@@ -206,7 +206,7 @@ const CalendarView = () => {
           } ${isPulling ? '' : 'transition-all duration-180 ease-out'}`}
           style={{ height: `${Math.max(0, pullY)}px` }}
         >
-          <div className="w-full text-center pb-2 text-gray-500 text-xs relative">
+          <div className="relative pb-2 w-full text-xs text-center text-gray-500">
             <div 
               className="absolute left-0 right-0 h-0.5 bg-gray-400 transition-opacity duration-180"
               style={{ 
@@ -220,15 +220,15 @@ const CalendarView = () => {
 
         {/* 콘텐츠 */}
         <div 
-          className={isPulling ? '' : 'transition-transform duration-180 ease-out'}
+          className={isPulling ? '':'transition-transform duration-180 ease-out'}
           style={{ transform: `translateY(${pullY}px)` }}
         >
           {/* 헤더 */}
-          <div className="py-6 px-5 text-center text-2xl font-semibold border-b border-gray-100 dark:border-gray-600 dark:text-white relative">
+          <div className="relative px-5 py-6 text-2xl font-semibold text-center border-b border-gray-100 dark:border-gray-600 dark:text-white">
             소비내역
             <button 
               onClick={toggleDarkMode}
-              className="absolute right-5 top-1/2 transform -translate-y-1/2 p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              className="absolute right-5 top-1/2 p-2 bg-gray-100 rounded-lg transition-colors transform -translate-y-1/2 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
             >
               {isDark ? '☀️' : '🌙'}
             </button>
@@ -237,24 +237,24 @@ const CalendarView = () => {
           {/* 캘린더 */}
           <div className="p-5 dark:bg-gray-700">
             {/* 월 선택 */}
-            <div className="flex justify-center items-center mb-5 gap-5">
+            <div className="flex gap-5 justify-center items-center mb-5">
               <div 
                 onClick={() => changeMonth(-1)} 
-                className="cursor-pointer text-gray-600 dark:text-gray-300 text-2xl select-none hover:text-gray-800 dark:hover:text-white transition-colors"
+                className="text-2xl text-gray-600 transition-colors cursor-pointer select-none dark:text-gray-300 hover:text-gray-800 dark:hover:text-white"
               >
                 ◀
               </div>
               <span className="text-lg font-medium dark:text-white">{month + 1}월</span>
               <div 
                 onClick={() => changeMonth(1)} 
-                className="cursor-pointer text-gray-600 dark:text-gray-300 text-2xl select-none hover:text-gray-800 dark:hover:text-white transition-colors"
+                className="text-2xl text-gray-600 transition-colors cursor-pointer select-none dark:text-gray-300 hover:text-gray-800 dark:hover:text-white"
               >
                 ▶
               </div>
             </div>
 
             {/* 요일 헤더 */}
-            <div className="grid grid-cols-7 mb-3 gap-1">
+            <div className="grid grid-cols-7 gap-1 mb-3">
               {['일', '월', '화', '수', '목', '금', '토'].map((day, idx) => (
                 <div 
                   key={idx} 
@@ -302,20 +302,20 @@ const CalendarView = () => {
           </div>
 
           {/* 혜택 박스 */}
-          <div className="mx-5 p-4 bg-gray-50 dark:bg-gray-600 rounded-2xl flex items-center gap-3">
-            <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+          <div className="flex gap-3 items-center p-4 mx-5 bg-gray-50 rounded-2xl dark:bg-gray-600">
+            <div className="flex justify-center items-center w-12 h-12 bg-blue-500 rounded-full">
               <img src={saveMoney} alt="saveMoney" className="w-8 h-8" />
             </div>
             <div className="flex-1">
-              <div className="text-sm text-gray-600 dark:text-gray-300 mb-1">
-                이번달 <span className="text-green-600 dark:text-green-400 font-semibold">네이버페이 우리카드 체크</span> 로
+              <div className="mb-1 text-sm text-gray-600 dark:text-gray-300">
+                이번달 <span className="font-semibold text-green-600 dark:text-green-400">네이버페이 우리카드 체크</span> 로
               </div>
-              <div className="text-lg text-blue-600 dark:text-blue-400 font-bold">{totalReward.toLocaleString()}원의 혜택을 받았어요!</div>
+              <div className="text-lg font-bold text-blue-600 dark:text-blue-400">{totalReward.toLocaleString()}원의 혜택을 받았어요!</div>
             </div>
           </div>
 
           {/* 결제 내역 리스트 */}
-          <div className="px-5 pb-5">
+          <div className="px-5 pb-6">
             {groupedPayments.map(([day, payments]) => {
               const date = new Date(year, month, parseInt(day));
               const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
@@ -326,13 +326,13 @@ const CalendarView = () => {
                   ref={(el) => (dateRefs.current[day] = el)}
                   className="mb-8"
                 >
-                  <div className="text-sm text-gray-600 dark:text-gray-300 mb-4 font-medium">{day}일 {dayOfWeek}요일</div>
+                  <div className="mb-4 text-sm font-medium text-gray-600 dark:text-gray-300">{day}일 {dayOfWeek}요일</div>
 
                   {payments.map((payment, idx) => (
                     <div
                       key={idx}
                       onClick={() => setDetail({ day, data: payment })}
-                      className="flex items-center p-4 bg-white dark:bg-gray-600 rounded-2xl mb-3 shadow-sm gap-4 cursor-pointer hover:shadow-md dark:hover:shadow-lg transition-shadow"
+                      className="flex gap-4 items-center p-4 mb-3 bg-white rounded-2xl shadow-sm transition-shadow cursor-pointer dark:bg-gray-600 hover:shadow-md dark:hover:shadow-lg"
                     >
                       <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${
                         payment.merchant.includes('네이버페이') ? 'overflow-hidden bg-green-500' : 'bg-blue-500'
@@ -344,12 +344,12 @@ const CalendarView = () => {
                         />
                       </div>
                       <div className="flex-1">
-                        <div className="text-base font-bold mb-1 text-gray-900 dark:text-white">{payment.amount.toLocaleString()} 원</div>
+                        <div className="mb-1 text-base font-bold text-gray-900 dark:text-white">{payment.amount.toLocaleString()} 원</div>
                         <div className="text-sm text-gray-500 dark:text-gray-400">{payment.company}</div>
                       </div>
                       <div className="text-right">
                         <div className="text-base font-semibold text-gray-900 dark:text-white">{payment.merchant}</div>
-                        {payment.reward > 0 && <div className="text-sm text-green-600 dark:text-green-400 font-medium">+{payment.reward.toLocaleString()}원</div>}
+                        {payment.reward > 0 && <div className="text-sm font-medium text-green-600 dark:text-green-400">+{payment.reward.toLocaleString()}원</div>}
                       </div>
                     </div>
                   ))}

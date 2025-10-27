@@ -56,6 +56,7 @@ import grayCheckRightIcon from './gray_chec_right.png';
 import settingIcon from './setting.png';
 import alarmIcon from './alarm.png';
 import searchIcon from './search.png';
+import wooriCard from './woori_card.png';
 
 
 export const img ={
@@ -66,5 +67,5 @@ export const img ={
     doori_heart, doori_normal, doori_pouting, doori_question, doori_report, doori_thinking, doori_wallet, doori_writing,
     doori_basic,
     
-    DeleteIcon, EditIcon, grayCheckRightIcon, settingIcon, alarmIcon, searchIcon,
+    DeleteIcon, EditIcon, grayCheckRightIcon, settingIcon, alarmIcon, searchIcon, wooriCard,
 }
