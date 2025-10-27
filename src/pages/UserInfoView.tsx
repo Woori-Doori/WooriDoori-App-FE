@@ -53,9 +53,9 @@ const UserInfoView: React.FC = () => {
       </div>
 
       {/* 프로필 섹션 */}
-      <div className="flex flex-col items-center mb-8">
+      <div className="flex items-center justify-between mb-8">
         {/* 프로필 이미지 - 간단한 스마일 아이콘 */}
-        <div className="flex justify-center items-center w-20 h-20 bg-green-500 rounded-full mb-4">
+        <div className="flex justify-center items-center w-20 h-20 bg-green-500 rounded-full">
           <div className="text-white text-4xl font-bold">
             :)
           </div>
