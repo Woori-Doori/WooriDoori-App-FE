@@ -7,6 +7,7 @@
 
 import Test from "@/components/Test";
 import CalendarView from "@/pages/CalendarView";
+import CardRecommendView from "@/pages/CardRecommendView";
 
 // 메인 route list
 const mainList : Array<any> = [ 
@@ -23,7 +24,9 @@ const calendarList : Array<any> = [{path : '/calendar', element :<CalendarView /
 
 
 // 카드 route list
-const cardList : Array<any> = [];
+const cardList : Array<any> = [
+    {path : '/card-recommend', element :<CardRecommendView />}
+];
 
 
 
