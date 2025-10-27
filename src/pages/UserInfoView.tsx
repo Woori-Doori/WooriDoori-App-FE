@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DefaultDiv from '@/components/default/DefaultDiv';
-import DefaultButton from '@/components/button/DefaultButton';
 import BottomNav from '@/components/default/NavBar';
 import ChoiceModal from '@/components/modal/ChoiceModal';
 import { img } from '@/assets/img';
@@ -52,6 +51,9 @@ const UserInfoView: React.FC = () => {
 
   return (
     <DefaultDiv>
+      {/* 모달이 열릴 때 어두운 오버레이 */}
+      <div className={`absolute inset-0 bg-black/40 transition-opacity duration-200 z-10 ${(isLogoutModalOpen || isWithdrawModalOpen) ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}></div>
+      
       {/* 헤더 - 뒤로가기 버튼 */}
       <div className="flex justify-between items-center pt-4 pb-2 w-full">
         <button
@@ -73,11 +75,11 @@ const UserInfoView: React.FC = () => {
       {/* 프로필 섹션 */}
       <div className="flex justify-between items-center mt-20 mb-10">
         {/* 프로필 이미지 - favicon */}
-        <div className="flex justify-center items-center w-32 h-32 bg-green-500 rounded-full overflow-hidden">
+        <div className="flex overflow-hidden justify-center items-center w-32 h-32 bg-green-500 rounded-full">
           <img
             src={img.doori_favicon}
             alt="프로필"
-            className="w-24 h-24 object-contain"
+            className="object-contain w-24 h-24"
           />
         </div>
         
@@ -173,24 +175,28 @@ const UserInfoView: React.FC = () => {
       </div>
 
       {/* 로그아웃 확인 모달 */}
-      <ChoiceModal
-        message="정말 로그아웃 할 것인가요?"
-        isOpen={isLogoutModalOpen}
-        onConfirm={confirmLogout}
-        onCancel={cancelLogout}
-        btnTitle="로그아웃"
-        btnColor="text-red-500"
-      />
+      <div className="relative z-20">
+        <ChoiceModal
+          message="정말 로그아웃 할 것인가요?"
+          isOpen={isLogoutModalOpen}
+          onConfirm={confirmLogout}
+          onCancel={cancelLogout}
+          btnTitle="로그아웃"
+          btnColor="text-red-500"
+        />
+      </div>
 
       {/* 회원탈퇴 확인 모달 */}
-      <ChoiceModal
-        message="정말 회원탈퇴를 하시겠습니까?"
-        isOpen={isWithdrawModalOpen}
-        onConfirm={confirmWithdraw}
-        onCancel={cancelWithdraw}
-        btnTitle="탈퇴"
-        btnColor="text-red-500"
-      />
+      <div className="relative z-20">
+        <ChoiceModal
+          message="정말 회원탈퇴를 하시겠습니까?"
+          isOpen={isWithdrawModalOpen}
+          onConfirm={confirmWithdraw}
+          onCancel={cancelWithdraw}
+          btnTitle="탈퇴"
+          btnColor="text-red-500"
+        />
+      </div>
     </DefaultDiv>
   );
 };
