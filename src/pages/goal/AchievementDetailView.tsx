@@ -17,7 +17,11 @@ export default function AchievementDetailView() {
     const navigate = useNavigate();
 
     const handleBack = () => {
-        navigate("/"); // ✅ 홈 화면으로 이동
+        navigate(-1);
+    };
+
+    const handleClose = () => {
+        navigate("/");
     };
 
     // ✅ 더미 히스토리 데이터 (나중에 백엔드 연동)
@@ -82,7 +86,14 @@ export default function AchievementDetailView() {
 
     return (
         <DefaultDiv>
-            <Header title="달성도" showBack={true} onBack={handleBack} />
+            <Header
+                title="달성도"
+                showBack={true}
+                showClose={true}
+                onBack={handleBack}
+                onClose={handleClose}
+            />
+
 
             <div className="flex flex-col h-full px-6 pt-20 pb-10 gap-8">
                 {/* 제목 */}

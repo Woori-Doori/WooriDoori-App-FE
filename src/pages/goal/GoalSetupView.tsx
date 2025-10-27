@@ -61,11 +61,16 @@ export default function GoalSetupView({
     navigate("/");
   };
 
+  const handleClose = () => {
+    navigate("/");
+  };
+
   return (
     <DefaultDiv>
       <Header
         title="목표 금액 설정"
         showBack={true}
+        onClose={handleClose}
         onBack={() => {
           if (step > 1) setStep((prev) => (prev - 1) as 1 | 2 | 3 | 4);
         }}

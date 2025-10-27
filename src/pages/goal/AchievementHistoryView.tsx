@@ -13,6 +13,7 @@ type Achievement = {
 
 export default function AchievementHistoryView() {
   const navigate = useNavigate();
+  const goHome = () => navigate("/");
 
   // ✅ 더미 데이터 (임시 테스트용)
   const mockHistory: Achievement[] = [
@@ -32,7 +33,7 @@ export default function AchievementHistoryView() {
 
   return (
     <DefaultDiv>
-      <Header title="달성도" showBack={true} />
+      <Header title="달성도" onClose={goHome} />
 
       <div className="flex flex-col h-full px-6 pt-20 pb-10 gap-6">
         {/* 달성도 카드 목록 */}
