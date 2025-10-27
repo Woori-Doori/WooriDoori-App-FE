@@ -24,7 +24,7 @@ const MyPageView: React.FC = () => {
       <div className="flex justify-end pt-4 pb-2 w-full">
         <button
           onClick={() => navigate('/userinfo')}
-          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          className="p-2 rounded-lg transition-colors hover:bg-gray-100"
         >
           <img
             src={img.settingIcon}
