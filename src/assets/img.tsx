@@ -55,6 +55,12 @@ import EditIcon from './edit.png';
 import grayCheckRightIcon from './gray_chec_right.png';
 import settingIcon from './setting.png';
 import alarmIcon from './alarm.png';
+import check from './check2.png';
+import fireworkLeft from './fireworkL.png';
+import fireworkRight from './fireworkR.png';
+import scale from './scale.png';
+import gauge from './gauge.png';
+import needle from './needle.png';
 
 
 export const img ={
@@ -65,5 +71,5 @@ export const img ={
     doori_heart, doori_normal, doori_pouting, doori_question, doori_report, doori_thinking, doori_wallet, doori_writing,
     doori_basic,
     
-    DeleteIcon, EditIcon, grayCheckRightIcon, settingIcon, alarmIcon,
+    DeleteIcon, EditIcon, grayCheckRightIcon, settingIcon, alarmIcon, check, fireworkLeft, fireworkRight, scale, gauge, needle
 }
