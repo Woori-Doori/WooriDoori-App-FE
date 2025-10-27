@@ -28,11 +28,11 @@ const MyPageView: React.FC = () => {
       {/* 사용자 프로필 섹션 */}
       <div className="flex gap-4 items-center mb-8">
         {/* 프로필 이미지 */}
-        <div className="flex justify-center items-center w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full overflow-hidden">
+        <div className="flex overflow-hidden justify-center items-center w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full">
           <img
             src={img.doori_favicon}
             alt="프로필"
-            className="w-12 h-12 object-contain"
+            className="object-contain w-12 h-12"
           />
         </div>
         
@@ -54,13 +54,11 @@ const MyPageView: React.FC = () => {
         </h2>
         
         {/* 메뉴 리스트 */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="overflow-hidden bg-white rounded-2xl border border-gray-100 shadow-sm">
           {menuItems.map((item, index) => (
             <div
               key={index}
-              className={`flex justify-between items-center px-6 py-5 transition-all duration-200 cursor-pointer hover:bg-blue-50 ${
-                index !== menuItems.length - 1 ? 'border-b border-gray-100' : ''
-              }`}
+              className="flex justify-between items-center px-6 py-5 transition-all duration-200 cursor-pointer hover:bg-blue-50"
             >
               <span className="text-[1.4rem] font-medium text-gray-800">
                 {item.title}
