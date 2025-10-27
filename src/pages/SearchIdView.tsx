@@ -23,7 +23,7 @@ const SearchIdView = () => {
             onClick={() => (window.location.href = "/login")}
         />
 
-        <div className="h-12" />
+        <div className="h-8" />
         <img src={img.wooridoorilogo} alt="" className="w-60 mx-auto"/>
         <div className="h-8" />
       <Title1 text="아이디 찾기" />
