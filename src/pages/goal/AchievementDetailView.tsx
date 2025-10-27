@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import DefaultDiv from "@/components/default/DefaultDiv";
 import Header from "@/components/default/Header";
 import SubText from "@/components/text/SubText";
@@ -13,6 +14,11 @@ import doori_angry from "@/assets/doori/doori_angry.png";
 export default function AchievementDetailView() {
     const location = useLocation();
     const data = location.state?.data;
+    const navigate = useNavigate();
+
+    const handleBack = () => {
+        navigate("/"); // ✅ 홈 화면으로 이동
+    };
 
     // ✅ 더미 히스토리 데이터 (나중에 백엔드 연동)
     const mockHistory = [
@@ -76,7 +82,7 @@ export default function AchievementDetailView() {
 
     return (
         <DefaultDiv>
-            <Header title="달성도" showBack={true} />
+            <Header title="달성도" showBack={true} onBack={handleBack} />
 
             <div className="flex flex-col h-full px-6 pt-20 pb-10 gap-8">
                 {/* 제목 */}
