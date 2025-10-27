@@ -17,7 +17,7 @@ const MyPageView: React.FC = () => {
   return (
     <DefaultDiv>
       {/* 헤더 - 설정 아이콘 */}
-      <div className="flex justify-end w-full pt-4 pb-2">
+      <div className="flex justify-end pt-4 pb-2 w-full">
         <img
           src={img.settingIcon}
           alt="설정"
@@ -26,10 +26,14 @@ const MyPageView: React.FC = () => {
       </div>
 
       {/* 사용자 프로필 섹션 */}
-      <div className="flex items-center gap-4 mb-8">
+      <div className="flex gap-4 items-center mb-8">
         {/* 프로필 이미지 */}
-        <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-          {/* 프로필 이미지가 없을 때 기본 아이콘 또는 빈 원 */}
+        <div className="flex justify-center items-center w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full overflow-hidden">
+          <img
+            src={img.doori_favicon}
+            alt="프로필"
+            className="w-12 h-12 object-contain"
+          />
         </div>
         
         {/* 사용자 정보 */}
@@ -37,7 +41,7 @@ const MyPageView: React.FC = () => {
           <h1 className="text-[1.8rem] font-bold text-gray-900 mb-1">
             석기시대님
           </h1>
-          <p className="text-[1.2rem] text-gray-500">
+          <p className="text-[1.2rem] text-gray-600">
             안녕하세요 오늘도 이용해주셔서 감사해요
           </p>
         </div>
@@ -45,21 +49,23 @@ const MyPageView: React.FC = () => {
 
       {/* 메뉴 섹션 */}
       <div className="w-full">
-        <h2 className="text-[1.6rem] font-bold text-gray-900 mb-4">
+        <h2 className="text-[1.6rem] font-bold text-gray-900 mb-6">
           메뉴
         </h2>
         
         {/* 메뉴 리스트 */}
-        <div className="bg-gray-50 rounded-xl p-1">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           {menuItems.map((item, index) => (
             <div
               key={index}
-              className="flex items-center justify-between py-4 px-4 hover:bg-gray-100 transition-colors cursor-pointer"
+              className={`flex justify-between items-center px-6 py-5 transition-all duration-200 cursor-pointer hover:bg-blue-50 ${
+                index !== menuItems.length - 1 ? 'border-b border-gray-100' : ''
+              }`}
             >
-              <span className="text-[1.4rem] text-gray-700">
+              <span className="text-[1.4rem] font-medium text-gray-800">
                 {item.title}
               </span>
-              <span className="text-[1.2rem] text-gray-400">
+              <span className="text-[1.2rem] text-blue-400 font-bold">
                 {item.icon}
               </span>
             </div>
