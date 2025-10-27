@@ -1,7 +1,7 @@
 import React from "react";
 
 interface ConfirmModalProps {
-  message: string;
+  message: React.ReactNode;
   isOpen: boolean;
   onConfirm?: () => void;
   onClose?: () => void;
