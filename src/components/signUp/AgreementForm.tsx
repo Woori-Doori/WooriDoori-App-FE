@@ -1,41 +1,40 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ConfirmModal from "../modal/ConfirmModal";
 
-const AgreementSection = () => {
+interface AgreementFormProps {
+  onValidChange?: (isValid: boolean) => void;
+}
+
+const AgreementForm = ({ onValidChange }: AgreementFormProps) => {
   const [allChecked, setAllChecked] = useState(false);
   const [agreements, setAgreements] = useState({
-    age: false,
-    terms: false,
-    privacy: false,
+    terms: false,   // 회원약관 (필수)
+    privacy: false, // 개인정보 처리방침 (필수)
   });
 
-  // 모달 상태
-  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
-  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
+  const [showPrivacy, setShowPrivacy] = useState(false);
+
+  // 필수 2항목 체크 상태 부모로 전달
+  useEffect(() => {
+    const requiredAgreed = agreements.terms && agreements.privacy;
+    onValidChange?.(requiredAgreed);
+    setAllChecked(Object.values(agreements).every(Boolean));
+  }, [agreements, onValidChange]);
 
   const handleAllCheck = () => {
-    const newState = !allChecked;
-    setAllChecked(newState);
-    setAgreements({
-      age: newState,
-      terms: newState,
-      privacy: newState,
-    });
+    const next = !allChecked;
+    setAllChecked(next);
+    setAgreements({ terms: next, privacy: next });
   };
 
-  const handleCheck = (key: keyof typeof agreements) => {
-    const updated = { ...agreements, [key]: !agreements[key] };
-    setAgreements(updated);
-    setAllChecked(Object.values(updated).every(Boolean));
-  };
+  const toggle = (key: keyof typeof agreements) =>
+    setAgreements(prev => ({ ...prev, [key]: !prev[key] }));
 
   return (
     <div className="w-[34rem] text-left flex flex-col gap-[2rem] text-[1.5rem] text-gray-700 mb-[6rem]">
       {/* 전체 동의 */}
-      <div
-        className="flex items-center justify-between cursor-pointer"
-        onClick={handleAllCheck}
-      >
+      <div className="flex items-center justify-between cursor-pointer" onClick={handleAllCheck}>
         <div className="flex items-center gap-[1rem]">
           <input
             type="checkbox"
@@ -51,7 +50,7 @@ const AgreementSection = () => {
       <div className="flex items-center justify-between">
         <div
           className="flex items-center gap-[1rem] cursor-pointer"
-          onClick={() => handleCheck("terms")}
+          onClick={() => toggle("terms")}
         >
           <input
             type="checkbox"
@@ -65,7 +64,7 @@ const AgreementSection = () => {
         </div>
         <button
           type="button"
-          onClick={() => setShowTermsModal(true)}
+          onClick={() => setShowTerms(true)}
           className="text-gray-400 text-[1.2rem] hover:text-green-600 transition"
         >
           보기 ›
@@ -76,7 +75,7 @@ const AgreementSection = () => {
       <div className="flex items-center justify-between">
         <div
           className="flex items-center gap-[1rem] cursor-pointer"
-          onClick={() => handleCheck("privacy")}
+          onClick={() => toggle("privacy")}
         >
           <input
             type="checkbox"
@@ -90,19 +89,19 @@ const AgreementSection = () => {
         </div>
         <button
           type="button"
-          onClick={() => setShowPrivacyModal(true)}
+          onClick={() => setShowPrivacy(true)}
           className="text-gray-400 text-[1.2rem] hover:text-green-600 transition"
         >
           보기 ›
         </button>
       </div>
 
-      {/* ✅ 회원약관 모달 */}
+      {/* 회원약관 모달 */}
       <ConfirmModal
-        isOpen={showTermsModal}
-        onClose={() => setShowTermsModal(false)}
+        isOpen={showTerms}
+        onClose={() => setShowTerms(false)}
         message={
-          <div className="max-h-[60vh] overflow-y-auto text-left text-gray-700 text-[0.9rem] leading-relaxed space-y-3">
+          <div className="max-h-[60vh] overflow-y-auto text-left text-gray-700 text-[0.95rem] leading-relaxed space-y-3">
             <h2 className="text-lg font-bold mb-2">온라인서비스 회원약관</h2>
             <p>
               제 1 조(목 적)<br />
@@ -137,12 +136,12 @@ const AgreementSection = () => {
         btnColor="#16A34A"
       />
 
-      {/* ✅ 개인정보 모달 */}
+      {/* 개인정보 모달 */}
       <ConfirmModal
-        isOpen={showPrivacyModal}
-        onClose={() => setShowPrivacyModal(false)}
+        isOpen={showPrivacy}
+        onClose={() => setShowPrivacy(false)}
         message={
-          <div className="max-h-[60vh] overflow-y-auto text-left text-gray-700 text-[0.9rem] leading-relaxed space-y-3">
+          <div className="max-h-[60vh] overflow-y-auto text-left text-gray-700 text-[0.95rem] leading-relaxed space-y-3">
             <h2 className="text-lg font-bold mb-2">개인정보 취급방침 동의</h2>
             <p>
               귀하의 계약과 관련하여 귀사가 본인의 개인(신용)정보를 수집·이용하고자 하는 경우에는
@@ -178,4 +177,4 @@ const AgreementSection = () => {
   );
 };
 
-export default AgreementSection;
+export default AgreementForm;
