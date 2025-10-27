@@ -4,6 +4,8 @@ import { img } from '@/assets/img';
 import IconButton from '@/components/button/IconButton';
 import ConfirmModal from '@/components/modal/ConfirmModal';
 
+import DefaultDiv from '@/components/default/DefaultDiv';
+import NavBar from '@/components/default/NavBar';
 const DiaryEmotionView = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -36,6 +38,7 @@ const DiaryEmotionView = () => {
   };
   
   return (
+    <DefaultDiv isPadding={false}>
     <div className="w-full h-screen bg-white dark:bg-gray-700 flex flex-col relative">
       {/* 헤더 */}
       <div className="py-all px-5 flex items-center justify-between">
@@ -59,7 +62,7 @@ const DiaryEmotionView = () => {
       </div>
       
       {/* 감정 선택 - 하단 고정 */}
-      <div className="w-full py-6 px-6 fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-700" style={{ borderTop: `2px solid rgb(139, 195, 75)` }}>
+      <div className="w-full py-6 px-6 fixed bottom-[50px] left-0 right-0 bg-white dark:bg-gray-700 z-40" style={{ borderTop: `2px solid rgb(139, 195, 75)` }}>
         <p className="text-2xl text-gray-700 dark:text-gray-300 mb-6">
           오늘의 소비를 평가해 보아요.
         </p>
@@ -89,6 +92,8 @@ const DiaryEmotionView = () => {
         onCancel={() => setShowCancelModal(false)}
       />
     </div>
+      <NavBar />
+    </DefaultDiv>
   );
 };
 

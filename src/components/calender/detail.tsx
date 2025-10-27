@@ -134,7 +134,7 @@ export const DutchPayModal: React.FC = () => {
   return (
     <div 
       onClick={handleClose} 
-      className={`fixed inset-0 bg-black transition-colors duration-200 flex items-end justify-center z-50 ${
+      className={`fixed inset-0 bg-black transition-colors duration-200 flex items-end justify-center z-[60] ${
         open ? 'bg-opacity-35' : 'bg-opacity-0'
       }`}
     >
@@ -143,7 +143,7 @@ export const DutchPayModal: React.FC = () => {
         className={`w-full max-w-full bg-white dark:bg-gray-700 rounded-t-3xl shadow-xl transform transition-all duration-200 ${
           open ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
         }`}
-        style={{ width: '402px' }}
+        style={{ width: '402px', zIndex: 60 }}
       >
         <div className="px-6 pt-8 pb-6">
           <div className="flex items-center justify-between mb-8">
@@ -297,7 +297,7 @@ export const DetailModal: React.FC<{ dateLabel: string }> = ({ dateLabel }) => {
   return (
     <div 
       onClick={handleClose} 
-      className={`fixed inset-0 bg-black transition-colors duration-200 flex items-end justify-center z-50 ${
+      className={`fixed inset-0 bg-black transition-colors duration-200 flex items-end justify-center z-[60] ${
         open ? 'bg-opacity-35' : 'bg-opacity-0'
       }`}
     >
@@ -306,7 +306,7 @@ export const DetailModal: React.FC<{ dateLabel: string }> = ({ dateLabel }) => {
         className={`w-full max-w-full bg-white dark:bg-gray-700 rounded-t-3xl shadow-xl transform transition-all duration-200 ${
           open ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
         }`}
-        style={{ width: '402px' }}
+        style={{ width: '402px', zIndex: 60 }}
       >
         <div className="px-6 pt-8 pb-6">
           <div className="flex items-center justify-between mb-8">

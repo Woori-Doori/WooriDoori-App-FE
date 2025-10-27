@@ -7,6 +7,7 @@ import DefaultDiv from '@/components/default/DefaultDiv';
 import IconButton from '@/components/button/IconButton';
 import { img } from '@/assets/img';
 import "@/styles/calendar/calendar.styles.css";
+import NavBar from '@/components/default/NavBar';
 
 
 // 결제 데이터 (테이블 형식 - 플랫 배열)
@@ -396,6 +397,7 @@ const CalendarView = () => {
         {/* 더치페이 모달 */}
         <DutchPayModal />
       </div>
+      <NavBar />
     </DefaultDiv>
   );
 };

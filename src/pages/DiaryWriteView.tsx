@@ -4,6 +4,8 @@ import { img } from '@/assets/img';
 import IconButton from '@/components/button/IconButton';
 import ConfirmModal from '@/components/modal/ConfirmModal';
 import { useCalendarStore } from '@/stores/calendarStore';
+import NavBar from '@/components/default/NavBar';
+import DefaultDiv from '@/components/default/DefaultDiv';
 
 const DiaryWriteView = () => {
   const navigate = useNavigate();
@@ -61,90 +63,93 @@ const DiaryWriteView = () => {
   };
   
   return (
-    <div className="w-full h-screen bg-white dark:bg-gray-700 flex flex-col">
-      {/* 헤더 */}
-      <div className="py-all px-5 flex items-center justify-between">
-        <div className="w-10"></div>
-        <div className="text-3xl font-bold dark:text-white">소비 일기</div>
-        <button onClick={handleCancel}>
-          <IconButton src={img.BsX} alt="닫기" height={33} />
-        </button>
-      </div>
-      
-      {/* 메인 컨텐츠 */}
-      <div className="flex-1 px-6 pb-32 flex flex-col">
-        {/* 날짜 필드 */}
-        <div className="mb-6">
-          <div className="bg-gray-100 dark:bg-gray-700 rounded-2xl px-4 py-3">
-            <span className="text-xl text-gray-700 dark:text-gray-300">
-              {day}일 {dayOfWeek}요일
-            </span>
-          </div>
-        </div>
-        
-        {/* 감정 아이콘 - 큰 원형 */}
-        <div className="mb-8">
-          <button 
-            onClick={() => navigate(`/calendar/diary/emotion?date=${date}&emotion=${emotion}`)}
-          >
-            <IconButton
-              src={emotionIcons[emotion]}
-              alt="감정"
-              width={100}
-              height={100}
-            />
+    <DefaultDiv isPadding={false}>
+      <div className="w-full h-screen bg-white dark:bg-gray-700 flex flex-col">
+        {/* 헤더 */}
+        <div className="py-all px-5 flex items-center justify-between">
+          <div className="w-10"></div>
+          <div className="text-3xl font-bold dark:text-white">소비 일기</div>
+          <button onClick={handleCancel}>
+            <IconButton src={img.BsX} alt="닫기" height={33} />
           </button>
         </div>
         
-        {/* 텍스트 입력 영역 */}
-        <div className="flex-1 flex flex-col">
-          <textarea
-            value={content}
-            onChange={(e) => {
-              const text = e.target.value;
-              if (text.length <= maxLength) {
-                setContent(text);
-              }
-            }}
-            placeholder="오늘의 소비 일기를 써봐요. (50자 이내)"
-            className="flex-1 w-full border-2 border-none rounded-2xl p-4 text-lg text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 resize-none"
-            autoFocus
-          />
+        {/* 메인 컨텐츠 */}
+        <div className="flex-1 px-6 pb-[112px] flex flex-col">
+          {/* 날짜 필드 */}
+          <div className="mb-6">
+            <div className="bg-gray-100 dark:bg-gray-700 rounded-2xl px-4 py-3">
+              <span className="text-xl text-gray-700 dark:text-gray-300">
+                {day}일 {dayOfWeek}요일
+              </span>
+            </div>
+          </div>
+          
+          {/* 감정 아이콘 - 큰 원형 */}
+          <div className="mb-8">
+            <button 
+              onClick={() => navigate(`/calendar/diary/emotion?date=${date}&emotion=${emotion}`)}
+            >
+              <IconButton
+                src={emotionIcons[emotion]}
+                alt="감정"
+                width={100}
+                height={100}
+              />
+            </button>
+          </div>
+          
+          {/* 텍스트 입력 영역 */}
+          <div className="flex-1 flex flex-col">
+            <textarea
+              value={content}
+              onChange={(e) => {
+                const text = e.target.value;
+                if (text.length <= maxLength) {
+                  setContent(text);
+                }
+              }}
+              placeholder="오늘의 소비 일기를 써봐요. (50자 이내)"
+              className="flex-1 w-full border-2 border-green-500 rounded-2xl p-4 text-lg text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 resize-none"
+              autoFocus
+            />
+          </div>
         </div>
+        
+        {/* 완료 버튼 - 하단 고정 */}
+        <div className="w-full px-6 py-4 fixed bottom-[50px] left-0 right-0 bg-white dark:bg-gray-700 z-40">
+          <button
+            onClick={handleComplete}
+            disabled={!content.trim()}
+            className={`w-full py-4 rounded-2xl text-2xl font-bold transition-colors ${
+              content.trim() 
+                ? 'text-white' 
+                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            }`}
+            style={content.trim() ? { backgroundColor: 'rgb(139, 195, 75)' } : {}}
+          >
+            완료
+          </button>
+        </div>
+        
+        {/* 저장 확인 모달 */}
+        <ConfirmModal
+          message="내용을 저장하시겠습니까?"
+          isOpen={showSaveModal}
+          onConfirm={handleConfirmSave}
+          onCancel={() => setShowSaveModal(false)}
+        />
+        
+        {/* 취소 확인 모달 */}
+        <ConfirmModal
+          message={editMode ? "수정을 취소하시겠습니까?" : "작성을 취소하시겠습니까?"}
+          isOpen={showCancelModal}
+          onConfirm={handleConfirmCancel}
+          onCancel={() => setShowCancelModal(false)}
+        />
       </div>
-      
-      {/* 완료 버튼 - 하단 고정 */}
-      <div className="w-full px-6 py-4 fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-700">
-        <button
-          onClick={handleComplete}
-          disabled={!content.trim()}
-          className={`w-full py-4 rounded-2xl text-2xl font-bold transition-colors ${
-            content.trim() 
-              ? 'text-white' 
-              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-          }`}
-          style={content.trim() ? { backgroundColor: 'rgb(139, 195, 75)' } : {}}
-        >
-          완료
-        </button>
-      </div>
-      
-      {/* 저장 확인 모달 */}
-      <ConfirmModal
-        message="내용을 저장하시겠습니까?"
-        isOpen={showSaveModal}
-        onConfirm={handleConfirmSave}
-        onCancel={() => setShowSaveModal(false)}
-      />
-      
-      {/* 취소 확인 모달 */}
-      <ConfirmModal
-        message={editMode ? "수정을 취소하시겠습니까?" : "작성을 취소하시겠습니까?"}
-        isOpen={showCancelModal}
-        onConfirm={handleConfirmCancel}
-        onCancel={() => setShowCancelModal(false)}
-      />
-    </div>
+      <NavBar />
+    </DefaultDiv>
   );
 };
 

@@ -259,4 +259,7 @@
   .text-5lg{
     font-size: 1.3rem;
   }
+  .mb-20{
+    margin-bottom: 20px;
+  }
 }

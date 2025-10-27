@@ -6,6 +6,7 @@ import { img } from '@/assets/img';
 import { useCalendarStore } from '@/stores/calendarStore';
 import { useNavigate } from 'react-router-dom';
 import "@/styles/calendar/calendar.styles.css";
+import NavBar from '@/components/default/NavBar';
 
 const DiaryView = () => {
   const navigate = useNavigate();
@@ -248,6 +249,7 @@ const DiaryView = () => {
           onCancel={handleModalCancel}
         />
       </div>
+      <NavBar />
     </DefaultDiv>
   );
 };
