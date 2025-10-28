@@ -23,11 +23,11 @@ const BottomNav = () => {
   return (
     <nav
       className="
-        fixed bottom-0 left-0 right-0
-        w-[100vw] bg-white border-t border-gray-200
+        fixed bottom-0 left-1/2 transform -translate-x-1/2
+        w-[100vw] max-w-[400px] bg-white border-t border-gray-200
         z-50
         flex justify-around items-center
-        py-4
+        py-6
         px-[max(env(safe-area-inset-left),1rem)]
         pb-[calc(env(safe-area-inset-bottom)+1.25rem)]
       "
@@ -43,16 +43,16 @@ const BottomNav = () => {
           <button
             key={item.name}
             onClick={() => navigate(item.path)}
-            className="flex flex-col items-center justify-center gap-1 focus:outline-none"
+            className="flex flex-col gap-1 justify-center items-center focus:outline-none"
           >
             <img
               src={isActive ? item.iconActive : item.iconInactive}
               alt={item.name}
-              className="w-6 h-6 sm:w-7 sm:h-7 transition-all duration-200"
+              className="w-6 h-6 transition-all duration-200 sm:w-7 sm:h-7"
             />
             <span
               className={`text-xs ${
-                isActive ? "text-black font-semibold" : "text-gray-400"
+                isActive ? "font-semibold text-black" : "text-gray-400"
               }`}
             >
               {item.name}

@@ -49,6 +49,7 @@ import doori_thinking from './doori/doori_thinking.png';
 import doori_wallet from './doori/doori_wallet.png';
 import doori_writing from './doori/doori_writing.png';
 import doori_basic from './doori/doori_basic.png';
+import doori_favicon from './doori/favicon.png';
 
 import DeleteIcon from './delete.png';
 import EditIcon from './edit.png';
@@ -63,13 +64,28 @@ import gauge from './gauge.png';
 import needle from './needle.png';
 
 
+
+import logoIcon from './logo.png';
+import bgImg from './home/main_banner.png';
+
+import stomIcon from './report/stome.png';
+import scaleIcon from './report/scale_icon.png';
+import testCard from './report/test_card.png';
+import cardBanner from './home/card_banner.png';
+import cardBanner2 from './home/card_banner2.png';
+
+
 export const img ={
     cardIcon, BsX, Vector, calendarB, calendarW, cardB, cardW, homeB, homeW, menuB, menuW, education, traffic, etc, 
     hospital, shopping, entertainment, food, travel, transfer, residence, communication, mart, doori_angry, doori_annoyed,
     doori_card, doori_celebrating, doori_cheering, doori_coffee, doori_coin_warning, doori_cool, doori_counting_coins, doori_crying,
     doori_drawing, doori_face1, doori_face2, doori_face3, doori_face4, doori_face5, doori_facepalm, doori_frustrated, doori_ghost,
     doori_heart, doori_normal, doori_pouting, doori_question, doori_report, doori_thinking, doori_wallet, doori_writing,
-    doori_basic,
+    doori_basic, doori_favicon,
     
     DeleteIcon, EditIcon, grayCheckRightIcon, settingIcon, alarmIcon, check, fireworkLeft, fireworkRight, scale, gauge, needle
+
+
+    logoIcon, bgImg, 
+    stomIcon, scaleIcon, testCard, cardBanner,cardBanner2
 }
