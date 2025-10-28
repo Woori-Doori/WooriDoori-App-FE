@@ -14,6 +14,7 @@ interface Notification {
   isNew?: boolean;
 }
 
+
 const NotificationItem: React.FC<{ notification: Notification; onDelete: (id: number) => void }> = ({ notification, onDelete }) => {
   const [translateX, setTranslateX] = React.useState(0);
   const [touchStart, setTouchStart] = React.useState<number | null>(null);
