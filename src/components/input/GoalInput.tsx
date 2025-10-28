@@ -27,16 +27,12 @@ const GoalInput: React.FC<GoalInputProps> = ({ value, onChange, placeholder }) =
         value={formatNumber(value)}
         onChange={handleChange}
         placeholder={placeholder || "금액을 입력해주세요"}
-        className="
-          w-full bg-transparent outline-none
-          text-gray-900 text-xl font-semibold
-          placeholder:text-gray-400
-        "
+        className="w-full text-3xl font-semibold text-gray-900 bg-transparent outline-none  placeholder:text-gray-400"
         inputMode="numeric"
       />
 
       {/* 단위 */}
-      <span className="ml-2 text-[#B6B6B6] text-xl font-medium leading-none whitespace-nowrap">
+      <span className="ml-2 text-[#B6B6B6] text-2xl font-medium leading-none whitespace-nowrap">
         만원
       </span>
     </div>

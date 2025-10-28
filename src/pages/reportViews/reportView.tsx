@@ -1,6 +1,7 @@
 import '@/styles/report/animations.css';
 import ReportLayout from "@/components/report/ReportLayout";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ProgressDonet from "@/components/Progress/ProgressDonet";
 import { img } from "@/assets/img";
 import ProgressCategoryView from "./ProgressCategoryView";
@@ -8,6 +9,7 @@ import FallingRockScoreView from './FallingRockScoreView';
 import MonthCategoryListView from './MonthCategroyListView';
 
 const ReportView = () => {
+  const navigate = useNavigate();
   const name = "석기";
 
   const titleMap: Record<number, string> = {
@@ -68,8 +70,10 @@ const ReportView = () => {
   }, []);
 
   const onClick = (type?: string) => {
-
-    if (type != "back" && pageNum == Object.keys(titleMap).length) { return window.location.href = '/report-card'; }
+    if (type != "back" && pageNum == Object.keys(titleMap).length) {
+      navigate('/report-card');
+      return;
+    }
 
     const num = type == "back" ? pageNum - 1 : pageNum + 1
     setTitle(titleMap[num] || "");
@@ -103,7 +107,7 @@ const ReportView = () => {
 
   return (
     <ReportLayout mainText={title} isMainTextCenter={false}
-      onButtonClick={onClick} onBack={() => { onClick("back") }} onClose={() => { window.location.href = '/home'; }}
+      onButtonClick={onClick} onBack={() => { navigate('/mypage'); }} onClose={() => { navigate('/home'); }}
     >
       {
         renderPage()

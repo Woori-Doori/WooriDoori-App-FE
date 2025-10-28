@@ -46,7 +46,7 @@ export default function GoalEditView() {
   };
 
   const handleClose = () => {
-    navigate("/");
+    navigate("/home");
   };
 
   return (
@@ -56,13 +56,17 @@ export default function GoalEditView() {
         showBack={true}
         onClose={handleClose}
         onBack={() => {
-          if (step > 1) setStep((prev) => (prev - 1) as 1 | 2 | 3);
+          if (step > 1) {
+            setStep((prev) => (prev - 1) as 1 | 2 | 3);
+          } else {
+            navigate('/mypage');
+          }
         }}
       />
 
       {/* STEP 1: 수입 수정 */}
       {step === 1 && (
-        <div className="flex flex-col h-full px-6 pt-16 pb-10">
+        <div className="flex flex-col px-6 pt-16 pb-10 h-full">
           <div className="text-left mt-[3rem]">
             <Title2 text="석기시대님의 수입은 어느정도이신가요?" />
             <div className="mt-[2rem]">
@@ -78,7 +82,7 @@ export default function GoalEditView() {
             />
           </div>
 
-          <div className="mt-auto w-full flex justify-center">
+          <div className="flex justify-center mt-auto w-full">
             <DefaultButton text="다음" disabled={!isValidStep} onClick={handleNext} />
           </div>
         </div>
@@ -86,7 +90,7 @@ export default function GoalEditView() {
 
       {/* STEP 2: 목표 금액 수정 */}
       {step === 2 && (
-        <div className="flex flex-col h-full px-6 pt-16 pb-10">
+        <div className="flex flex-col px-6 pt-16 pb-10 h-full">
           <div className="text-left mt-[3rem]">
             <Title2 text="목표 금액을 수정해주세요." />
             <div className="mt-[2rem]">
@@ -102,7 +106,7 @@ export default function GoalEditView() {
             />
           </div>
 
-          <div className="mt-auto w-full flex justify-center">
+          <div className="flex justify-center mt-auto w-full">
             <DefaultButton text="다음" disabled={!isValidStep} onClick={handleNext} />
           </div>
         </div>
@@ -110,7 +114,7 @@ export default function GoalEditView() {
 
       {/* STEP 3: 완료 화면 */}
       {step === 3 && (
-        <div className="flex flex-col items-center h-full px-4 pt-20 pb-10">
+        <div className="flex flex-col items-center px-4 pt-20 pb-10 h-full">
           {/* 체크 아이콘 */}
           <div className="w-[10rem] h-[10rem] flex items-center justify-center translate-y-[10rem]">
             <img
@@ -141,7 +145,7 @@ export default function GoalEditView() {
             </div>
           </div>
 
-          <div className="mt-auto w-full flex justify-center">
+          <div className="flex justify-center mt-auto w-full">
             <DefaultButton text="확인" onClick={handleRestart} />
           </div>
         </div>

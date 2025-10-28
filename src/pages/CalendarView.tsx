@@ -69,6 +69,7 @@ const CalendarView = () => {
   
   const dateRefs = React.useRef<Record<string, HTMLDivElement | null>>({});
   const scrollRef = React.useRef<HTMLDivElement | null>(null);
+  const calendarStickyRef = React.useRef<HTMLDivElement | null>(null);
 
   // Payment 데이터를 state로 관리
   const [paymentDataState, setPaymentDataState] = useState<Payment[]>(paymentData);
@@ -80,6 +81,7 @@ const CalendarView = () => {
   const startYRef = React.useRef(0);
   const THRESHOLD = 80;
   const MAX_PULL = 130;
+
   
   // detail 변경 감지하여 paymentData 업데이트
   React.useEffect(() => {
@@ -137,17 +139,17 @@ const CalendarView = () => {
 
   // 현재 월의 필터링된 데이터 (date에서 날짜만 추출)
   const currentMonthFiltered = paymentDataState.filter(payment => {
-    const dateOnly = payment.date.split(' ')[0]; // "YYYY-MM-DD" 부분만 추출
-    const paymentDate = new Date(dateOnly);
-    return paymentDate.getFullYear() === year && paymentDate.getMonth() === month;
+    const dateOnly = payment.date.split(' ')[0]; // "YYYY-MM-DD"
+    const [yy, mm] = dateOnly.split('-').map(Number);
+    return yy === year && (mm - 1) === month; // 문자열 파싱으로 TZ 이슈 회피
   });
 
   // 해당 날짜의 총 지출 계산 (더치페이 고려)
   const getDayTotal = (day: number): number => {
     const dayData = currentMonthFiltered.filter(payment => {
       const dateOnly = payment.date.split(' ')[0];
-      const paymentDate = new Date(dateOnly);
-      return paymentDate.getDate() === day;
+      const dayNum = parseInt(dateOnly.split('-')[2], 10);
+      return dayNum === day;
     });
     
     return dayData.reduce((sum, payment) => {
@@ -166,7 +168,7 @@ const CalendarView = () => {
   // 날짜별로 그룹화된 결제 내역
   const groupedPaymentsMap = currentMonthFiltered.reduce((acc, payment) => {
     const dateOnly = payment.date.split(' ')[0];
-    const day = new Date(dateOnly).getDate();
+    const day = parseInt(dateOnly.split('-')[2], 10);
     const dayKey = day.toString();
     if (!acc[dayKey]) {
       acc[dayKey] = [];
@@ -213,32 +215,73 @@ const CalendarView = () => {
       setIsPulling(false);
     }
   };
+
  // 날짜 클릭
  const handleDateClick = (day: number | null) => {
   if (day) {
     setSelectedDate(day);
     const dayKey = day.toString();
-    if (dateRefs.current[dayKey]) {
-      dateRefs.current[dayKey]!.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const targetEl = dateRefs.current[dayKey];
+    const sc = scrollRef.current;
+    if (targetEl && sc) {
+      // 자기 스크롤 컨테이너 기준 위치를 계산
+      const stickyH = calendarStickyRef.current?.clientHeight ?? 0;
+      const containerTop = sc.getBoundingClientRect().top;
+      const targetTopInViewport = targetEl.getBoundingClientRect().top;
+      const currentScrollTop = sc.scrollTop;
+      const delta = targetTopInViewport - containerTop; // 컨테이너 상단부터 목표까지 거리
+      const targetTop = currentScrollTop + delta - stickyH + 1; // 여유 8px
+      sc.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
     }
   }
 };
   return (
     <DefaultDiv isPadding={false}>
-      <div
-        ref={scrollRef}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
-        className="relative dark:bg-gray-700"
-      >
+      <div className="flex relative flex-col h-screen dark:bg-gray-700">
+        {/* 헤더 (상단 고정) */}
+        <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[100vw] max-w-[400px] z-[60] bg-white border-b border-gray-200">
+          <div className="flex justify-between items-center px-5 py-all">
+            <div className="block gap-2 items-center">
+              <div className="flex relative items-center text-3xl font-semibold text-center border-b border-gray-100 dark:border-gray-600">소비내역</div>
+            </div>
+              <button onClick={() => navigate('/calendar/diary')}>
+                <IconButton
+                  src={img.diaryIcon.toString()}
+                  alt="일기"
+                  height={28}
+                />
+              </button>
+          </div>
+          
+          {/* 월 선택 (헤더에 포함) */}
+          <div className="flex gap-5 justify-center items-center px-5 mb-5">
+            <div 
+              onClick={() => changeMonth(-1)} 
+              className="text-2xl text-gray-600 transition-colors cursor-pointer select-none dark:text-gray-300 hover:text-gray-800 dark:hover:text-white"
+            >
+              ◀
+            </div>
+            <span className="text-2xl font-400 dark:text-white">{month + 1}월</span>
+            <div 
+              onClick={() => changeMonth(1)} 
+              className="text-2xl text-gray-600 transition-colors cursor-pointer select-none dark:text-gray-300 hover:text-gray-800 dark:hover:text-white"
+            >
+              ▶
+            </div>
+          </div>
+        </div>
+
+        {/* 헤더 공간 확보 (헤더 높이만큼) */}
+        <div className="h-[12rem]"></div>
+
+        {/* Pull-to-refresh 인디케이터 */}
         <div 
-          className={`absolute top-0 left-0 right-0 bg-gray-100 flex items-end justify-center overflow-hidden border-b ${
+          className={`absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] max-w-[400px] bg-gray-100 flex items-end justify-center overflow-hidden border-b ${
             pullY > 0 || isRefreshing ? 'flex' : 'hidden'
           } ${isPulling ? '' : 'transition-all duration-180 ease-out'}`}
           style={{ height: `${Math.max(0, pullY)}px` }}
         >
-          <div className="w-full text-center pb-2 text-gray-500 text-xs relative">
+          <div className="relative pb-2 w-full text-xs text-center text-gray-500">
             <div 
               className="absolute left-0 right-0 h-0.5 bg-gray-400 transition-opacity duration-180"
               style={{ 
@@ -250,94 +293,63 @@ const CalendarView = () => {
           </div>
         </div>
 
-        {/* 콘텐츠 */}
+        {/* 결제 내역 리스트 (스크롤 가능) */}
         <div 
-          className={isPulling ? '' : 'transition-transform duration-180 ease-out'}
-          style={{ transform: `translateY(${pullY}px)` }}
+          ref={scrollRef}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+          className="overflow-y-auto flex-1 px-5 pb-60"
         >
-          {/* 헤더 */}
-          <div className="py-all px-5 flex items-center justify-between">
-            <div className="block items-center gap-2">
-              <div className="flex items-center text-center text-3xl font-semibold border-b border-gray-100 dark:border-gray-600 relative">소비내역</div>
-              <div className="text-3xl text-black=-500 font-bold">(전체)</div>
-            </div>
-              <button onClick={() => navigate('/calendar/diary')}>
-                <IconButton
-                  src={img.diaryIcon.toString()}
-                  alt="일기"
-                  height={33}
-                />
-              </button>
-          </div>
-          {/* 캘린더 */}
-          <div className="p-5 dark:bg-gray-700">
-            {/* 월 선택 */}
-            <div className="flex justify-center items-center mb-5 gap-5">
-              <div 
-                onClick={() => changeMonth(-1)} 
-                className="cursor-pointer text-gray-600 dark:text-gray-300 text-2xl select-none hover:text-gray-800 dark:hover:text-white transition-colors"
-              >
-                ◀
-              </div>
-              <span className="text-2xl font-400 dark:text-white">{month + 1}월</span>
-              <div 
-                onClick={() => changeMonth(1)} 
-                className="cursor-pointer text-gray-600 dark:text-gray-300 text-2xl select-none hover:text-gray-800 dark:hover:text-white transition-colors"
-              >
-                ▶
-              </div>
-            </div>
-
-            {/* 요일 헤더 */}
-            <div className="grid grid-cols-7 mb-3 gap-1">
-              {['일', '월', '화', '수', '목', '금', '토'].map((day, idx) => (
-                <div 
-                  key={idx} 
-                  className={`text-center text-5lg font-medium py-2 ${
-                    idx === 0 ? 'text-red-500 dark:text-red-400' : 
-                    idx === 6 ? 'text-blue-500 dark:text-blue-400' : 
-                    'text-gray-600 dark:text-gray-300'
-                  }`}
-                >
-                  {day}
-                </div>
-              ))}
-            </div>
-
-            {/* 날짜 그리드 */}
-            <div className="grid grid-cols-7 gap-0.5">
-              {calendarDays.map((day, idx) => {
-                const dayTotal = day ? getDayTotal(day) : 0;
-                const isSelected = day === selectedDate;
-
-                return (
-                  <div
-                    key={idx}
-                    onClick={() => handleDateClick(day)}
-                    className={`h-20 flex flex-col items-center justify-start pt-2 rounded-3xl relative cursor-${day ? 'pointer' : 'default'} ${
-                      isSelected ? 'shadow-xl' : 'bg-transparent'
+            {/* 캘린더 (스크롤 컨테이너 상단 sticky) */}
+            <div ref={calendarStickyRef} className="sticky top-0 z-[55] bg-white dark:bg-gray-700 pt-2 pb-5">
+              {/* 요일 헤더 */}
+              <div className="grid grid-cols-7 gap-1 mb-3">
+                {['일', '월', '화', '수', '목', '금', '토'].map((day, idx) => (
+                  <div 
+                    key={idx} 
+                    className={`text-center text-5lg font-medium py-2 ${
+                      idx === 0 ? 'text-red-500 dark:text-red-400' : 
+                      idx === 6 ? 'text-blue-500 dark:text-blue-400' : 
+                      'text-gray-600 dark:text-gray-300'
                     }`}
                   >
-                    {day && (
-                      <>
-                        <div className={` text-5lg text-base mb-1 h-5 leading-5 text-gray-900 ${
-                          isSelected ? 'font-semibold' : 'font-normal'
-                        }`}>
-                          {day}
-                        </div>
-                        <div className="mt-[0.5rem] text-md text-red-500 dark:text-red-400 font-medium h-3.5 leading-3.5 whitespace-nowrap">
-                          {dayTotal < 0 ? dayTotal.toLocaleString() : ''}
-                        </div>
-                      </>
-                    )}
+                    {day}
                   </div>
-                );
-              })}
-            </div>
-          </div>
+                ))}
+              </div>
 
-          {/* 결제 내역 리스트 */}
-          <div className="px-5 pb-5">
+              {/* 날짜 그리드 */}
+              <div className="grid grid-cols-7 gap-0.5">
+                {calendarDays.map((day, idx) => {
+                  const dayTotal = day ? getDayTotal(day) : 0;
+                  const isSelected = day === selectedDate;
+
+                  return (
+                    <div
+                      key={idx}
+                      onClick={() => handleDateClick(day)}
+                      className={`h-20 flex flex-col items-center justify-start pt-2 rounded-3xl relative cursor-${day ? 'pointer' : 'default'} ${
+                        isSelected ? 'shadow-xl' : 'bg-transparent'
+                      }`}
+                    >
+                      {day && (
+                        <>
+                          <div className={` text-5lg text-base mb-1 h-5 leading-5 text-gray-900 ${
+                            isSelected ? 'font-semibold' : 'font-normal'
+                          }`}>
+                            {day}
+                          </div>
+                          <div className="mt-[0.5rem] text-md text-red-500 dark:text-red-400 font-medium h-3.5 leading-3.5 whitespace-nowrap">
+                            {dayTotal < 0 ? dayTotal.toLocaleString() : ''}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
             {groupedPayments.map(([day, payments]) => {
               const date = new Date(year, month, parseInt(day));
               const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
@@ -346,27 +358,27 @@ const CalendarView = () => {
                 <div
                   key={day}
                   ref={(el) => (dateRefs.current[day] = el)}
-                  className="mb-8"
+                  className="mb-8 scroll-mt-[14rem]"
                 >
-                  <div className="text-xl text-gray-600 dark:text-gray-300 mb-4 font-medium">{day}일 {dayOfWeek}요일</div>
+                  <div className="mb-4 text-xl font-medium text-gray-600 dark:text-gray-300">{day}일 {dayOfWeek}요일</div>
                   {payments.map((payment, idx) => (
                     <div
                       key={idx}
                       onClick={() => setDetail({ day, data: payment })}
-                      className="flex items-center p-4 bg-white dark:bg-gray-600 rounded-2xl mb-3 shadow-sm gap-4 cursor-pointer hover:shadow-md dark:hover:shadow-lg transition-shadow"
+                      className="flex gap-4 items-center p-4 mb-3 bg-white rounded-2xl shadow-sm transition-shadow cursor-pointer dark:bg-gray-600 hover:shadow-md dark:hover:shadow-lg"
                     >
                       <div 
-                        className="w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0"
+                        className="flex flex-shrink-0 justify-center items-center w-20 h-20 rounded-full"
                         style={{ backgroundColor: `#${payment.categoryColor}` }}
                       >
                         <img
                           src={getCategoryIcon(payment.category) as any}
                           alt={payment.category}
-                          className="w-12 object-contain"
+                          className="object-contain w-12"
                         />
                       </div>
                       <div className="flex-1">
-                        <div className="text-2xl font-bold mb-1 text-gray-900 dark:text-white">
+                        <div className="mb-1 text-2xl font-bold text-gray-900 dark:text-white">
                           {(() => {
                             const displayAmount = payment.dutchPay && payment.dutchPay > 1 
                               ? Math.ceil(payment.amount / payment.dutchPay) 
@@ -374,7 +386,7 @@ const CalendarView = () => {
                             return displayAmount.toLocaleString();
                           })()} 원
                           {payment.dutchPay && payment.dutchPay > 1 && (
-                            <span className="text-base text-blue-500 ml-2">({payment.dutchPay}인)</span>
+                            <span className="ml-2 text-base text-blue-500">({payment.dutchPay}인)</span>
                           )}
                         </div>
                         <div className="text-xl text-gray-500 dark:text-gray-400">{payment.company}</div>
@@ -384,7 +396,11 @@ const CalendarView = () => {
                 </div>
               );
             })}
-          </div>
+        </div>
+
+        {/* 하단 네비게이션 (고정) */}
+        <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-[100vw] max-w-[400px] z-50">
+          <NavBar />
         </div>
 
         {/* 상세 내역 모달 */}
@@ -397,7 +413,6 @@ const CalendarView = () => {
         {/* 더치페이 모달 */}
         <DutchPayModal />
       </div>
-      <NavBar />
     </DefaultDiv>
   );
 };

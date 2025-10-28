@@ -102,49 +102,54 @@ const AddCard: React.FC = () => {
 
   return (
     <div className="flex relative flex-col w-full h-screen bg-white" style={{width:'400px', margin: '0 auto'}}>
-      {/* 헤더 */}
-      <div className="relative flex items-center justify-between w-full h-[4.5rem] px-0 bg-white border-b border-gray-200">
-        {/* 왼쪽: 뒤로가기 버튼 */}
-        <div className="flex justify-start pl-5 w-10">
-          <button
-            type="button"
-            onClick={() => navigate('/card')}
-            aria-label="뒤로가기"
-            className="flex justify-center items-center"
-          >
-            <img
-              src={img.Vector}
-              alt="뒤로가기"
-              className="object-contain w-5 h-5"
-            />
-          </button>
-        </div>
+      {/* 헤더 (상단 고정) */}
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[100vw] max-w-[400px] z-[60] bg-white border-b border-gray-200">
+        <div className="flex items-center justify-between h-[4.5rem] px-0">
+          {/* 왼쪽: 뒤로가기 버튼 */}
+          <div className="flex justify-start pl-5 w-10">
+            <button
+              type="button"
+              onClick={() => navigate('/card')}
+              aria-label="뒤로가기"
+              className="flex justify-center items-center"
+            >
+              <img
+                src={img.Vector}
+                alt="뒤로가기"
+                className="object-contain w-5 h-5"
+              />
+            </button>
+          </div>
 
-        {/* 가운데: 타이틀 */}
-        <h1 className="flex-1 text-center text-[1.6rem] font-semibold text-gray-900">
-          카드 추가
-        </h1>
+          {/* 가운데: 타이틀 */}
+          <h1 className="flex-1 text-center text-[1.6rem] font-semibold text-gray-900">
+            카드 추가
+          </h1>
 
-        {/* 오른쪽: 닫기 버튼 */}
-        <div className="flex justify-end pr-5 w-10">
-          <button
-            type="button"
-            onClick={() => navigate('/card')}
-            aria-label="닫기"
-            className="flex justify-center items-center"
-          >
-            <img
-              src={img.BsX}
-              alt="닫기"
-              className="object-contain w-7 h-7"
-            />
-          </button>
+          {/* 오른쪽: 닫기 버튼 */}
+          <div className="flex justify-end pr-5 w-10">
+            <button
+              type="button"
+              onClick={() => navigate('/card')}
+              aria-label="닫기"
+              className="flex justify-center items-center"
+            >
+              <img
+                src={img.BsX}
+                alt="닫기"
+                className="object-contain w-7 h-7"
+              />
+            </button>
+          </div>
         </div>
       </div>
 
+      {/* 헤더 공간 확보 */}
+      <div className="h-[4.5rem]"></div>
+
       {/* 메인 컨텐츠 */}
       <div className="flex flex-col flex-1 pb-20 bg-white">
-        <div className="flex-1 px-8 pt-20 pb-10">
+        <div className="flex-1 px-8 pt-10 pb-2">
           {/* 폼 */}
           <div className="space-y-12">
             {/* 카드번호 */}
@@ -267,7 +272,7 @@ const AddCard: React.FC = () => {
                     errors.birthDate ? 'border-red-500' : 'border-gray-200 focus:border-blue-500'
                   }`}
                 />
-                <div className="flex gap-6 ml-4">
+                <div className="flex gap-5 ml-4">
                   <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
                   <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
                   <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
@@ -300,15 +305,18 @@ const AddCard: React.FC = () => {
           </div>
         </div>
 
-        {/* 완료 버튼 */}
-        <div className="flex justify-center px-6 py-10 bg-white">
+      </div>
+
+      {/* 완료 버튼 (하단 고정) - 보안키패드 표시 시 숨김 */}
+      {!keypadVisible && (
+        <div className="fixed left-1/2 -translate-x-1/2 bottom-[5rem] w-[100vw] max-w-[400px] z-[100] px-6 py-4 bg-white border-t border-gray-200">
           <DefaultButton
             text="완료"
             onClick={handleComplete}
-            className="bg-[#8BC34A] hover:bg-[#7EB73F] w-full max-w-none py-3 text-base"
+            className="bg-[#8BC34A] hover:bg-[#7EB73F] w-full py-3 text-base"
           />
         </div>
-      </div>
+      )}
 
       {/* 보안키패드 */}
       <SecureKeypad
@@ -318,10 +326,12 @@ const AddCard: React.FC = () => {
         onClose={handleKeypadClose}
       />
 
-      {/* 하단 네비게이션 */}
-      <div className="relative z-10">
-        <BottomNav />
-      </div>
+      {/* 하단 네비게이션 (고정) - 보안키패드 표시 시 숨김 */}
+      {!keypadVisible && (
+        <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-[100vw] max-w-[400px] z-50">
+          <BottomNav />
+        </div>
+      )}
 
     </div>
   );

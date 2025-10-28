@@ -42,7 +42,7 @@ export default function GoalSetupView({
   const isValidStep = useMemo(() => {
     if (step === 1 && !job) return false;
     if (step === 2 && incomeNum <= 0) return false;
-    if (step === 3 && goalNum <= 0) return false;
+    if (step === 3 && (goalNum <= 0 || goalNum > incomeNum)) return false;
     return true;
   }, [step, job, incomeNum, goalNum]);
 
@@ -58,11 +58,11 @@ export default function GoalSetupView({
     setGoalText("");
 
     // ✅ 홈으로 이동
-    navigate("/");
+    navigate("/home");
   };
 
   const handleClose = () => {
-    navigate("/");
+    navigate("/home");
   };
 
   return (
@@ -78,7 +78,7 @@ export default function GoalSetupView({
 
       {/* STEP 1: 직업 선택 */}
       {step === 1 && (
-        <div className="flex flex-col h-full px-6 pt-16 pb-10">
+        <div className="flex flex-col px-6 pt-16 pb-10 h-full">
           <div className="text-left mt-[3rem]">
             <Title2 text="지금은 어떤" />
             <Title2 text="상황에 가장 가까우신가요?" />
@@ -101,7 +101,7 @@ export default function GoalSetupView({
             <span className="text-gray-400">▾</span>
           </button>
 
-          <div className="mt-auto w-full flex justify-center">
+          <div className="flex justify-center mt-auto w-full">
             <DefaultButton text="다음" disabled={!isValidStep} onClick={handleNext} />
           </div>
 
@@ -119,7 +119,7 @@ export default function GoalSetupView({
 
       {/* STEP 2: 수입 입력 */}
       {step === 2 && (
-        <div className="flex flex-col h-full px-6 pt-16 pb-10">
+        <div className="flex flex-col px-6 pt-16 pb-10 h-full">
           <div className="text-left mt-[3rem]">
             <Title2 text="석기시대님의 수입은" />
             <Title2 text="어느정도이신가요?" />
@@ -128,7 +128,7 @@ export default function GoalSetupView({
             </div>
           </div>
 
-          <div className="mt-[5rem]">
+          <div className="mt-[3rem]">
             <GoalInput
               value={incomeText}
               onChange={setIncomeText}
@@ -136,7 +136,7 @@ export default function GoalSetupView({
             />
           </div>
 
-          <div className="mt-auto w-full flex justify-center">
+          <div className="flex justify-center mt-auto w-full">
             <DefaultButton text="다음" disabled={!isValidStep} onClick={handleNext} />
           </div>
         </div>
@@ -144,7 +144,7 @@ export default function GoalSetupView({
 
       {/* STEP 3: 목표 입력 */}
       {step === 3 && (
-        <div className="flex flex-col h-full px-6 pt-16 pb-10">
+        <div className="flex flex-col px-6 pt-16 pb-10 h-full">
           <div className="text-left mt-[3rem]">
             <Title2 text="이번 달에는" />
             <Title2 text="얼마까지 쓰고 싶으신가요?" />
@@ -159,9 +159,14 @@ export default function GoalSetupView({
               onChange={setGoalText}
               placeholder={incomePlaceholder}
             />
+            {goalNum > 0 && goalNum > incomeNum && (
+              <div className="mt-3 text-red-500 text-[1rem]">
+                목표 금액은 한달 내 수입을 초과할 수 없어요.
+              </div>
+            )}
           </div>
 
-          <div className="mt-auto w-full flex justify-center">
+          <div className="flex justify-center mt-auto w-full">
             <DefaultButton text="다음" disabled={!isValidStep} onClick={handleNext} />
           </div>
 
@@ -170,7 +175,7 @@ export default function GoalSetupView({
 
       {/* STEP 4: 완료 화면 */}
       {step === 4 && (
-        <div className="flex flex-col items-center h-full px-4 pt-20 pb-10">
+        <div className="flex flex-col items-center px-4 pt-20 pb-10 h-full">
           {/* 체크 아이콘 */}
           <div className="w-[10rem] h-[10rem] flex items-center translate-y-[11rem]">
             <img
@@ -189,19 +194,19 @@ export default function GoalSetupView({
           <div className="w-[80%] mt-[23rem] flex flex-col gap-[1rem] mx-auto">
             <div className="flex justify-between">
               <span className="text-[#A1A1A1] text-[1.2rem]">한달 내 수입</span>
-              <span className="text-[#4D4D4D] font-semibold text-[1.2rem]">
+              <span className="text-[#4D4D4D] font-semibold text-[1.5rem]">
                 {incomeNum.toLocaleString()} 만원
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-[#A1A1A1] text-[1.2rem]">목표 금액</span>
-              <span className="text-[#4D4D4D] font-semibold text-[1.2rem]">
+              <span className="text-[#4D4D4D] font-semibold text-[1.5rem]">
                 {goalNum.toLocaleString()} 만원
               </span>
             </div>
           </div>
 
-          <div className="mt-auto w-full flex justify-center">
+          <div className="flex justify-center mt-auto w-full">
             <DefaultButton text="확인" onClick={handleRestart} />
           </div>
 
