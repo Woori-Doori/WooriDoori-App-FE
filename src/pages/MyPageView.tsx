@@ -7,8 +7,20 @@ import { img } from '@/assets/img';
 const MyPageView: React.FC = () => {
   const navigate = useNavigate();
   
+  // localStorage에서 사용자 정보 가져오기
+  const getUserName = () => {
+    const userInfo = localStorage.getItem('userInfo');
+    if (userInfo) {
+      const user = JSON.parse(userInfo);
+      return user.name || '사용자';
+    }
+    return '석기'; // 기본값
+  };
+  
+  const userName = getUserName();
+  
   const menuItems = [
-    { title: '메인 화면', icon: '>', path: '/' },
+    { title: '메인 화면', icon: '>', path: '/home' },
     { title: '소비 내역 (일기)', icon: '>', path: '/calendar/diary' },
     { title: '소비 내역 (캘린더)', icon: '>', path: '/calendar' },
     { title: '카드 관리', icon: '>', path: '/card' },
@@ -48,7 +60,7 @@ const MyPageView: React.FC = () => {
         {/* 사용자 정보 */}
         <div className="flex-1">
           <h1 className="text-[1.8rem] font-bold text-gray-900 mb-1">
-            석기시대님
+            {userName}님
           </h1>
           <p className="text-[1.2rem] text-gray-600">
             안녕하세요 오늘도 이용해주셔서 감사해요
