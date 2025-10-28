@@ -25,7 +25,6 @@ const CardManagement: React.FC = () => {
   // 별명 편집 모달 상태
   const [isEditNicknameModalOpen, setIsEditNicknameModalOpen] = useState(false);
   const [editingCardId, setEditingCardId] = useState<string | null>(null);
-  const [editingCardNickname, setEditingCardNickname] = useState<string>('');
   const [newNickname, setNewNickname] = useState<string>('');
   
   // 카드 데이터 상태
@@ -124,7 +123,6 @@ const CardManagement: React.FC = () => {
   // 별명 편집 모달 열기
   const handleEditNickname = (cardId: string, currentNickname: string) => {
     setEditingCardId(cardId);
-    setEditingCardNickname(currentNickname);
     setNewNickname(currentNickname);
     setIsEditNicknameModalOpen(true);
   };
@@ -141,7 +139,6 @@ const CardManagement: React.FC = () => {
     }
     setIsEditNicknameModalOpen(false);
     setEditingCardId(null);
-    setEditingCardNickname('');
     setNewNickname('');
   };
 
@@ -149,57 +146,47 @@ const CardManagement: React.FC = () => {
   const handleCloseNicknameModal = () => {
     setIsEditNicknameModalOpen(false);
     setEditingCardId(null);
-    setEditingCardNickname('');
     setNewNickname('');
   };
 
   return (
     <div>
       <DefaultDiv className={`transition-all duration-200 ${isEditNicknameModalOpen ? 'bg-black/40' : ''}`}>
-        {/* 헤더 */}
-        <div className="relative flex items-center justify-between w-full h-[4.5rem] px-0 bg-white border-b border-gray-200">
-          {/* 왼쪽: 뒤로가기 버튼 */}
-          <div className="flex justify-start pl-5 w-10">
-            <button
-              type="button"
-              onClick={() => window.history.back()}
-              aria-label="뒤로가기"
-              className="flex justify-center items-center"
-            >
-              <img
-                src={img.Vector}
-                alt="뒤로가기"
-                className="object-contain w-5 h-5"
-              />
-            </button>
+        {/* 헤더 (상단 고정) */}
+        <div
+          className="fixed top-0 left-1/2 -translate-x-1/2 w-[100vw] max-w-[400px] z-[60] bg-white border-b border-gray-200"
+        >
+          <div className="flex items-center justify-between h-[4.5rem] px-0">
+            {/* 타이틀 */}
+            <h1 className="flex-1 text-left text-[1.9rem] font-semibold text-gray-900 pl-5">
+              카드 관리
+            </h1>
+
+            {/* 오른쪽: 설정 버튼 */}
+            {!isEditMode && (
+              <div className="flex justify-end pr-5 w-11">
+                <button
+                  type="button"
+                  onClick={toggleSettingsModal}
+                  aria-label="설정"
+                  className="flex justify-center items-center"
+                >
+                  <img
+                    src={img.settingIcon}
+                    alt="설정"
+                    className="object-contain w-8 h-8"
+                  />
+                </button>
+              </div>
+            )}
           </div>
-
-        {/* 왼쪽: 타이틀 */}
-        <h1 className="flex-1 text-left text-[1.9rem] font-semibold text-gray-900 truncate -ml-10">
-          카드 관리
-        </h1>
-
-          {/* 오른쪽: 설정 버튼 */}
-          {!isEditMode && (
-            <div className="flex justify-end pr-5 w-11">
-              <button
-                type="button"
-                onClick={toggleSettingsModal}
-                aria-label="설정"
-                className="flex justify-center items-center"
-              >
-                <img
-                  src={img.settingIcon}
-                  alt="설정"
-                  className="object-contain w-8 h-8"
-                />
-              </button>
-            </div>
-          )}
         </div>
 
+      {/* 헤더 공간 확보 */}
+      <div className="h-[4.5rem]"></div>
+
       {/* 메인 컨텐츠 */}
-      <div className="pb-32">
+      <div className="pb-40">
         {/* 총 등록 카드 수 */}
         <div className="mt-4 mb-4">
           <SubText text={`총 등록 (${cards.length}개)`} />
@@ -230,16 +217,31 @@ const CardManagement: React.FC = () => {
           ))}
         </div>
 
+        {/* 편집 모드일 때 저장 버튼 (하단 고정, 네비게이션 위) */}
+        {isEditMode && (
+          <div className="fixed left-1/2 -translate-x-1/2 bottom-[5rem] w-[100vw] max-w-[400px] z-[100] px-[1.2rem] py-4 bg-white border-t border-gray-200">
+            <DefaultButton
+              text="변경사항 저장"
+              onClick={isEditNicknameModalOpen ? undefined : handleSaveChanges}
+              className={`w-full ${
+                isEditNicknameModalOpen 
+                  ? 'bg-gray-400 opacity-50 cursor-not-allowed' 
+                  : 'bg-red-500 hover:bg-red-600 active:bg-red-700'
+              }`}
+            />
+          </div>
+        )}
+
         {/* 설정 모달 */}
         {isSettingsModalOpen && (
           <div 
-            className={`flex absolute inset-0 z-[500] justify-center items-end bg-black/40 transition-all duration-500 ${
+            className={`fixed inset-0 z-[0] flex justify-center items-end bg-black/40 transition-all duration-500 ${
               isModalVisible ? 'opacity-100' : 'opacity-0'
             }`}
             onClick={toggleSettingsModal}
           >
             <div 
-              className={`w-[400px] h-[170px] bg-white rounded-t-3xl shadow-lg flex flex-col transform transition-transform duration-500 ease-out ${
+              className={`w-[400px] h-[170px] bg-white rounded-t-3xl shadow-lg flex flex-col transform transition-transform duration-500 ease-out mb-[5rem] ${
                 isModalVisible ? 'translate-y-0' : 'translate-y-full'
               }`}
               onClick={(e) => e.stopPropagation()}
@@ -277,20 +279,6 @@ const CardManagement: React.FC = () => {
           </div>
         )}
 
-        {/* 편집 모드일 때 저장 버튼 */}
-        {isEditMode && (
-          <div className="absolute bottom-[7rem] left-0 right-0 z-[60] px-[1.2rem] flex justify-center">
-            <DefaultButton
-              text="변경사항 저장"
-              onClick={isEditNicknameModalOpen ? undefined : handleSaveChanges}
-              className={`${
-                isEditNicknameModalOpen 
-                  ? 'bg-gray-400 opacity-50 cursor-not-allowed' 
-                  : 'bg-red-500 hover:bg-red-600 active:bg-red-700'
-              }`}
-            />
-          </div>
-        )}
       </div>
       
       {/* 네비게이션 바 */}
