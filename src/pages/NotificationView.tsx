@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import DefaultDiv from '@/components/default/DefaultDiv';
 import NavBar from '@/components/default/NavBar';
+import NotificationItem from '@/components/noti/Notification';
 import { img } from '@/assets/img';
 
 interface Notification {
@@ -13,107 +14,6 @@ interface Notification {
   date: string;
   isNew?: boolean;
 }
-
-
-const NotificationItem: React.FC<{ notification: Notification; onDelete: (id: number) => void }> = ({ notification, onDelete }) => {
-  const [translateX, setTranslateX] = React.useState(0);
-  const [touchStart, setTouchStart] = React.useState<number | null>(null);
-  
-  const deleteButtonWidth = 80;
-
-  const onTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-
-  const onTouchMove = (e: React.TouchEvent) => {
-    if (touchStart === null) return;
-    
-    const currentX = e.targetTouches[0].clientX;
-    const diff = touchStart - currentX;
-    
-    if (diff > 0) {
-      // 왼쪽으로 드래그
-      const newTranslateX = Math.min(diff, deleteButtonWidth);
-      setTranslateX(newTranslateX);
-    } else {
-      // 오른쪽으로 드래그
-      setTranslateX(0);
-    }
-  };
-
-  const onTouchEnd = () => {
-    if (touchStart === null) return;
-    
-    const finalTranslate = translateX;
-    if (finalTranslate > deleteButtonWidth / 2) {
-      // 절반 이상 드래그했으면 완전히 열림
-      setTranslateX(deleteButtonWidth);
-    } else {
-      // 절반 이하면 닫음
-      setTranslateX(0);
-    }
-    
-    setTouchStart(null);
-  };
-
-  const handleDelete = () => {
-    onDelete(notification.id);
-  };
-
-  return (
-    <div className="relative overflow-hidden rounded-2xl">
-      {/* 삭제 버튼 */}
-      <div 
-        className="absolute right-0 top-0 bottom-0 flex items-center justify-center bg-red-500"
-        style={{ width: `${deleteButtonWidth}px` }}
-      >
-        <button
-          onClick={handleDelete}
-          className="text-white"
-        >
-          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-          </svg>
-        </button>
-      </div>
-
-      {/* 알림 컨텐츠 */}
-      <div
-        className={`rounded-2xl p-4 transition-transform ${
-          notification.isNew ? 'bg-green-50 dark:bg-green-900/20' : 'bg-white dark:bg-gray-700'
-        } border border-gray-200 dark:border-gray-600 relative`}
-        style={{ transform: `translateX(-${translateX}px)` }}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
-      >
-        <div className="flex gap-4">
-          {/* 아이콘 */}
-          <div className="flex-shrink-0">
-            <img
-              src={notification.icon}
-              alt="Doori"
-              className="w-16 h-16 object-contain"
-            />
-          </div>
-
-          {/* 텍스트 */}
-          <div className="flex-1 min-w-0">
-            <p className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-1">
-              {notification.mainMessage}
-            </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-              {notification.subMessage}
-            </p>
-            <p className="text-xs text-gray-400 dark:text-gray-500 text-right">
-              {notification.date}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const NotificationView: React.FC = () => {
   const navigate = useNavigate();
