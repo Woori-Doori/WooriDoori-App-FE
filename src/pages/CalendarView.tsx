@@ -238,7 +238,7 @@ const CalendarView = () => {
           } ${isPulling ? '' : 'transition-all duration-180 ease-out'}`}
           style={{ height: `${Math.max(0, pullY)}px` }}
         >
-          <div className="relative pb-2 w-full text-xs text-center text-gray-500">
+          <div className="w-full text-center pb-2 text-gray-500 text-xs relative">
             <div 
               className="absolute left-0 right-0 h-0.5 bg-gray-400 transition-opacity duration-180"
               style={{ 
@@ -252,13 +252,13 @@ const CalendarView = () => {
 
         {/* 콘텐츠 */}
         <div 
-          className={isPulling ? '':'transition-transform duration-180 ease-out'}
+          className={isPulling ? '' : 'transition-transform duration-180 ease-out'}
           style={{ transform: `translateY(${pullY}px)` }}
         >
           {/* 헤더 */}
-          <div className="flex justify-between items-center px-5 py-all">
-            <div className="block gap-2 items-center">
-              <div className="flex relative items-center text-3xl font-semibold text-center border-b border-gray-100 dark:border-gray-600">소비내역</div>
+          <div className="py-all px-5 flex items-center justify-between">
+            <div className="block items-center gap-2">
+              <div className="flex items-center text-center text-3xl font-semibold border-b border-gray-100 dark:border-gray-600 relative">소비내역</div>
               <div className="text-3xl text-black=-500 font-bold">(전체)</div>
             </div>
               <button onClick={() => navigate('/calendar/diary')}>
@@ -272,24 +272,24 @@ const CalendarView = () => {
           {/* 캘린더 */}
           <div className="p-5 dark:bg-gray-700">
             {/* 월 선택 */}
-            <div className="flex gap-5 justify-center items-center mb-5">
+            <div className="flex justify-center items-center mb-5 gap-5">
               <div 
                 onClick={() => changeMonth(-1)} 
-                className="text-2xl text-gray-600 transition-colors cursor-pointer select-none dark:text-gray-300 hover:text-gray-800 dark:hover:text-white"
+                className="cursor-pointer text-gray-600 dark:text-gray-300 text-2xl select-none hover:text-gray-800 dark:hover:text-white transition-colors"
               >
                 ◀
               </div>
               <span className="text-2xl font-400 dark:text-white">{month + 1}월</span>
               <div 
                 onClick={() => changeMonth(1)} 
-                className="text-2xl text-gray-600 transition-colors cursor-pointer select-none dark:text-gray-300 hover:text-gray-800 dark:hover:text-white"
+                className="cursor-pointer text-gray-600 dark:text-gray-300 text-2xl select-none hover:text-gray-800 dark:hover:text-white transition-colors"
               >
                 ▶
               </div>
             </div>
 
             {/* 요일 헤더 */}
-            <div className="grid grid-cols-7 gap-1 mb-3">
+            <div className="grid grid-cols-7 mb-3 gap-1">
               {['일', '월', '화', '수', '목', '금', '토'].map((day, idx) => (
                 <div 
                   key={idx} 
@@ -348,25 +348,25 @@ const CalendarView = () => {
                   ref={(el) => (dateRefs.current[day] = el)}
                   className="mb-8"
                 >
-                  <div className="mb-4 text-xl font-medium text-gray-600 dark:text-gray-300">{day}일 {dayOfWeek}요일</div>
+                  <div className="text-xl text-gray-600 dark:text-gray-300 mb-4 font-medium">{day}일 {dayOfWeek}요일</div>
                   {payments.map((payment, idx) => (
                     <div
                       key={idx}
                       onClick={() => setDetail({ day, data: payment })}
-                      className="flex gap-4 items-center p-4 mb-3 bg-white rounded-2xl shadow-sm transition-shadow cursor-pointer dark:bg-gray-600 hover:shadow-md dark:hover:shadow-lg"
+                      className="flex items-center p-4 bg-white dark:bg-gray-600 rounded-2xl mb-3 shadow-sm gap-4 cursor-pointer hover:shadow-md dark:hover:shadow-lg transition-shadow"
                     >
                       <div 
-                        className="flex flex-shrink-0 justify-center items-center w-20 h-20 rounded-full"
+                        className="w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0"
                         style={{ backgroundColor: `#${payment.categoryColor}` }}
                       >
                         <img
                           src={getCategoryIcon(payment.category) as any}
                           alt={payment.category}
-                          className="object-contain w-12"
+                          className="w-12 object-contain"
                         />
                       </div>
                       <div className="flex-1">
-                        <div className="mb-1 text-2xl font-bold text-gray-900 dark:text-white">
+                        <div className="text-2xl font-bold mb-1 text-gray-900 dark:text-white">
                           {(() => {
                             const displayAmount = payment.dutchPay && payment.dutchPay > 1 
                               ? Math.ceil(payment.amount / payment.dutchPay) 
@@ -374,7 +374,7 @@ const CalendarView = () => {
                             return displayAmount.toLocaleString();
                           })()} 원
                           {payment.dutchPay && payment.dutchPay > 1 && (
-                            <span className="ml-2 text-base text-blue-500">({payment.dutchPay}인)</span>
+                            <span className="text-base text-blue-500 ml-2">({payment.dutchPay}인)</span>
                           )}
                         </div>
                         <div className="text-xl text-gray-500 dark:text-gray-400">{payment.company}</div>
