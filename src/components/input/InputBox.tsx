@@ -7,6 +7,7 @@ interface InputBoxProps {
   bgColor?: string;     // Tailwind 클래스명 ex) 'bg-white'
   focusColor?: string;  // Tailwind 클래스명 ex) 'focus:ring-green-300'
   disabled?: boolean;
+  type? :string;  //비밀번호 마스킹용
 }
 
 const InputBox = ({
@@ -18,20 +19,16 @@ const InputBox = ({
   bgColor = "bg-white",
   focusColor = "focus:ring-green-300",
   disabled = false,
+  type = "text"
 }: InputBoxProps) => {
   return (
     <input
-      type="text"
+      type={type}
       value={value}
       onChange={onChange}
       placeholder={placeholder}
       disabled={disabled}
-      className={`
-        w-full max-w-[33rem] sm:max-w-[33.5rem] px-4 py-3 rounded-lg outline-none border 
-        ${borderColor} ${textColor} ${bgColor} 
-        ${focusColor} transition
-        disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed
-      `}
+      className={`flex-1 px-4 py-3 w-full rounded-lg border transition outline-none ${borderColor} ${textColor} ${bgColor} ${focusColor} disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed`}
     />
   );
 };
