@@ -32,6 +32,7 @@ import CardRecomView from "@/pages/CardRecomViews/CardRecomView";
 import HomeView from "@/pages/HomeView";
 import ReportView from "@/pages/reportViews/reportView";
 import NotificationView from "@/pages/NotificationView";
+import CategoryTop5View from "@/pages/CategoryTop5View";
 
 // 라우트 타입 정의
 interface RouteConfig {
@@ -99,6 +100,11 @@ const reportRoutes: RouteConfig[] = [
   { path: '/report-card', element: <CardRecomView /> },
 ];
 
+// 카테고리 관련 라우트
+const categoryRoutes: RouteConfig[] = [
+  { path: '/category-top5', element: <CategoryTop5View /> },
+];
+
 // 모든 라우트 통합
 export const routerList: RouteConfig[] = [
   ...homeRoutes,
@@ -108,5 +114,6 @@ export const routerList: RouteConfig[] = [
   ...cardRoutes,
   ...goalRoutes,
   ...reportRoutes,
+  ...categoryRoutes,
   ...accountRoutes,
 ];

@@ -1,20 +1,23 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Title1 from "../components/title/Title1";
 import DefaultButton from "../components/button/DefaultButton";
 import logo from "../assets/login/logo_login.png";
 import DefaultDiv from "../components/default/DefaultDiv";
+import SuccessModal from "@/components/modal/SuccessModal";
 import LoginForm, { LoginFormRef } from "../components/login/LoginForm";
 
 const LoginView = () => {
   const navigate = useNavigate();
   const formRef = useRef<LoginFormRef>(null);
 
+  const [showSuccess, setShowSuccess] = useState(false);
+
   const handleLoginClick = async () => {
     const success = await formRef.current?.handleLogin();
 
     if (success) {
-      navigate("/home"); // 홈 화면으로 이동
+      setShowSuccess(true);
     } else {
       // 로그인 실패 시, 현재 화면 유지
       console.log("로그인 실패");
@@ -58,6 +61,15 @@ const LoginView = () => {
             onClick={handleLoginClick}
           />
         </div>
+
+      {/* 로그인 성공 모달 */}
+      <SuccessModal
+        isOpen={showSuccess}
+        title="로그인 성공"
+        message={`두리와 함께 즐거운 소비 관리 시작해볼까요?`}
+        confirmText="시작하기"
+        onConfirm={() => navigate('/home')}
+      />
       </div>
     </DefaultDiv>
   );

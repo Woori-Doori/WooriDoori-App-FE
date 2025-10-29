@@ -21,8 +21,8 @@ const MyPageView: React.FC = () => {
   
   const menuItems = [
     { title: '메인 화면', icon: '>', path: '/home' },
-    { title: '소비 내역 (일기)', icon: '>', path: '/calendar/diary' },
-    { title: '소비 내역 (캘린더)', icon: '>', path: '/calendar' },
+    { title: '소비 일기', icon: '>', path: '/calendar/diary' },
+    { title: '소비 내역', icon: '>', path: '/calendar' },
     { title: '카드 관리', icon: '>', path: '/card' },
     { title: '카드 추천', icon: '>', path: '/card-recommend' },
     { title: '달성도', icon: '>', path: '/goal/achievementHistory' },
@@ -31,7 +31,7 @@ const MyPageView: React.FC = () => {
   ];
 
   return (
-    <DefaultDiv>
+    <DefaultDiv isHome={true}>
       {/* 헤더 - 설정 아이콘 */}
       <div className="flex justify-end pt-4 pb-2 w-full">
         <button
@@ -85,8 +85,8 @@ const MyPageView: React.FC = () => {
               <span className="text-[1.4rem] font-medium text-gray-800">
                 {item.title}
               </span>
-              <span className="text-[1.2rem] text-blue-400 font-bold">
-                {item.icon}
+              <span className="flex items-center">
+                <img src={img.grayCheckRightIcon} alt=">" width={15} />
               </span>
             </div>
           ))}

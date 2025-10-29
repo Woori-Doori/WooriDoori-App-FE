@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import InputBox from "../input/InputBox";
+import SuccessModal from "../modal/SuccessModal";
 
 interface EmailVerificationProps {
   email: string;
@@ -14,6 +15,8 @@ const EmailVerification = ({ email, setEmail, onVerified }: EmailVerificationPro
   const [inputCode, setInputCode] = useState(""); // 사용자가 입력한 코드
   const [serverCode, setServerCode] = useState(""); // 실제 서버에서 받은 코드 (예시용)
   const [isVerified, setIsVerified] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [modalType, setModalType] = useState<'success' | 'error'>('success');
 
   // 타이머
   useEffect(() => {
@@ -39,7 +42,8 @@ const EmailVerification = ({ email, setEmail, onVerified }: EmailVerificationPro
   // 이메일 중복확인
   const handleEmailCheck = () => {
     if (!email) {
-      alert("이메일을 입력해주세요.");
+      setModalType('error');
+      setShowSuccessModal(true);
       return;
     }
     if (!validateEmailFormat(email)) {
@@ -86,7 +90,8 @@ const EmailVerification = ({ email, setEmail, onVerified }: EmailVerificationPro
     }
 
     if (inputCode === serverCode) {
-      alert("인증이 완료되었습니다!");
+      setModalType('success');
+      setShowSuccessModal(true);
       setIsVerified(true);
       setIsCodeSent(false);
       setTimeLeft(0);
@@ -105,7 +110,7 @@ const EmailVerification = ({ email, setEmail, onVerified }: EmailVerificationPro
           아이디
         </label>
         <div className="flex gap-[1rem] items-start">
-          <div className="flex-1 relative">
+          <div className="relative flex-1">
             <InputBox
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -134,55 +139,74 @@ const EmailVerification = ({ email, setEmail, onVerified }: EmailVerificationPro
             onClick={handleEmailCheck}
             className="px-[1rem] py-[0.8rem] border rounded-lg text-[1rem] font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition"
           >
-            중복확인
+            인증하기
           </button>
         </div>
       </div>
 
-      {/* 인증번호 입력 */}
-      <div className="mt-[1rem]">
-        <label className="block text-[1.4rem] font-bold text-gray-700 mb-[0.8rem]">
-          인증번호
-        </label>
-        <div className="flex gap-[1rem] items-center">
-          <div className="relative w-[27rem]">
-            <InputBox
-              value={inputCode}
-              onChange={(e) => setInputCode(e.target.value)}
-              placeholder="인증번호를 입력해주세요"
-            />
-            {isCodeSent && timeLeft > 0 && (
-              <span className="absolute right-[1rem] top-1/2 -translate-y-1/2 text-red-500 text-[1.2rem]">
-                {formatTime(timeLeft)}
-              </span>
-            )}
+      {/* 인증번호 입력 - 이메일 인증 후에만 표시 */}
+      {isAvailable === true && (
+        <div className="mt-[1rem]">
+          <label className="block text-[1.4rem] font-bold text-gray-700 mb-[0.8rem]">
+            인증번호
+          </label>
+          <div className="flex gap-[1rem] items-center">
+            <div className="relative flex-1">
+              <InputBox
+                value={inputCode}
+                onChange={(e) => setInputCode(e.target.value)}
+                placeholder="인증번호를 입력해주세요"
+              />
+              {isCodeSent && timeLeft > 0 && (
+                <span className="absolute right-[1rem] top-1/2 -translate-y-1/2 text-red-500 text-[1.2rem]">
+                  {formatTime(timeLeft)}
+                </span>
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={handleVerifyCode}
+              className={`px-[1rem] py-[0.8rem] border rounded-lg text-[1rem] font-medium transition ${
+                isVerified
+                  ? "text-white bg-gray-500 border-gray-500"
+                  : "text-gray-700 bg-gray-100 hover:bg-gray-200"
+              }`}
+            >
+              {isVerified ? "인증 완료" : "확인하기"}
+            </button>
           </div>
 
-          <button
-            type="button"
-            onClick={() => handleSendCode()}
-            className={`font-medium underline transition ${
-              isAvailable === true
-                ? "text-gray-800 hover:text-gray-500"
-                : "text-gray-400 cursor-not-allowed"
-            }`}
-          >
-            {isCodeSent ? "재전송" : "재전송"}
-          </button>
+          {/* 재전송 버튼 - 인증번호 입력창 아래에 배치 */}
+          <div className="mt-[0.8rem] text-left">
+            <div className="flex gap-2 items-center">
+              <span className="text-[1rem] text-gray-600">
+                ⚠️ 이메일을 받지 못하셨나요?
+              </span>
+              <button
+                type="button"
+                onClick={() => handleSendCode()}
+                className={`text-[1rem] font-medium underline transition ${
+                  isCodeSent
+                    ? "text-gray-800 hover:text-gray-500"
+                    : "text-gray-400 cursor-not-allowed"
+                }`}
+              >
+                이메일 재전송하기
+              </button>
+            </div>
+          </div>
         </div>
+      )}
 
-        <button
-          type="button"
-          onClick={handleVerifyCode}
-          className={`px-[1rem] py-[0.8rem] float-right border rounded-lg text-[1rem] font-medium transition ${
-            isVerified
-              ? "text-white bg-gray-500 border-gray-500"
-              : "text-gray-700 bg-gray-100 hover:bg-gray-200"
-          }`}
-        >
-          {isVerified ? "인증 완료" : "확인하기"}
-        </button>
-      </div>
+      {/* 인증 모달 */}
+      <SuccessModal
+        isOpen={showSuccessModal}
+        title={modalType === 'success' ? "인증 완료!" : "이메일을 입력해주세요"}
+        message={modalType === 'success' ? "이메일 인증이 성공적으로 완료되었습니다." : "이메일을 입력한 후 인증하기 버튼을 눌러주세요."}
+        confirmText="확인"
+        onConfirm={() => setShowSuccessModal(false)}
+      />
     </div>
   );
 };

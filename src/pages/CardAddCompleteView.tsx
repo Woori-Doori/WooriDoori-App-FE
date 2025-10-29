@@ -85,7 +85,7 @@ const CardAddComplete: React.FC = () => {
         </div>
 
         {/* 완료 버튼 - 하단 고정 */}
-        <div className="px-8 pb-8">
+        <div className="px-8 pb-20">
           <DefaultButton
             text="완료"
             onClick={handleComplete}

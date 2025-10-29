@@ -68,10 +68,14 @@ import fireworkRight from './fireworkR.png';
 import scale from './scale.png';
 import gauge from './gauge.png';
 import needle from './needle.png';
+import bubble from './bubble.png';
+import starbucks from './starbucks.png';
+import megacoffee from './megacoffee.png';
+import twosomecoffee from './twosomecoffee.png';
+import dooriBubble from './doori/doori_bubble.png';
 
 
-
-import logoIcon from './logo.png';
+import logoIcon from './woori_doori_logo.png';
 import bgImg from './home/main_banner.png';
 
 import stomIcon from './report/stome.png';
@@ -105,5 +109,5 @@ export const img ={
 
 
     logoIcon, bgImg, 
-    stomIcon, scaleIcon, testCard, cardBanner,cardBanner2
+    stomIcon, scaleIcon, testCard, cardBanner,cardBanner2, bubble, starbucks, megacoffee, twosomecoffee, dooriBubble
 }

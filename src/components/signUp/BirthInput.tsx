@@ -45,8 +45,7 @@ const BirthInput = ({ onValidChange }: BirthInputProps) => {
           value={front}
           onChange={handleFrontChange}
           maxLength={6}
-          placeholder="YYMMDD"
-          className="w-[12rem] px-4 py-3 rounded-lg outline-none border border-gray-300 text-gray-800 bg-white focus:ring-green-300 transition text-center"
+          className="w-[13rem] px-4 py-3 rounded-lg outline-none border border-gray-300 text-gray-800 bg-white focus:ring-green-300 transition text-center"
         />
         <span className="text-gray-600">-</span>
         <input

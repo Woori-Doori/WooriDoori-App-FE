@@ -48,7 +48,7 @@ const BottomNav = () => {
             <img
               src={isActive ? item.iconActive : item.iconInactive}
               alt={item.name}
-              className="w-6 h-6 transition-all duration-200 sm:w-7 sm:h-7"
+              className="w-8 h-8 transition-all duration-200 sm:w-7 sm:h-7"
             />
             <span
               className={`text-xs ${

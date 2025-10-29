@@ -66,18 +66,15 @@ const LoginForm = forwardRef<LoginFormRef>((_, ref) => {
       try {
         // API 호출
         const result = await loginUser(email, password);
-        
+
         if (result.success) {
           // 로그인 성공 시 사용자 정보를 localStorage에 저장
           localStorage.setItem('userInfo', JSON.stringify(result.data));
-          alert(`로그인 성공! 환영합니다, ${result.data.name}님!`);
           return true;
         } else {
-          alert(result.message || "로그인 실패: 이메일 또는 비밀번호를 확인해주세요.");
           return false;
         }
       } catch (error) {
-        alert("로그인 중 오류가 발생했습니다. 다시 시도해주세요.");
         return false;
       }
     },

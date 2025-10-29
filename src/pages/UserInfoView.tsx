@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import DefaultDiv from '@/components/default/DefaultDiv';
 import BottomNav from '@/components/default/NavBar';
 import ChoiceModal from '@/components/modal/ChoiceModal';
+import SuccessModal from '@/components/modal/SuccessModal';
 import { img } from '@/assets/img';
 
 const UserInfoView: React.FC = () => {
@@ -14,8 +15,8 @@ const UserInfoView: React.FC = () => {
     if (userInfo) {
       const user = JSON.parse(userInfo);
       return {
-        id: user.memberId || 'test@test.com',
-        password: '*************',
+        id: user.memberId || user.email || 'test@test.com',
+        password: user.password ? '•'.repeat(user.password.length) : '••••••••',
         name: user.name || '홍길동',
         phone: user.phone || '010-0000-0000',
         birth: user.birth || '040207'
@@ -23,18 +24,19 @@ const UserInfoView: React.FC = () => {
     }
     return {
       id: 'test@test.com',
-      password: '*************',
+      password: '••••••••',
       name: '홍길동',
       phone: '010-0000-0000',
       birth: '040207'
     };
   };
   
-  const [userInfo, setUserInfo] = useState(getUserInfo());
+  const [userInfo] = useState(getUserInfo());
 
   // 모달 상태
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
+  const [showLogoutSuccess, setShowLogoutSuccess] = useState(false);
 
 
   const handleLogout = () => {
@@ -49,14 +51,11 @@ const UserInfoView: React.FC = () => {
     // localStorage에서 사용자 정보 제거
     localStorage.removeItem('userInfo');
     
-    // 로그인 페이지로 이동
-    navigate('/');
-    
     // 모달 닫기
     setIsLogoutModalOpen(false);
     
-    // 로그아웃 성공 알림
-    alert('로그아웃되었습니다.');
+    // 로그아웃 성공 모달 표시
+    setShowLogoutSuccess(true);
   };
 
   const confirmWithdraw = () => {
@@ -74,7 +73,7 @@ const UserInfoView: React.FC = () => {
   };
 
   return (
-    <DefaultDiv>
+    <DefaultDiv isHome={true}>
       {/* 모달이 열릴 때 어두운 오버레이 */}
       <div className={`absolute inset-0 bg-black/40 transition-opacity duration-200 z-10 ${(isLogoutModalOpen || isWithdrawModalOpen) ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}></div>
       
@@ -82,15 +81,15 @@ const UserInfoView: React.FC = () => {
       <div className="flex justify-between items-center pt-4 pb-2 w-full">
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center"
+          className="p-2 rounded-lg transition-colors hover:bg-gray-100"
         >
           <img
             src={img.Vector}
             alt="뒤로가기"
-            className="w-5 h-5"
+            className="w-4 h-4"
           />
         </button>
-        <h1 className="text-[1.8rem] font-bold text-gray-900">
+        <h1 className="text-[1.5rem] font-bold text-gray-900">
           사용자 정보
         </h1>
         <div className="w-5"></div> {/* 공간 확보 */}
@@ -99,7 +98,7 @@ const UserInfoView: React.FC = () => {
       {/* 프로필 섹션 */}
       <div className="flex justify-between items-center mt-20 mb-10">
         {/* 프로필 이미지 - favicon */}
-        <div className="flex overflow-hidden justify-center items-center w-32 h-32 bg-green-500 rounded-full">
+        <div className="flex overflow-hidden justify-center items-center w-32 h-32 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full">
           <img
             src={img.doori_favicon}
             alt="프로필"
@@ -219,6 +218,15 @@ const UserInfoView: React.FC = () => {
           onCancel={cancelWithdraw}
           btnTitle="탈퇴"
           btnColor="text-red-500"
+        />
+
+        {/* 로그아웃 성공 모달 */}
+        <SuccessModal
+          isOpen={showLogoutSuccess}
+          title="로그아웃 완료"
+          message="안전하게 로그아웃되었습니다. 다음에 또 만나요!"
+          confirmText="확인"
+          onConfirm={() => navigate('/')}
         />
       </div>
     </DefaultDiv>

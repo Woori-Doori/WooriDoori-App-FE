@@ -6,6 +6,7 @@ import DefaultButton from "../components/button/DefaultButton";
 import EmailVerification from "../components/signUp/EmailVerification";
 import PasswordFields from "../components/signUp/PasswordFields";
 import BirthInput from "../components/signUp/BirthInput";
+import SuccessModal from "../components/modal/SuccessModal";
 import { useNavigate } from "react-router-dom";
 
 const SignUpFormView = () => {
@@ -20,6 +21,7 @@ const SignUpFormView = () => {
   const [nameError, setNameError] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [birthValid, setBirthValid] = useState(false);
+  const [showSignUpSuccess, setShowSignUpSuccess] = useState(false);
 
   // 이름: 한글/영문만 허용
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,8 +80,8 @@ const SignUpFormView = () => {
       const success = Math.random() > 0.1; // 10% 확률로 실패
       if (!success) throw new Error("서버 응답 오류");
 
-      alert("회원가입이 완료되었습니다!");
-      navigate("/signUp/Success");
+      // 회원가입 성공 모달 표시
+      setShowSignUpSuccess(true);
     } catch (error) {
       console.error("회원가입 중 오류:", error);
       alert("예기치 못한 오류로 회원가입에 실패했습니다.");
@@ -97,7 +99,7 @@ const SignUpFormView = () => {
         onClose={() => navigate("/login")}
       />
 
-      <div className="pt-[8rem] flex flex-col items-center">
+      <div className="pt-[4rem] flex flex-col items-center">
         <form className="w-full max-w-[34rem] flex flex-col gap-[2rem]">
           {/* 이메일 인증 */}
           <EmailVerification
@@ -147,10 +149,10 @@ const SignUpFormView = () => {
           <BirthInput onValidChange={setBirthValid} />
 
           {/* 완료 버튼 */}
-          <div className="mt-[6rem] w-full">
+          <div className="mt-[3rem] w-full">
             <DefaultButton
               text="완료"
-              className={`max-w-[33.5rem] w-full py-[1.4rem] text-[1.3rem] rounded-lg transition ${isFormValid
+              className={`max-w-[33.5rem] w-full py-[1.4rem] text-[1.3rem] rounded-2xl transition ${isFormValid
                   ? "bg-green-600 text-white hover:bg-green-700"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
@@ -159,6 +161,15 @@ const SignUpFormView = () => {
             />
           </div>
         </form>
+
+        {/* 회원가입 성공 모달 */}
+        <SuccessModal
+          isOpen={showSignUpSuccess}
+          title="회원가입 완료!"
+          message="축하합니다! 회원가입이 성공적으로 완료되었습니다.\n이제 로그인하여 서비스를 이용해보세요."
+          confirmText="로그인하기"
+          onConfirm={() => navigate('/login')}
+        />
       </div>
     </DefaultDiv>
   );
