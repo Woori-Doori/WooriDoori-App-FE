@@ -56,7 +56,6 @@ import DeleteIcon from './delete.png';
 import EditIcon from './edit.png';
 import grayCheckRightIcon from './gray_chec_right.png';
 import settingIcon from './setting.png';
-import alarmIcon from './alarm.png';
 import goindol from './searchid/goindol.png'
 import searchIcon from './search.png';
 import wooriCard from './woori_card.png';
@@ -90,6 +89,9 @@ import phoneIcon from './phone.png';
 import wooridoori_logo from './logo/logo.png';
 import woori_logo from './logo/woori_logo.png';
 
+import alarmOn from './bellY.png';
+import alarmOff from './bellB.png';
+
 
 
 export const img ={
@@ -100,10 +102,10 @@ export const img ={
     doori_heart, doori_normal, doori_pouting, doori_question, doori_report, doori_thinking, doori_wallet, doori_writing,
     doori_basic, goindol,
     cardExample,
-    wooridoori_logo, woori_logo,
+    wooridoori_logo, woori_logo, alarmOn, alarmOff,
     
     searchIcon, wooriCard,
-    DeleteIcon, EditIcon, grayCheckRightIcon, settingIcon, alarmIcon, diaryIcon, storeIcon, homeIcon, hospitalIcon, drinkIcon, phoneIcon
+    DeleteIcon, EditIcon, grayCheckRightIcon, settingIcon, diaryIcon, storeIcon, homeIcon, hospitalIcon, drinkIcon, phoneIcon
     , doori_favicon,
     check, fireworkLeft, fireworkRight, scale, gauge, needle,
 
