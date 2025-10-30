@@ -3,7 +3,6 @@ import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import DefaultDiv from "@/components/default/DefaultDiv";
 import Header from "@/components/default/Header";
-import SubText from "@/components/text/SubText";
 import { img } from "@/assets/img";
 
 // ✅ 두리 상태별 이미지
@@ -43,11 +42,11 @@ export default function AchievementDetailView() {
     const consumption = 120000;
 
     const top5 = [
-        { icon: img.food, price: 330314, color: "#FF715B" },
-        { icon: img.traffic, price: 330314, color: "#34D1BF" },
-        { icon: img.shopping, price: 330314, color: "#345BD1" },
-        { icon: img.education, price: 330314, color: "#969191" },
-        { icon: img.residence, price: 330314, color: "#FFF1D6" },
+        { icon: img.foodIcon, price: 330314, color: "#FF715B" },
+        { icon: img.trafficIcon, price: 330314, color: "#34D1BF" },
+        { icon: img.shoppingIcon, price: 330314, color: "#345BD1" },
+        { icon: img.educationIcon, price: 330314, color: "#969191" },
+        { icon: img.residenceIcon, price: 330314, color: "#FFF1D6" },
     ];
 
     // ✅ 상태별 구분
