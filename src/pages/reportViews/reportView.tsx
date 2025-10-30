@@ -28,11 +28,11 @@ const ReportView = () => {
   //도넛 리스트
   const totalPrice = 1080000;
   const categoriesList = [
-    { name: "식비", value: 400000, color: "#FF8353", percent: "37.04%", src: img.food },
-    { name: "교통/자동차", value: 300000, color: "#3ACFA3", percent: "27.78%", src: img.traffic },
-    { name: "쇼핑/마트", value: 200000, color: "#6B5DD3", percent: "18.52%", src: img.shopping },
-    { name: "교육", value: 100000, color: "#6E6E6E", percent: "9.26%", src: img.education },
-    { name: "기타", value: 80000, color: "#C4C4C4", percent: "7.41%", src: img.etc }
+    { name: "식비", value: 400000, color: "#FF8353", percent: "37.04%", src: img.foodIcon },
+    { name: "교통/자동차", value: 300000, color: "#3ACFA3", percent: "27.78%", src: img.trafficIcon },
+    { name: "쇼핑/마트", value: 200000, color: "#6B5DD3", percent: "18.52%", src: img.shoppingIcon },
+    { name: "교육", value: 100000, color: "#6E6E6E", percent: "9.26%", src: img.educationIcon },
+    { name: "기타", value: 80000, color: "#C4C4C4", percent: "7.41%", src: img.etcIcon }
   ];
 
 
