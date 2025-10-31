@@ -81,9 +81,9 @@ const CategoryTop5View: React.FC = () => {
     },
     {
       src:  `${img.doori_face1}`,
-      size: 250,
+      size: 200,
       top: "10%",
-      left: "35%",
+      left: "43%",
       delay: 3.5,
     },
   ];
@@ -101,7 +101,7 @@ const CategoryTop5View: React.FC = () => {
 
         {/* 캐릭터 */}
         <div className="character">
-          <img src={img.doori_basic} alt="dog" />
+          <img src={img.doori_bubbole} alt="두리" width={138} />
         </div>
       </div>
     </DefaultDiv>

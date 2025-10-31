@@ -15,6 +15,7 @@
 .character {
   position: absolute;
   bottom: 10px;
+  left: 10%;
 }
 .character img {
   width: 120px;
@@ -26,7 +27,6 @@
   position: absolute;
   border-radius: 50%;
   background: url('../assets/Bubble.png') no-repeat center center;
-  backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
   align-items: center;
