@@ -2,6 +2,7 @@ import React from "react";
 import "@/styles/bobbleAnimation.css";
 import { img } from "@/assets/img";
 import DefaultDiv from "@/components/default/DefaultDiv";
+import { useParams } from "react-router-dom";
 
 type BubbleProps = {
   src: string | null;
@@ -29,7 +30,10 @@ const Bubble: React.FC<BubbleProps> = ({ src, size, top, left, delay = 0 }) => {
 };
 
 const CategoryTop5View: React.FC = () => {
-  const bubbles = [
+  const { id } = useParams<{ id: string }>();
+
+  const category = '식비';
+  const categoryList = [
     {
       src: `${img.doori_face1}`,
       size: 70,
@@ -89,13 +93,13 @@ const CategoryTop5View: React.FC = () => {
   ];
 
   return (
-    <DefaultDiv isPadding={false}>
+    <DefaultDiv isPadding={false} isHeader={true} title={`${id} 중 가맹점 TOP 5`} onClose={()=>{window.history.back()}}>
       <div className="bubble-scene">
         {/* 배경 구름/잔디 */}
         <div className="ground" />
 
         {/* 비눗방울들 */}
-        {bubbles.map((b, i) => (
+        {categoryList.map((b, i) => (
           <Bubble key={i} {...b} />
         ))}
 

@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 const HomeView = () => {
   const navigate = useNavigate();
-  
+
   // localStorage에서 사용자 정보 가져오기
   const getUserName = () => {
     const userInfo = localStorage.getItem('userInfo');
@@ -21,7 +21,7 @@ const HomeView = () => {
     }
     return '석기'; // 기본값
   };
-  
+
   const name: string = getUserName();
   const target: string = '100만원 쓰기';
   const dooriTaget = { src: img.doori_basic, title: '흠...어디 한번 볼까?' };
@@ -122,19 +122,19 @@ const HomeView = () => {
             <h3 className="font-bold text-[1.6rem]">카테고리별 사용 금액 TOP 5</h3>
           </div>
           <BorderBox>
-            <div onClick={() => navigate('/category-top5')} className="cursor-pointer">
-              {
-                topCategoryList.map((element, index) => {
-                  return (
+            {
+              topCategoryList.map((element, index) => {
+                return (
+                  <div onClick={() => navigate(`/category-top5/${index}`)} className="cursor-pointer">
                     <div key={index} className={`flex items-center gap-6 ${index != topCategoryList.length - 1 ? 'border-b border-gray-100' : ''}`}>
                       <p className={`text-[1.5rem] font-bold pl-4
                         ${index == 0 ? 'text-[#FF0000]' : index == topCategoryList.length - 1 ? 'text-[#138FEF]' : 'text-[#4A4A4A]'}`}>TOP {index + 1}</p>
                       <ConsumptionCategory amount={element.amount} iconSrc={element.iconSrc} label={element.label} bgColor={element.bgColor} percentage="" isBorder={false} />
                     </div>
-                  )
-                })
-              }
-            </div>
+                  </div>
+                )
+              })
+            }
           </BorderBox>
         </div>
 

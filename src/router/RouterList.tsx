@@ -102,7 +102,7 @@ const reportRoutes: RouteConfig[] = [
 
 // 카테고리 관련 라우트
 const categoryRoutes: RouteConfig[] = [
-  { path: '/category-top5', element: <CategoryTop5View /> },
+  { path: '/category-top5/:id', element: <CategoryTop5View /> },
 ];
 
 // 모든 라우트 통합
