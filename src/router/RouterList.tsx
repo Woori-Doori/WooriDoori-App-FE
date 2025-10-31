@@ -31,7 +31,7 @@ import SignUpFailView from "@/pages/accountViews/signUp/SignUpFailView";
 import CardRecomView from "@/pages/cardRecomViews/CardRecomView";
 import HomeView from "@/pages/homeViews/HomeView";
 import ReportView from "@/pages/reportViews/reportView";
-import NotificationView from "@/pages/NotificationView";
+import NotificationView from "@/pages/noticationViews/NotificationView";
 import CategoryTop5View from "@/pages/CategoryTop5View";
 
 // 라우트 타입 정의
