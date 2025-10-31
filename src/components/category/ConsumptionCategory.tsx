@@ -21,7 +21,8 @@ const ConsumptionCategory = ({
             <div className="flex gap-8 items-center">
                 {/* ✅ 아이콘 영역 */}
                 <div
-                    className={`flex justify-center items-center w-16 h-16 rounded-full ${bgColor} shrink-0`}
+                    className="flex justify-center items-center w-16 h-16 rounded-full shrink-0"
+                    style={{ backgroundColor: bgColor }} // 🔥 color 그대로 반영
                 >
                     <img
                         src={iconSrc}

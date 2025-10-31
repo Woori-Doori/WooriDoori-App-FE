@@ -106,7 +106,7 @@ const ProgressCategoryView: React.FC<Props> = ({ categoriesList, totalPrice }) =
               amount={`${element.value.toLocaleString()}원`}
               iconSrc={element.src}
               label={element.name}
-              bgColor={`bg-[${element.color}]`}
+              bgColor={element.color}
               percentage={element.percent}
             />
           </div>
