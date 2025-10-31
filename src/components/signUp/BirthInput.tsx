@@ -39,7 +39,7 @@ const BirthInput = ({ onValidChange }: BirthInputProps) => {
       <label className="block text-[1.4rem] font-bold text-gray-700 mb-[0.8rem]">
         생년월일
       </label>
-      <div className="flex items-center gap-[0.8rem]">
+      <div className="flex flex-nowrap items-center gap-[0.8rem] whitespace-nowrap min-w-fit">
         <input
           type="text"
           value={front}
