@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DefaultDiv from "@/components/default/DefaultDiv";
-import Header from "@/components/default/Header";
 import Title2 from "@/components/title/Title2";
 import SubText from "@/components/text/SubText";
 import GoalInput from "@/components/input/GoalInput";
@@ -53,9 +52,12 @@ export default function GoalEditView() {
       // 첫 단계일 경우 뒤로가기 버튼이 안보이므로 여기 안들어옴
     }
   };
-
   const handleClose = () => {
-    navigate("/home");
+    if (window.history.length > 1) {
+      navigate(-1); // 🔙 브라우저 히스토리 기준으로 한 단계 뒤로
+    } else {
+      navigate("/home"); // 🔁 혹시나 히스토리가 없으면 홈으로
+    }
   };
 
   return (
