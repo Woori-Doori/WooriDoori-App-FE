@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DefaultDiv from '@/components/default/DefaultDiv';
-import BottomNav from '@/components/default/NavBar';
 import ChoiceModal from '@/components/modal/ChoiceModal';
 import SuccessModal from '@/components/modal/SuccessModal';
 import { img } from '@/assets/img';
@@ -38,7 +37,6 @@ const UserInfoView: React.FC = () => {
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [showLogoutSuccess, setShowLogoutSuccess] = useState(false);
 
-
   const handleLogout = () => {
     setIsLogoutModalOpen(true);
   };
@@ -73,27 +71,17 @@ const UserInfoView: React.FC = () => {
   };
 
   return (
-    <DefaultDiv isHome={true} isBottomNav={true}>
+    <DefaultDiv
+      isHeader={true}
+      title="사용자 정보"
+      isShowBack={true}
+      isShowClose={false}
+      isShowSetting={false}
+      onBack={() => navigate(-1)}
+      isBottomNav={true}
+    >
       {/* 모달이 열릴 때 어두운 오버레이 */}
       <div className={`absolute inset-0 bg-black/40 transition-opacity duration-200 z-10 ${(isLogoutModalOpen || isWithdrawModalOpen) ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}></div>
-      
-      {/* 헤더 - 뒤로가기 버튼 */}
-      <div className="flex justify-between items-center pt-4 pb-2 w-full">
-        <button
-          onClick={() => navigate(-1)}
-          className="p-2 rounded-lg transition-colors hover:bg-gray-100"
-        >
-          <img
-            src={img.Vector}
-            alt="뒤로가기"
-            className="w-4 h-4"
-          />
-        </button>
-        <h1 className="text-[1.5rem] font-bold text-gray-900">
-          사용자 정보
-        </h1>
-        <div className="w-5"></div> {/* 공간 확보 */}
-      </div>
 
       {/* 프로필 섹션 */}
       <div className="flex justify-between items-center mt-20 mb-10">
