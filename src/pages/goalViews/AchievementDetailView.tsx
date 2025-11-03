@@ -1,270 +1,215 @@
-import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import DefaultDiv from "@/components/default/DefaultDiv";
+import BorderBox from "@/components/default/BorderBox";
 import { img } from "@/assets/img";
+import RadarChart from "@/components/RadarChart";
+import ConsumptionGradeGauge from "@/components/Progress/ConsumptionGradeGauge";
+import "@/styles/goal/gaugePointerAnimations.css";
 
-// ✅ 두리 상태별 이미지
-import dooriHeart from "@/assets/doori/doori_heart.png";
-import doori_frustrated from "@/assets/doori/doori_frustrated.png";
-import doori_angry from "@/assets/doori/doori_angry.png";
+// ✅ 두리 등급별 이미지
+import dooriCool from "@/assets/doori/doori_cool.png";
+import dooriCoffee from "@/assets/doori/doori_coffee.png";
+import dooriPouting from "@/assets/doori/doori_pouting.png";
+import dooriFrustrated from "@/assets/doori/doori_frustrated.png";
+import dooriAngry from "@/assets/doori/doori_angry.png";
 
 export default function AchievementDetailView() {
-    const location = useLocation();
-    const data = location.state?.data;
-    const from = location.state?.from || "home";
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { state } = useLocation(); 
+  const data = state?.data as { month?: string } | undefined;
+  const from = state?.from || "home";
 
-    const handleBack = () => navigate(-1);
-    const handleClose = () => {
-    if (from === "mypage") navigate("/mypage");
-    else navigate("/home");
-    };
+  const handleBack = () => navigate(-1);
+  const handleClose = () => (from === "mypage" ? navigate("/mypage") : navigate("/home"));
 
-    // ✅ 더미 히스토리 데이터 (나중에 백엔드 연동)
-    const mockHistory = [
-        { month: "2025.02", percent: 25, comment: "좋아요! 이대로만 유지해요 🌱" },
-        { month: "2025.03", percent: 40, comment: "조금 과소비했어요 💸" },
-        { month: "2025.04", percent: 80, comment: "절약모드 필요해요 ⚠️" },
-    ];
+  // ✅ 더미 히스토리 데이터 (추후 백엔드 연동) - AchievementHistoryView와 동일한 데이터 사용
+  const mockHistory = useMemo(
+    () => [
+      { month: "2025.04", percent: 80, comment: "절약모드 필요해요 ⚠️" },
+      { month: "2025.03", percent: 40, comment: "조금 과소비했어요 💸" },
+      { month: "2025.02", percent: 25, comment: "좋아요! 이대로만 유지해요 🌱" },
+    ],
+    []
+  );
 
-    // ✅ 현재 인덱스 관리
-    const initialIndex =
-        mockHistory.findIndex((item) => item.month === data?.month) || 0;
-    const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  // ✅ 현재 인덱스 안전 계산
+  const foundIndex = mockHistory.findIndex((item) => item.month === data?.month);
+  const initialIndex = foundIndex !== -1 ? foundIndex : 0;
+  const [currentIndex, setCurrentIndex] = useState(initialIndex);
 
-    const currentData = mockHistory[currentIndex];
-    const percent = currentData.percent;
-    const comment = currentData.comment;
-    const score = 100 - percent;
-    const consumption = 120000;
+  // ✅ 현재 데이터
+  const currentData = mockHistory[currentIndex];
+  const percent = currentData.percent; // 과소비 진행도(0~100)
+  const score = 100 - percent; // 점수(낮을수록 과소비)
+  const goal = 120_000; // 이번달 목표(예시)
+  
+  // ✅ 소비 등급 계산 (1~5등급)
+  const getGrade = (p: number) => {
+    if (p <= 20) return 1;
+    if (p <= 40) return 2;
+    if (p <= 60) return 3;
+    if (p <= 80) return 4;
+    return 5;
+  };
+  const grade = getGrade(percent);
+  
+  // ✅ 3개월 이상 데이터가 있을 때만 점수 표시
+  const shouldShowScore = mockHistory.length >= 3;
 
-    const top5 = [
-        { icon: img.foodIcon, price: 330314, color: "#FF715B" },
-        { icon: img.trafficIcon, price: 330314, color: "#34D1BF" },
-        { icon: img.shoppingIcon, price: 330314, color: "#345BD1" },
-        { icon: img.educationIcon, price: 330314, color: "#969191" },
-        { icon: img.residenceIcon, price: 330314, color: "#FFF1D6" },
-    ];
+  // ✅ TOP 4
+  const top4 = [
+    { icon: img.foodIcon, price: 330314, color: "#FF715B" },
+    { icon: img.trafficIcon, price: 330314, color: "#34D1BF" },
+    { icon: img.shoppingIcon, price: 330314, color: "#345BD1" },
+    { icon: img.educationIcon, price: 330314, color: "#969191" },
+  ];
 
-    // ✅ 상태별 구분
-    let state: "good" | "normal" | "bad" = "normal";
-    if (score >= 70) state = "good";
-    else if (score >= 50) state = "normal";
-    else state = "bad";
+  // ✅ 등급별 스타일 설정 (1~5등급) - 게이지 색상과 일치
+  const gradeStyle = {
+    1: { border: "border-[#6BB64A]", img: dooriCool },
+    2: { border: "border-[#B6DB4A]", img: dooriCoffee },
+    3: { border: "border-[#F7E547]", img: dooriPouting },
+    4: { border: "border-[#F9A23B]", img: dooriFrustrated },
+    5: { border: "border-[#E74C3C]", img: dooriAngry },
+  }[grade];
 
-    const { color, doolyImg } =
-        state === "good"
-            ? {
-                color: "text-[#1BC277]",
-                doolyImg: dooriHeart,
+
+  // ✅ 유저 이름 로드
+  const getUserName = () => {
+    const info = localStorage.getItem("userInfo");
+    if (!info) return "사용자";
+    try {
+      const parsed = JSON.parse(info);
+      return parsed?.name || "사용자";
+    } catch {
+      return "사용자";
+    }
+  };
+  const userName = getUserName();
+
+  const fmt = (n: number) =>
+    n.toLocaleString("ko-KR", { maximumFractionDigits: 0 });
+
+  return (
+    <DefaultDiv
+      isHeader
+      title="목표 관리"
+      isShowBack
+      isShowClose
+      isShowSetting={false}
+      onBack={handleBack}
+      onClose={handleClose}
+      isMainTitle={false}
+    >
+      <div className="flex flex-col gap-6 px-4 pt-4 pb-0 h-full">
+        {/* ✅ 월 선택 (헤더 바로 아래) */}
+        <div className="flex items-center justify-center gap-4 text-gray-600 text-[1.4rem] font-semibold">
+          <button
+            onClick={() => currentIndex > 0 && setCurrentIndex((v) => v - 1)}
+            disabled={currentIndex === 0}
+            className={`transition ${currentIndex === 0 ? "text-gray-300 cursor-default" : "hover:text-black"}`}
+            aria-label="이전 달"
+          >
+            ◀
+          </button>
+          <span className="text-[1.6rem] font-bold text-gray-800">{currentData.month || ""}</span>
+          <button
+            onClick={() =>
+              currentIndex < mockHistory.length - 1 && setCurrentIndex((v) => v + 1)
             }
-            : state === "normal"
-                ? {
-                    color: "text-[#FFC642]",
-                    doolyImg: doori_frustrated,
-                }
-                : {
-                    color: "text-[#FD5D42]",
-                    doolyImg: doori_angry,
-                };
+            disabled={currentIndex === mockHistory.length - 1}
+            className={`transition ${
+              currentIndex === mockHistory.length - 1 ? "text-gray-300 cursor-default" : "hover:text-black"
+            }`}
+            aria-label="다음 달"
+          >
+            ▶
+          </button>
+        </div>
 
-    // ✅ 월 이동 핸들러
-    const handlePrev = () => {
-        if (currentIndex > 0) setCurrentIndex((prev) => prev - 1);
-    };
-    const handleNext = () => {
-        if (currentIndex < mockHistory.length - 1)
-            setCurrentIndex((prev) => prev + 1);
-    };
-
-    // ✅ percent → 시침 각도 변환 함수 (-90° ~ +90°)
-    const percentToDeg = (p: number) => -90 + p * 1.8;
-
-    // 유저 이름 로드
-    const getUserName = () => {
-        const info = localStorage.getItem('userInfo');
-        if (!info) return '사용자';
-        try { return JSON.parse(info).name || '사용자'; } catch { return '사용자'; }
-    };
-    const userName = getUserName();
-
-    return (
-        <DefaultDiv
-            isHeader={true}
-            title="달성도"
-            isShowBack={true}      
-            isShowClose={true}     
-            isShowSetting={false}
-            onBack={handleBack}    
-            onClose={handleClose}  
-            isMainTitle={false}
-        >
-            <div className="flex flex-col gap-6 px-6 pt-8 pb-60 h-full">
-                {/* 제목 영역 제거 (아래 점수 폼 하단으로 이동) */}
-                <div className="h-0" />
-
-                {/* ✅ 월 선택 + 점수 */}
-                <div className="flex flex-col items-center">
-                    <div className="flex items-center justify-center gap-4 text-gray-600 text-[1.6rem] mb-3 font-semibold">
-                        <button
-                            onClick={handlePrev}
-                            disabled={currentIndex === 0}
-                            className={`transition ${currentIndex === 0
-                                ? "text-gray-300 cursor-default"
-                                : "hover:text-black"
-                                }`}
-                        >
-                            ◀
-                        </button>
-                        <span className="text-[2rem] font-bold text-gray-800">{currentData.month}</span>
-                        <button
-                            onClick={handleNext}
-                            disabled={currentIndex === mockHistory.length - 1}
-                            className={`transition ${currentIndex === mockHistory.length - 1
-                                ? "text-gray-300 cursor-default"
-                                : "hover:text-black"
-                                }`}
-                        >
-                            ▶
-                        </button>
-                    </div>
-
-                    {/* ✅ 점수 박스 */}
-                    <div className="flex relative flex-col justify-center items-center py-10 w-full rounded-2xl border">
-                        {/* 왼쪽 폭죽 */}
-                        <img
-                            src={img.fireworkLeft}
-                            alt="왼쪽폭죽"
-                            className="absolute left-4 top-4 w-[7rem] h-[7rem]"
-                        />
-
-                        {/* 오른쪽 폭죽 */}
-                        <img
-                            src={img.fireworkRight}
-                            alt="오른쪽폭죽"
-                            className="absolute right-4 top-[9rem] w-[7rem] h-[7rem]"
-                        />
-
-                        {/* 점수 */}
-                        <p className="text-[3.5rem] font-extrabold text-gray-900 mt-2">
-                            {score}점
-                        </p>
-
-                        {/* 저울 */}
-                        <img
-                            src={img.scale}
-                            alt="저울"
-                            className="w-[4rem] h-[4rem] mt-3 object-contain"
-                        />
-                    </div>
-                </div>
-
-                {/* 점수 폼 하단 안내 문구 (가운데 정렬) */}
-                <div className="flex justify-center">
-                    <p className="mt-0 text-[1.2rem] text-gray-700 text-center">
-                        {`${userName}님의 현재 달성도에 대해 알려드릴게요`}
-                    </p>
-                </div>
-
-                {/* ✅ 소비 요약 */}
-                <div className="flex justify-around mt-5 text-center">
-                    <div>
-                        <p className="text-gray-500 text-[1.3rem]">이번달 소비</p>
-                        <p className="font-bold text-[1.4rem]">
-                            ₩{consumption.toLocaleString()}
-                        </p>
-                    </div>
-                    <div>
-                        <p className="text-gray-500 text-[1.3rem]">과소비 진행도</p>
-                        <p className="font-bold text-[1.4rem]">{percent}%</p>
-                    </div>
-                </div>
-
-                {/* ✅ 두리의 한마디 */}
-                <div
-                    className={`p-5 rounded-2xl border-2 bg-white transition-colors ${state === "good"
-                        ? "border-green-400"
-                        : state === "normal"
-                            ? "border-yellow-400"
-                            : "border-red-400"
-                        }`}
-                >
-                    <p className="text-[1.4rem] font-medium text-left">두리의 한마디</p>
-                    <p className="text-[1.2rem] font-light text-left">• {comment}</p>
-                </div>
-
-                {/* ✅ 초과 소비 TOP5 + 위험도 + 두리 */}
-                <div className="grid grid-cols-2 gap-5 items-start">
-                    {/* ✅ 왼쪽: 한달 소비 TOP5 */}
-                    <div className="p-5 bg-white rounded-2xl border border-gray-200 shadow-sm">
-                        <p className="font-semibold text-gray-800 mb-4 text-[1.2rem]">한달 소비 TOP 5</p>
-                        <ul className="space-y-4">
-                            {top5.map((item, i) => (
-                                <li key={i} className="flex justify-between items-center">
-                                    <div className="flex gap-3 items-center">
-                                        {/* 🔹 배경색 적용 */}
-                                        <div
-                                            className="w-[3rem] h-[3rem] rounded-full flex items-center justify-center"
-                                            style={{ backgroundColor: item.color }}
-                                        >
-                                            <img
-                                                src={item.icon}
-                                                className="w-[1.8rem] h-[1.8rem] object-contain"
-                                            />
-                                        </div>
-                                    </div>
-                                    <span className="text-[1.3rem] text-gray-700 font-semibold">
-                                        {item.price.toLocaleString()}원
-                                    </span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* ✅ 오른쪽: 위험도 예측 + 두리 */}
-                    <div className="flex flex-col gap-4 items-center">
-                        {/* ✅ 위험도 카드 */}
-                        <div className="rounded-2xl shadow-sm border border-gray-200 p-5 bg-white w-[85%] flex flex-col items-center justify-center">
-                            <p className="font-semibold text-gray-800 mb-2 text-[1.2rem]">
-                                이번달 위험도 예측
-                            </p>
-
-                            {/* ✅ 게이지 + 시침 */}
-                            <div className="relative w-[11rem] h-[5.5rem] flex items-center justify-center">
-                                {/* 반원형 게이지 */}
-                                <img
-                                    src={img.gauge}
-                                    alt="위험도 게이지"
-                                    className="w-[85%] h-auto translate-y-[2rem]"
-                                />
-
-                                {/* 시침 */}
-                                <div
-                                    className="absolute bottom-[-1rem] left-1/2 w-[0.35rem] h-[4rem] bg-black rounded-t-full origin-bottom transition-transform duration-500"
-                                    style={{
-                                        transform: `rotate(${percentToDeg(percent)}deg)`,
-                                    }}
-                                ></div>
-                            </div>
-
-                            {/* 퍼센트 표시 */}
-                            <p className="mt-4 text-[1.3rem] font-semibold text-gray-700">
-                                {percent}%
-                            </p>
-                        </div>
-
-                        {/* ✅ 두리 캐릭터 */}
-                        <div className="flex justify-center w-full">
-                            <img
-                                src={doolyImg}
-                                alt="두리 캐릭터"
-                                className="w-[11rem] h-[11rem] object-contain"
-                            />
-                        </div>
-                    </div>
-                </div>
+        {/* ✅ 상단: 이번달 목표 / 이번달 달성 */}
+          <div className="flex gap-10 justify-center items-center text-center">
+            <div className="flex flex-col">
+              <span className="text-gray-500 text-[1.3rem]">이번달 목표</span>
+              <span className="font-extrabold text-[1.6rem]">₩{fmt(goal)}</span>
             </div>
-        </DefaultDiv>
-    );
+            <span className="text-[2rem] font-bold text-gray-400 mt-6">+</span>
+            <div className="flex flex-col">
+              <span className="text-gray-500 text-[1.3rem]">이번달 달성</span>
+              <span className="font-extrabold text-[1.6rem]">{percent}%</span>
+            </div>
+          </div>
+
+        {/* ✅ 신용등급 그래프 (공통 컴포넌트 사용) */}
+        <ConsumptionGradeGauge key={`${currentIndex}-${grade}`} userName={userName} grade={grade} percent={percent} />
+
+        {/* ✅ 한달 소비 TOP 4 (2x2 그리드) */}
+        <div className="mt-6 mb-8">
+          <div className="flex flex-col items-center">
+            <div className="mx-auto w-fit">
+              <p className="font-semibold text-gray-800 mb-5 text-[1.4rem] text-left">한달 소비 TOP 4</p>
+              <div className="grid grid-cols-2 gap-6 gap-x-20 w-fit">
+            {top4.map((item, i) => (
+              <div key={i} className="flex gap-4 justify-start items-center w-fit">
+                <div
+                  className="w-[3rem] h-[3rem] rounded-full flex items-center justify-center shrink-0"
+                  style={{ backgroundColor: item.color }}
+                >
+                  <img src={item.icon} alt="" className="w-[1.8rem] h-[1.8rem] object-contain" />
+                </div>
+                <span className="text-[1.3rem] text-gray-700 font-semibold whitespace-nowrap">
+                  {fmt(item.price)}원
+                </span>
+              </div>
+            ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ✅ Radar 차트 카드 */}
+        {shouldShowScore && (
+          <BorderBox padding="p-5" borderRadius="rounded-2xl" borderColor="border-gray-200" shadow="shadow-sm">
+            <div className="w-full h-[28rem] flex items-center justify-center">
+              <RadarChart dataValues={[score, score * 0.9, score * 0.85, score * 0.95]} />
+            </div>
+          </BorderBox>
+        )}
+
+          <div className="flex gap-4 items-end">
+            {/* 폼: 왼쪽 */}
+          <BorderBox
+            padding="p-6"
+            borderRadius="rounded-2xl"
+            borderColor={gradeStyle.border}
+            bgColor="bg-[#FFFEFB]"
+            flex="flex-1"
+            shadow=""
+          >
+            <div className="min-w-[13rem] min-h-[18rem] flex flex-col" style={{
+              backgroundImage: 'repeating-linear-gradient(transparent, transparent 28px, rgba(16,24,40,0.12) 29px)',
+              backgroundSize: '100% 29px',
+              backgroundPositionY: '12px',
+            }}>
+              <p className="text-[1.4rem] font-medium text-left px-1 mb-2" style={{ 
+                lineHeight: '29px',
+                paddingTop: '12px'
+              }}>두리의 한마디</p>
+              <p className="text-[1.2rem] font-light text-left whitespace-pre-wrap break-words flex-1 overflow-y-auto px-1" style={{ 
+                lineHeight: '29px'
+              }}>
+                • {currentData.comment}
+              </p>
+            </div>
+          </BorderBox>
+          <img
+            src={gradeStyle.img}
+            alt="두리 캐릭터"
+            className="w-[14.5rem] h-[18.5rem] object-contain select-none pointer-events-none shrink-0"
+          />
+        </div>
+      </div>
+    </DefaultDiv>
+  );
 }
