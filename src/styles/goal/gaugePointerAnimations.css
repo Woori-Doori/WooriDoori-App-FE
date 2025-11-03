@@ -1,0 +1,27 @@
+/* 등급별 포인터 회전 및 위치 이동 애니메이션 */
+
+/* 공통 애니메이션 - 시작 위치(3등급 위치)에서 해당 등급 위치로 이동 */
+@keyframes moveAndRotateToGrade {
+  0% {
+    /* 3등급 위치 (정위치, 상단 중앙) */
+    left: 50%;
+    bottom: var(--start-bottom, 50%);
+    transform: translateX(-50%) rotate(0deg);
+  }
+  100% {
+    /* 목표 등급 위치 */
+    left: var(--pointer-left, 50%);
+    bottom: var(--pointer-bottom, 50%);
+    transform: translateX(-50%) rotate(var(--pointer-angle, 0deg));
+  }
+}
+
+/* 포인터 애니메이션 클래스 - 모든 등급에서 동일한 애니메이션 사용 */
+.gauge-pointer-grade-1,
+.gauge-pointer-grade-2,
+.gauge-pointer-grade-3,
+.gauge-pointer-grade-4,
+.gauge-pointer-grade-5 {
+  animation: moveAndRotateToGrade 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)
+    forwards;
+}
