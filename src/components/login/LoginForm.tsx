@@ -1,12 +1,12 @@
-import { useState, forwardRef, useImperativeHandle } from "react";
+import { useState, forwardRef } from "react";
 import { Link } from "react-router-dom";
-import { loginUser } from "../../api/userApi";
 
-export interface LoginFormRef {
-  handleLogin: () => Promise<boolean>;
-}
+// export interface LoginFormRef {
+//   handleLogin: () => Promise<boolean>;
+//   isError?: boolean,
+// }
 
-const LoginForm = forwardRef<LoginFormRef>((_, ref) => {
+const LoginForm = ({isError = false}:{ isError?: boolean })  => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -41,47 +41,47 @@ const LoginForm = forwardRef<LoginFormRef>((_, ref) => {
   };
 
   // 외부에서 실행할 수 있는 로그인 검증 로직
-  useImperativeHandle(ref, () => ({
-    handleLogin: async () => {
-      // 이메일 검증
-      if (!email) {
-        setEmailError("이메일을 입력해주세요.");
-        return false;
-      }
-      if (!emailRegex.test(email)) {
-        setEmailError("올바른 이메일 주소를 입력해주세요.");
-        return false;
-      }
+  // useImperativeHandle(ref, () => ({
+  //   handleLogin: async () => {
+  //     // 이메일 검증
+  //     if (!email) {
+  //       setEmailError("이메일을 입력해주세요.");
+  //       return false;
+  //     }
+  //     if (!emailRegex.test(email)) {
+  //       setEmailError("올바른 이메일 주소를 입력해주세요.");
+  //       return false;
+  //     }
 
-      // 비밀번호 검증
-      if (!password) {
-        setPwError("비밀번호를 입력해주세요.");
-        return false;
-      }
-      if (password.length < 6) {
-        setPwError("비밀번호는 6자리 이상이어야 합니다.");
-        return false;
-      }
+  //     // 비밀번호 검증
+  //     if (!password) {
+  //       setPwError("비밀번호를 입력해주세요.");
+  //       return false;
+  //     }
+  //     if (password.length < 6) {
+  //       setPwError("비밀번호는 6자리 이상이어야 합니다.");
+  //       return false;
+  //     }
 
-      try {
-        // API 호출
-        const result = await loginUser(email, password);
+  //     try {
+  //       // API 호출
+  //       const result = await loginUser(email, password);
 
-        if (result.success) {
-          // 로그인 성공 시 사용자 정보를 localStorage에 저장
-          localStorage.setItem('userInfo', JSON.stringify(result.data));
-          return true;
-        } else {
-          return false;
-        }
-      } catch (error) {
-        return false;
-      }
-    },
-  }));
+  //       if (result.success) {
+  //         // 로그인 성공 시 사용자 정보를 localStorage에 저장
+  //         localStorage.setItem('userInfo', JSON.stringify(result.data));
+  //         return true;
+  //       } else {
+  //         return false;
+  //       }
+  //     } catch (error) {
+  //       return false;
+  //     }
+  //   },
+  // }));
 
   return (
-    <div className="w-full mx-auto mb-[15rem] flex flex-col gap-[1.5rem] items-center">
+    <div className="w-full mx-auto mb-[10rem] flex flex-col gap-[1rem] items-center">
       {/* 이메일 입력 */}
       <div className="w-full max-w-[33.5rem]">
         <input
@@ -90,14 +90,17 @@ const LoginForm = forwardRef<LoginFormRef>((_, ref) => {
           onChange={handleEmailChange}
           placeholder="이메일 주소를 입력해주세요"
           className={`w-full px-6 py-4 rounded-lg outline-none border text-gray-800 bg-white transition text-[1.3rem] ${
-            emailError ? "border-red-400" : "border-gray-300"
+            emailError || isError ? "border-red-400" : "border-gray-300"
           }`}
         />
-        {emailError && (
-          <p className="text-[1.2rem] text-red-500 mt-[0.4rem]">
-            {emailError}
-          </p>
-        )}
+              <p
+          className={`text-[1.2rem] mt-[0.4rem] h-[1.6rem] transition-colors duration-200 ${
+            emailError ? "text-red-500" : "text-transparent"
+          }`}
+        >
+          {emailError || "placeholder"}
+        </p>
+
       </div>
 
       {/* 비밀번호 입력 */}
@@ -108,15 +111,20 @@ const LoginForm = forwardRef<LoginFormRef>((_, ref) => {
           onChange={handlePasswordChange}
           placeholder="비밀번호를 입력해주세요"
           className={`w-full px-6 py-4 rounded-lg outline-none border text-gray-800 bg-white transition text-[1.3rem] ${
-            pwError ? "border-red-400" : "border-gray-300"
+            pwError || isError  ? "border-red-400" : "border-gray-300"
           }`}
         />
-        {pwError && (
-          <p className="text-[1.2rem] text-red-500 mt-[0.4rem]">{pwError}</p>
-        )}
+
+         <p
+          className={`text-[1.2rem] mt-[0.4rem] h-[1.6rem] transition-colors duration-200 ${
+            pwError ? "text-red-500" : "text-transparent"
+          }`}
+        >
+          {pwError || "placeholder"}
+        </p>
 
         {/* 아이디 / 비밀번호 찾기 */}
-        <div className="absolute right-0 bottom-[-3rem] flex gap-[1.6rem] text-gray-500">
+        <div className="absolute right-0 bottom-[-2rem] flex gap-[1.6rem] text-gray-500">
           <Link
             to="/searchid"
             className="text-xl transition hover:text-green-600 hover:underline"
@@ -134,6 +142,6 @@ const LoginForm = forwardRef<LoginFormRef>((_, ref) => {
       </div>
     </div>
   );
-});
+}
 
 export default LoginForm;

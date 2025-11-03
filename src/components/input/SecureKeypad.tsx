@@ -21,11 +21,15 @@ const SecureKeypad: React.FC<SecureKeypadProps> = ({ onKeyPress, onBackspace, on
 
   return (
     <div 
-      className={`absolute inset-0 z-50 bg-black/50 flex items-end transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+      className={`absolute inset-0 z-50 bg-black/50 flex items-end transition-opacity duration-300 
+        ${isVisible ? 'flex' : 'hidden'} 
+      `}
       onClick={onClose}
     >
       <div 
-        className={`w-full bg-white rounded-t-3xl p-6 transform transition-transform duration-300 ease-out ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}
+        className={`w-full flex-1 bg-white rounded-t-3xl p-6 transform transition-transform duration-300 ease-out  bottom-sheet
+          ${isVisible ? 'active flex-col' : 'hide'}
+        `}
         onClick={(e) => e.stopPropagation()}
       >
         {/* 상단 바 */}

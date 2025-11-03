@@ -12,44 +12,68 @@ const ReportView = () => {
   const navigate = useNavigate();
   const name = "석기";
 
-  const titleMap: Record<number, string> = {
-    1: `${name}님의 소비습관 점수는 ?!`,
-    2: `${name}님의 한 달 동안\n전체 소비내역을 분석해봤어요`,
-    3: `${name}님의 한 달 소비를\n카테고리별로 정리했어요`,
-    // 4: `커피 가맹점 거래 횟수 Top 5`,
-    4: `${name}님의 10월 소비 내역`,
-  };
+  const [month, setMonth] = useState<number | null>(null);
+  const [score, setScore] = useState<number | null>(null);
 
   const [pageNum, setPageNum] = useState(1);
-  const [title, setTitle] = useState(titleMap[pageNum] || "");
+  const [title, setTitle] = useState("");
+
+  const getTitle = (page: number, monthValue: number | null) => {
+    const monthText = monthValue ? `${monthValue}월` : "이번 달";
+    const titleMap: Record<number, string> = {
+      1: `${name}님의 소비습관 점수는 ?!`,
+      2: `${name}님의 한 달 동안\n전체 소비내역을 분석해봤어요`,
+      3: `${name}님의 한 달 동안\n소비한 카테고리를 보여드릴게요`,
+      4: `${name}님의 ${monthText} 소비 내역`, // ✅ 동적 표시
+    };
+    return titleMap[page] || "";
+  };
+
+  useEffect(() => {
+    const fetchReportData = async () => {
+      try {
+        // 🔹 실제 API 연동 시 아래 주석 해제
+        // const res = await fetch("/api/report/summary");
+        // const data = await res.json();
+        // setMonth(data.month);
+        // setScore(data.score);
+
+        // 🔹 지금은 더미 데이터
+        setMonth(10);
+        setScore(0);
+      } catch (error) {
+        console.error("월 데이터 불러오기 실패:", error);
+        setMonth(new Date().getMonth() + 1); // 실패 시 현재 달로 대체
+        setScore(45);
+      }
+    };
+    fetchReportData();
+  }, []);
+
+  useEffect(() => {
+    setTitle(getTitle(pageNum, month));
+  }, [pageNum, month]);
 
   // ==================================================
 
   //도넛 리스트
   const totalPrice = 1080000;
   const categoriesList = [
-    { name: "식비", value: 400000, color: "#FF8353", percent: "37.04%", src: img.food },
-    { name: "교통/자동차", value: 300000, color: "#3ACFA3", percent: "27.78%", src: img.traffic },
-    { name: "쇼핑/마트", value: 200000, color: "#6B5DD3", percent: "18.52%", src: img.shopping },
-    { name: "교육", value: 100000, color: "#6E6E6E", percent: "9.26%", src: img.education },
-    { name: "기타", value: 80000, color: "#C4C4C4", percent: "7.41%", src: img.etc }
+    { name: "식비", value: 400000, color: "#FF8353", percent: "37.04%", src: img.foodIcon },
+    { name: "교통/자동차", value: 300000, color: "#3ACFA3", percent: "27.78%", src: img.trafficIcon },
+    { name: "쇼핑/마트", value: 200000, color: "#6B5DD3", percent: "18.52%", src: img.shoppingIcon },
+    { name: "교육", value: 100000, color: "#6E6E6E", percent: "9.26%", src: img.educationIcon },
+    { name: "기타", value: 80000, color: "#C4C4C4", percent: "7.41%", src: img.etcIcon }
   ];
 
 
   // 카테고리 리스트
   const categoriesByMonthList = [
-    { src: img.entertainment, title: "술/유흥" },
-    { src: img.traffic, title: "교통/자동차" },
-    { src: img.food, title: "식비" },
-    { src: img.shopping, title: "쇼핑/마트" },
-    { src: img.education, title: "교육" },
-    { src: img.travel, title: "여행" },
-    { src: img.hospital, title: "병원" },
-    { src: img.transfer, title: "이체" },
-    { src: img.communication, title: "통신" },
-    { src: img.mart, title: "편의점/마트" },
-    { src: img.residence, title: "주거" },
-    { src: img.etc, title: "기타" },
+    { src: img.trafficIcon, title: "교통/자동차", color: "#3ACFA3" },
+    { src: img.foodIcon, title: "식비", color: "#FF8353" },
+    { src: img.shoppingIcon, title: "쇼핑/마트", color: "#6B5DD3" },
+    { src: img.educationIcon, title: "교육", color: "#6E6E6E" },
+    { src: img.etcIcon, title: "기타", color: "#C4C4C4" },
   ];
 
 
@@ -69,51 +93,53 @@ const ReportView = () => {
     };
   }, []);
 
+
   const onClick = (type?: string) => {
-    if (type != "back" && pageNum == Object.keys(titleMap).length) {
+    if (type !== "back" && pageNum === 4) {
       navigate('/report-card');
       return;
     }
 
-    const num = type == "back" ? pageNum - 1 : pageNum + 1
-    setTitle(titleMap[num] || "");
-    setPageNum(num);
-  }
-
+    const nextPage = type === "back" ? pageNum - 1 : pageNum + 1;
+    setPageNum(nextPage);
+    setTitle(getTitle(nextPage, month));
+  };
 
   const renderPage = () => {
-    // 점수
-    if (pageNum == 1) {
-      return <FallingRockScoreView score={43} />
+    if (pageNum === 1) {
+      return <FallingRockScoreView score={score ?? 0} />;
     }
     // 총 지출 카테고리별
-    else if (pageNum == 2) {
+    if (pageNum == 2) {
       return (
         <div className="w-full">
           <p className="text-[#4A4A4A] font-semibold">카테고리별 소비</p>
-          <ProgressDonet total={totalPrice} categories={categoriesList} month="5월" size={300} />
+          <ProgressDonet total={totalPrice} categories={categoriesList} month={`${month ?? ""}월`} size={300} />
         </div>
-      )
+      );
     }
-    // 한달 소비 카테고리
-    else if (pageNum == 3) {
+    if (pageNum === 3)
       return <MonthCategoryListView categoriesByMonthList={categoriesByMonthList} />;
-    }
-    // 카테고리별 소비 금액
-    else if (pageNum == 4) {
+    if (pageNum === 4)
       return <ProgressCategoryView categoriesList={categoriesList} totalPrice={totalPrice} />;
-    }
-  }
+  };
 
   return (
-    <ReportLayout mainText={title} isMainTextCenter={false}
-      onButtonClick={onClick} onBack={() => { navigate('/mypage'); }} onClose={() => { navigate('/home'); }}
+    <ReportLayout
+      mainText={title}
+      isMainTextCenter={false}
+      // ✅ 뒤로가기 버튼 표시 여부 (1페이지면 숨김)
+      showBack={pageNum !== 1}
+      // ✅ 뒤로가기 동작: 이전 페이지 이동
+      onBack={() => onClick("back")}
+      // ✅ 닫기 버튼 누르면 홈으로 이동
+      onClose={() => navigate('/home')}
+      // ✅ 다음 버튼 클릭
+      onButtonClick={onClick}
     >
-      {
-        renderPage()
-      }
+      {renderPage()}
     </ReportLayout>
-  )
-}
+  );
+};
 
 export default ReportView;

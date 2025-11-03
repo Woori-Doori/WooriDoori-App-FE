@@ -1,5 +1,5 @@
 import DefaultButton from "@/components/button/DefaultButton";
-import Header from "@/components/default/Header";
+import BottomButtonWrapper from "@/components/button/BottomButtonWrapper";
 import DefaultDiv from "@/components/default/DefaultDiv";
 
 interface ReportLayoutProps {
@@ -8,13 +8,13 @@ interface ReportLayoutProps {
     children?: React.ReactNode; // 리포트별 그래프나 이미지
     buttonText?: string; // 버튼 문구 (기본: 다음)
     onButtonClick?: () => void; // 버튼 클릭 동작
+
     showClose?: boolean;
     showBack?: boolean;
-    isMainTextCenter? : boolean;
+    isMainTextCenter?: boolean;
 
     onBack?: () => void;
     onClose?: () => void;
-
 }
 
 const ReportLayout = ({
@@ -29,12 +29,21 @@ const ReportLayout = ({
     onBack, onClose,
 }: ReportLayoutProps) => {
     return (
-        <DefaultDiv>
-            {/* ✅ 상단 헤더 */}
-            <Header title={title} showBack={showBack} showClose={showClose} onBack={onBack} onClose={onClose} />
+        <DefaultDiv
+            isHeader={true}
 
+            title={title}
+            isShowBack={showBack}
+            isShowClose={showClose}
+            isShowSetting={false}
+            onBack={onBack}
+            onClose={onClose}
+            onClickSetting={undefined}
+            headerClassName=""
+            isMainTitle={false}
+        >
             {/* ✅ 본문 */}
-            <main className={`flex flex-col justify-end  px-6 py-6 ${isMainTextCenter? 'text-center items-center' : 'text-left'}`}>
+            <main className={`flex flex-col justify-end  px-6 py-6 ${isMainTextCenter ? 'text-center items-center' : 'text-left'}`}>
                 {/* 메인 문구 */}
                 <div className="mt-20 mb-7">
                     <h1 className="text-[1.9rem] font-semibold text-gray-900 leading-snug whitespace-pre-line">
@@ -48,9 +57,9 @@ const ReportLayout = ({
                 </div>
 
                 {/* 하단 버튼 */}
-                <div className="fixed bottom-0 py-10 w-full max-w-[32rem] bg-white">
+                <BottomButtonWrapper>
                     <DefaultButton text={buttonText} onClick={onButtonClick} />
-                </div>
+                </BottomButtonWrapper>
 
             </main>
         </DefaultDiv>

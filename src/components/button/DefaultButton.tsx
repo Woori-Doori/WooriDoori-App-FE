@@ -16,7 +16,7 @@ const DefaultButton = ({
       onClick={!disabled ? onClick : undefined}
       disabled={disabled}
       className={`
-        w-full    
+        w-full max-w-[32rem]
         rounded-2xl py-5       
         text-center text-white text-lg font-semibold
         transition-all duration-200

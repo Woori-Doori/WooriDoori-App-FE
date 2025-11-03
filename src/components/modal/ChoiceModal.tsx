@@ -36,8 +36,8 @@ const ChoiceModal: React.FC<ChoiceModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="flex fixed inset-0 z-50 justify-center items-center bg-transparent">
-      <div className="w-[350px] rounded-2xl bg-white shadow-lg overflow-hidden">
+    <div className="flex fixed inset-0 z-50 justify-center items-center bg-transparent px-10">
+      <div className="w-full max-w-[350px] rounded-2xl bg-white shadow-lg overflow-hidden">
         {/* 메시지 영역 */}
         <div className="p-6 mt-4 text-center">
           <p className="text-gray-900 text-[1.5rem] font-semibold mb-1">

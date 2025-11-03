@@ -19,8 +19,8 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[500] flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="w-[360px] rounded-3xl bg-white shadow-2xl overflow-hidden transform transition-all duration-300 scale-100">
+    <div className="fixed inset-0 z-[500] flex items-center justify-center bg-black/40 px-10">
+      <div className="w-full max-w-[350px] rounded-3xl bg-white shadow-2xl overflow-hidden transform transition-all duration-300 scale-100">
         {/* 상단 체크 아이콘 */}
         <div className="flex justify-center pt-8 pb-4">
           <div className="flex justify-center items-center w-16 h-16 bg-green-100 rounded-full">

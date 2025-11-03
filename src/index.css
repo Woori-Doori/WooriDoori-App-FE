@@ -36,3 +36,43 @@ body{
 .flex-2{
   flex: 2;
 }
+
+
+
+.bottom-sheet {
+  display: none;
+}
+
+.bottom-sheet.active {
+  display: flex; /* 가운데 정렬 유지 */
+  animation: bottomSheetUp 0.35s ease-out forwards;
+}
+
+.bottom-sheet.hide {
+  display: flex;
+  animation: bottomSheetDown 0.3s ease-in forwards;
+}
+
+/* 바텀시트가 올라올 때 */
+@keyframes bottomSheetUp {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 바텀시트가 내려갈 때 */
+@keyframes bottomSheetDown {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
