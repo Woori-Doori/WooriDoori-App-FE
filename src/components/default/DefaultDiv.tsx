@@ -61,7 +61,7 @@ const DefaultDiv = ({
                     children={headerChildren}
                 />
             }
-            <div className={`flex-1 ${isHeader ? 'pt-[5rem]' : ''}`}>
+            <div className={`flex-1 flex flex-col ${isHeader ? 'pt-[5rem]' : ''} min-h-0`}>
                 {children}
             </div>
             {isBottomNav && <BottomNav />}
