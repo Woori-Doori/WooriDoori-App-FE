@@ -84,7 +84,7 @@ const ReportView = () => {
 
   const onClick = (type?: string) => {
     if (type !== "back" && pageNum === 3) {
-        navigate("/report-card");
+        navigate("/report-card", { state: { month } });
       return;
     }
 

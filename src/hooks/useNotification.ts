@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { getCookie } from '@/utils/cookieUtils';
+import { useCookieManager } from '@/hooks/useCookieManager';
 import { useNotificationStore } from '@/stores/useNotificationStore';
 import { isNotificationEnabled } from '@/utils/notificationSettings';
 
@@ -8,6 +8,7 @@ import { isNotificationEnabled } from '@/utils/notificationSettings';
  */
 export const useNotification = () => {
   const { addNotification } = useNotificationStore();
+  const { getCookies } = useCookieManager();
 
   useEffect(() => {
     // 알림 권한 요청
@@ -16,7 +17,7 @@ export const useNotification = () => {
     }
 
     // SSE 연결
-    const token = getCookie("accessToken");
+    const { accessToken: token } = getCookies();
     if (!token) {
       console.log("토큰이 없어서 SSE 연결 안 함");
       return;
