@@ -5,7 +5,13 @@ function App() {
   // SSE 알림 연결 및 처리
   useNotification();
 
-  return <Router />;
+  return (
+    <div className="app-shell">
+      <div className="app-scroll-area">
+        <Router />
+      </div>
+    </div>
+  );
 }
 
 export default App;

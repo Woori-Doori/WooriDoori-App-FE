@@ -10,12 +10,11 @@ import LoginForm, { LoginFormRef } from "@/components/login/LoginForm";
 import { useApi } from "@/hooks/useApi";
 import { apiList } from "@/api/apiList";
 import { useCookieManager } from "@/hooks/useCookieManager";
-import { getCookie } from "@/utils/cookieUtils";
 
 const LoginView = () => {
   const navigate = useNavigate();
   const loginFormRef = useRef<LoginFormRef>(null);
-  const { setCookies } = useCookieManager();
+  const { setCookies, getCookies } = useCookieManager();
   const loginApi = useApi(apiList.login);
 
   const [showSuccess, setShowSuccess] = useState(false);
@@ -24,7 +23,7 @@ const LoginView = () => {
 
   // 토큰이 있으면 메인 페이지로 리다이렉트
   useEffect(() => {
-    const accessToken = getCookie("accessToken");
+    const { accessToken } = getCookies();
     if (accessToken) {
       navigate("/home");
     }

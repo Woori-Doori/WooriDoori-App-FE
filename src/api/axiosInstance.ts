@@ -1,7 +1,9 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { handleApiError } from "./handleApiError";
-import { getCookie } from "@/utils/cookieUtils";
+import { useCookieManager } from "@/hooks/useCookieManager";
 import { apiList } from "./apiList";
+
+const { getCookies, setCookies, removeCookies } = useCookieManager();
 
 
 const axiosInstance = axios.create({
@@ -32,7 +34,7 @@ const processQueue = (error: AxiosError | null, token: string | null = null) => 
 
 // 요청 인터셉터
 axiosInstance.interceptors.request.use((config) => {
-  const token = getCookie("accessToken");
+  const { accessToken: token } = getCookies();
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
@@ -69,14 +71,12 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
       isRefreshing = true;
 
-      const accessToken = getCookie("accessToken");
-      const refreshToken = getCookie("refreshToken");
+      const { accessToken, refreshToken } = getCookies();
 
       // refreshToken이 없으면 로그인 페이지로 이동
       if (!refreshToken || !accessToken) {
         isRefreshing = false;
-        deleteCookie("accessToken");
-        deleteCookie("refreshToken");
+        removeCookies();
         window.location.href = "/login";
         return Promise.reject(error);
       }
@@ -90,8 +90,7 @@ axiosInstance.interceptors.response.use(
           const { accessToken: newAccessToken, refreshToken: newRefreshToken } = reissueResult.data;
 
           // 새 토큰 저장
-          setCookie("accessToken", newAccessToken, 7);
-          setCookie("refreshToken", newRefreshToken, 7);
+          setCookies(newAccessToken, newRefreshToken);
 
           // 원래 요청 헤더에 새 토큰 설정
           if (originalRequest.headers) {
@@ -111,8 +110,7 @@ axiosInstance.interceptors.response.use(
         // 재발급 실패 시 로그인 페이지로 이동
         isRefreshing = false;
         processQueue(refreshError as AxiosError, null);
-        deleteCookie("accessToken");
-        deleteCookie("refreshToken");
+        removeCookies();
         window.location.href = "/login";
         return Promise.reject(refreshError);
       }

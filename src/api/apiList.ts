@@ -56,6 +56,12 @@ export const apiList = {
   // 회원가입
   signup: (data: { email: string; password: string; name: string }) => axiosInstance.post("/test2", data),
 
+  // 메인 페이지 데이터
+  getMain: async () => {
+    const response = await axiosInstance.get("/main");
+    return response.data.resultData;
+  },
+
   // 토큰 재발급 API
   // interceptor를 거치지 않도록 기본 axios 사용 (순환 참조 및 재발급 무한 루프 방지)
   reissue: async (accessToken: string, refreshToken: string) => {

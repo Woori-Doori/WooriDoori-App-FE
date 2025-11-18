@@ -14,7 +14,7 @@ type TabType = '시스템 알림' | '일기 알림';
 
 const NotificationView: React.FC = () => {
   const navigate = useNavigate();
-  const { notifications, removeNotification, markAsRead } = useNotificationStore();
+  const { notifications, removeNotification, markAsRead, clearAllNotifications } = useNotificationStore();
   const [isAlarmOn, setIsAlarmOn] = useState(true);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [selectedTab, setSelectedTab] = useState<TabType>('시스템 알림');
@@ -112,6 +112,7 @@ const NotificationView: React.FC = () => {
         title='알림'
         isShowBack={true}
         isShowClose={false}
+        className="overflow-hidden"
         headerChildren={
           <IconButton
             src={isAlarmOn ? img.alarmOn : img.alarmOff}
@@ -121,18 +122,20 @@ const NotificationView: React.FC = () => {
         onBack={() => { window.history.back(); }}
       >
 
-        <NotificationTab onChange={setSelectedTab} />
+        <div className="block">
+          {/* 탭 영역 (고정) */}
+          <div>
+            <NotificationTab onChange={setSelectedTab} />
+          </div>
 
-
-        {/* 메인 컨텐츠 */}
-        <div className="flex-1 py-5 h-full">
-
-          {/* 알림 목록 */}
+          {/* 알림 목록 영역 (스크롤 가능) */}
+          <div className="overflow-y-auto scroll-smooth mt-5" style={{ height: 'calc(100vh - 7rem - 80px)' }}>
           {filteredNotifications.length > 0 && (
             <>
-              {/* 읽지 않은 알림이 있으면 전체 읽음 버튼 */}
-              {filteredNotifications.some(n => !n.isRead) && (
-                <div className="mb-4 text-right">
+              {/* 버튼 영역 */}
+              <div className="mb-4 flex justify-end gap-4">
+                {/* 읽지 않은 알림이 있으면 전체 읽음 버튼 */}
+                {filteredNotifications.some(n => !n.isRead) && (
                   <button
                     onClick={() => {
                       // 현재 탭의 알림만 읽음 처리
@@ -144,8 +147,20 @@ const NotificationView: React.FC = () => {
                   >
                     전체 읽음 처리
                   </button>
-                </div>
-              )}
+                )}
+                
+                {/* 전체 삭제 버튼 */}
+                <button
+                  onClick={() => {
+                    if (window.confirm('모든 알림을 삭제하시겠습니까?')) {
+                      clearAllNotifications();
+                    }
+                  }}
+                  className="text-[1.2rem] text-red-500 font-medium hover:text-red-700 transition-colors"
+                >
+                  전체 삭제
+                </button>
+              </div>
               
               {filteredNotifications.map((notification) => (
                 <div
@@ -175,6 +190,7 @@ const NotificationView: React.FC = () => {
               </p>
             </div>
           )}
+          </div>
         </div>
 
         {/* 모달창 */}
