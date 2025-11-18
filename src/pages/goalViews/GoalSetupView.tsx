@@ -12,16 +12,19 @@ import { img } from "@/assets/img";
 
 // 카테고리 데이터
 const essentialCategories = [
-  { src: img.drinkIcon, title: "카페" },
+  { src: img.coffeeIcon, title: "카페" },
   { src: img.foodIcon, title: "식비" },
   { src: img.entertainmentIcon, title: "술/유흥" },
   { src: img.martIcon, title: "편의점/마트" },
   { src: img.educationIcon, title: "교육" },
   { src: img.shoppingIcon, title: "쇼핑" },
-  { src: img.etcIcon, title: "기타" },
-  { src: img.trafficIcon, title: "교통/자동차" },
-  { src: img.residenceIcon, title: "주거" },
+  { src: img.trafficIcon, title: "주유/자동차" },
+  { src: img.residenceIcon, title: "주거/관리" },
   { src: img.hospitalIcon, title: "병원" },
+  { src: img.transferIcon, title: "이체" },
+  { src: img.travelIcon, title: "여행" },
+  { src: img.phoneIcon, title: "통신" },
+  { src: img.etcIcon, title: "기타" },
 ];
 
 // 숫자 문자열(콤마 포함 가능) -> 정수 변환
