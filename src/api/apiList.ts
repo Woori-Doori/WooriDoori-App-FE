@@ -111,4 +111,16 @@ goal: {
     return axiosInstance.put("/goal/setgoal", payload);
   },
 },
+
+  goalhistory: {
+    getGoalHistory: () => 
+      axiosInstance.get("/goal/getgoalhistory")
+        .then(res => {
+          const goalList = res.data.resultData; // List<GetGoalDto>
+          console.log(goalList); // 화면 표시나 상태 업데이트로 사용
+          return goalList;
+        })
+  },
+
+
 };
