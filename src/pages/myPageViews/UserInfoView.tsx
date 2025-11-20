@@ -4,27 +4,29 @@ import DefaultDiv from '@/components/default/DefaultDiv';
 import ChoiceModal from '@/components/modal/ChoiceModal';
 import SuccessModal from '@/components/modal/SuccessModal';
 import { img } from '@/assets/img';
+import { useUserStore } from '@/stores/useUserStore';
+import { useCookieManager } from '@/hooks/useCookieManager';
 
 const UserInfoView: React.FC = () => {
   const navigate = useNavigate();
+  const { userInfo: storeUserInfo, clearUserInfo } = useUserStore();
+  const { removeCookies } = useCookieManager();
   
-  // localStorage에서 사용자 정보 가져오기
+  // store에서 사용자 정보 가져오기
   const getUserInfo = () => {
-    const userInfo = localStorage.getItem('userInfo');
-    if (userInfo) {
-      const user = JSON.parse(userInfo);
+    if (storeUserInfo) {
       return {
-        id: user.memberId || user.email || 'test@test.com',
-        password: user.password ? '•'.repeat(user.password.length) : '••••••••',
-        name: user.name || '홍길동',
-        phone: user.phone || '010-0000-0000',
-        birth: user.birth || '040207'
+        id: storeUserInfo.memberId || storeUserInfo.email || 'test@test.com',
+        password: '••••••••',
+        name: storeUserInfo.name || '사용자',
+        phone: '010-0000-0000', // store에 phone 정보가 없으면 기본값
+        birth: '040207' // store에 birth 정보가 없으면 기본값
       };
     }
     return {
       id: 'test@test.com',
       password: '••••••••',
-      name: '홍길동',
+      name: '사용자',
       phone: '010-0000-0000',
       birth: '040207'
     };
@@ -46,7 +48,13 @@ const UserInfoView: React.FC = () => {
   };
 
   const confirmLogout = () => {
-    // localStorage에서 사용자 정보 제거
+    // store에서 사용자 정보 제거
+    clearUserInfo();
+    
+    // 쿠키에서 토큰 제거
+    removeCookies();
+    
+    // localStorage에서 사용자 정보 제거 (기존 코드 호환성)
     localStorage.removeItem('userInfo');
     
     // 모달 닫기

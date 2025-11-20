@@ -2,21 +2,13 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import DefaultDiv from '@/components/default/DefaultDiv';
 import { img } from '@/assets/img';
+import { useUserStore } from '@/stores/useUserStore';
 
 const MyPageView: React.FC = () => {
   const navigate = useNavigate();
+  const { userInfo, isLoggedIn } = useUserStore();
   
-  // localStorage에서 사용자 정보 가져오기
-  const getUserName = () => {
-    const userInfo = localStorage.getItem('userInfo');
-    if (userInfo) {
-      const user = JSON.parse(userInfo);
-      return user.name || '사용자';
-    }
-    return '석기'; // 기본값
-  };
-  
-  const userName = getUserName();
+  const userName = isLoggedIn && userInfo?.name ? userInfo.name : '사용자';
   
   const menuItems = [
     { title: '메인 화면', icon: '>', path: '/home' },
