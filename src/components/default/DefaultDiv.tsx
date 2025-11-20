@@ -8,7 +8,6 @@ const DefaultDiv = ({
     className = '',
     isBottomNav = false,
     isHeader = false,
-    style,
     
     // header props
     title = "",
@@ -29,7 +28,6 @@ const DefaultDiv = ({
         className?: string,
         isBottomNav?: boolean,
         isHeader?: boolean,
-        style?: React.CSSProperties,
 
         // header props
         title?: string;
@@ -45,7 +43,7 @@ const DefaultDiv = ({
     }
 ) => {
     return (
-        <div className={`border flex flex-col overflow-auto relative min-h-[100vh] h-[100vh] m-auto bg-white font-sans w-full ${isPadding ? 'p-10' : ''} ${isBottomNav ? 'pb-[6rem]' : ''}  ${isHome ? 'default-img' : ''} ${className}`} style={{ maxWidth: '400px', ...style }}>
+        <div className={`border flex flex-col overflow-auto relative min-h-[100vh] h-[100vh] m-auto bg-white font-sans w-full ${isPadding ? 'p-10' : ''} ${isBottomNav ? 'pb-[6rem]' : ''}  ${isHome ? 'default-img' : ''} ${className}`} style={{ maxWidth: '400px' }}>
             {
                 isHeader &&
                 <HeaderBar
@@ -61,9 +59,9 @@ const DefaultDiv = ({
                     children={headerChildren}
                 />
             }
-        <div className={`flex-1 flex flex-col min-h-0 ${isHeader ? 'pt-[5rem]' : ''}`}>
-            {children}
-        </div>
+            <div className={`flex-1 ${isHeader ? 'pt-[5rem]' : ''}`}>
+                {children}
+            </div>
             {isBottomNav && <BottomNav />}
         </div>
     )
