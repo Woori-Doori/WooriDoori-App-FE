@@ -98,8 +98,8 @@ const NotificationView: React.FC = () => {
 
 
   // 알림 삭제
-  const handleDelete = (id: number) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
+  const handleDelete = (id: string) => {
+    setNotifications(prev => prev.filter(n => String(n.id) !== id));
   };
 
   // 알림 설정 표시 여부 판단
@@ -133,13 +133,23 @@ const NotificationView: React.FC = () => {
 
           {/* 알림 목록 */}
           {notifications.length > 0 && (
-            notifications.map((notification) => (
-              <NotificationItem
-                key={notification.id}
-                notification={notification}
-                onDelete={handleDelete}
-              />
-            ))
+            notifications.map((notification) => {
+              const notificationData = {
+                id: String(notification.id),
+                title: notification.mainMessage,
+                message: notification.subMessage,
+                type: notification.type as 'warning' | 'alert' | 'report',
+                createdAt: notification.date,
+                isRead: !notification.isNew,
+              };
+              return (
+                <NotificationItem
+                  key={notification.id}
+                  notification={notificationData}
+                  onDelete={handleDelete}
+                />
+              );
+            })
           )}
 
           {notifications.length === 0 && (

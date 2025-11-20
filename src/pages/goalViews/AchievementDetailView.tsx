@@ -9,13 +9,6 @@ import ChatModal from "@/components/modal/ChatModal";
 import "@/styles/goal/gaugePointerAnimations.css";
 import "@/styles/home/animations.css";
 
-// ✅ 두리 등급별 이미지
-import dooriCool from "@/assets/doori/doori_cool.png";
-import dooriCoffee from "@/assets/doori/doori_coffee.png";
-import dooriPouting from "@/assets/doori/doori_pouting.png";
-import dooriFrustrated from "@/assets/doori/doori_frustrated.png";
-import dooriAngry from "@/assets/doori/doori_angry.png";
-
 export default function AchievementDetailView() {
   const navigate = useNavigate();
   const { state } = useLocation(); 
@@ -157,14 +150,6 @@ export default function AchievementDetailView() {
     };
   });
 
-  // ✅ 등급별 스타일 설정 (1~5등급) - 게이지 색상과 일치
-  const gradeStyle = {
-    1: { border: "border-[#6BB64A]", img: dooriCool },
-    2: { border: "border-[#B6DB4A]", img: dooriCoffee },
-    3: { border: "border-[#F7E547]", img: dooriPouting },
-    4: { border: "border-[#F9A23B]", img: dooriFrustrated },
-    5: { border: "border-[#E74C3C]", img: dooriAngry },
-  }[grade];
 
 
   // ✅ 유저 이름 로드
@@ -288,7 +273,7 @@ export default function AchievementDetailView() {
                 className="object-contain w-14 h-14"
               />
               {/* 느낌표 배지 */}
-              <div className="flex absolute -top-1 -right-1 justify-center items-center w-6 h-6 bg-red-500 rounded-full border border-black border-white attention-pulse" >
+              <div className="flex absolute -top-1 -right-1 justify-center items-center w-6 h-6 bg-red-500 rounded-full border-2 border-white attention-pulse" >
                 <span className="text-white text-[1rem] font-bold attention-shake">!</span>
               </div>
             </button>
