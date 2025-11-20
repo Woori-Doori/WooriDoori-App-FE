@@ -27,6 +27,7 @@ interface CardRecommendItem {
 interface MainResponse {
   fullDate?: number;
   duringDate?: number;
+  remainingDays?: number;
   goalPercent?: number;
   goalMoney?: number;
   totalPaidMoney?: number;
@@ -91,7 +92,8 @@ const HomeView = () => {
   const goalPercent = homeData?.goalPercent ?? 80;
   const fullDate = homeData?.fullDate ?? 30;
   const duringDate = homeData?.duringDate ?? 28;
-  const remainDays = Math.max(fullDate - duringDate, 0);
+  // 백엔드에서 계산한 예상 남은 일수 사용, 없으면 기본값 계산
+  const remainDays = homeData?.remainingDays ?? Math.max(fullDate - duringDate, 0);
   const target =
     homeData?.goalMoney && homeData.goalMoney > 0
       ? `${homeData.goalMoney.toLocaleString()}만원 쓰기`
