@@ -12,6 +12,7 @@ import { img } from "@/assets/img";
 import { apiList } from "@/api/apiList";
 import { categoryNameToEnum } from "@/utils/categoryMeta";
 import { jobNameToEnum } from "@/utils/jobType";
+import { useUserStore } from "@/stores/useUserStore";
 
 // 카테고리 데이터
 const essentialCategories = [
@@ -43,6 +44,7 @@ type Props = {
   goalPlaceholder?: string;   // 목표 입력 placeholder
 };
 
+
 export default function GoalSetupView({
   incomePlaceholder = "0",
 }: Props) {
@@ -51,6 +53,9 @@ export default function GoalSetupView({
   const [step, setStep] = useState<1 | 2 | 3 | 4 | 5>(1);
   const [job, setJob] = useState<string | null>(null);
   const [isBottomsheetOpen, setBottomsheetOpen] = useState(false);
+
+  const { userInfo, isLoggedIn } = useUserStore();
+  const userName = isLoggedIn && userInfo?.name ? userInfo.name : "사용자";
 
   const [incomeText, setIncomeText] = useState(""); // 숫자 문자열 (콤마 제거 상태)
   const [goalText, setGoalText] = useState("");
@@ -201,7 +206,7 @@ const submitGoalData = async () => {
       {step === 2 && (
         <div className="flex flex-col px-6 pt-16 pb-10 h-full">
           <div className="text-left mt-[3rem]">
-            <Title2 text="석기시대님의 수입은" />
+            <Title2 text={`${userName}님의 수입은`} />
             <Title2 text="어느정도이신가요?" />
             <div className="mt-[2rem]">
               <SubText text="실제 수령하는 금액 기준으로 입력 부탁드려요." />
