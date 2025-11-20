@@ -10,6 +10,7 @@ const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
   headers: { "Content-Type": "application/json" },
+  // withCredentials: true,
 });
 
 // 토큰 재발급 중 플래그 (중복 요청 방지)

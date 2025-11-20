@@ -37,3 +37,12 @@ export const getCategoryEnum = (label: string): string => {
   return entry ? entry[0] : 'ETC';
 };
 
+/** 🔥 역매핑: "식비" → "FOOD" */
+export const categoryNameToEnum: Record<string, string> = Object.keys(CATEGORY_META).reduce(
+  (acc, key) => {
+    const label = CATEGORY_META[key].label;
+    acc[label] = key; // label → ENUM
+    return acc;
+  },
+  {} as Record<string, string>
+);

@@ -9,6 +9,9 @@ import BottomButtonWrapper from "@/components/button/BottomButtonWrapper";
 import Bottomsheet from "@/components/default/Bottomsheet";
 import check from "@/assets/check2.png";
 import { img } from "@/assets/img";
+import { apiList } from "@/api/apiList";
+import { categoryNameToEnum } from "@/utils/categoryMeta";
+import { jobNameToEnum } from "@/utils/jobType";
 
 // 카테고리 데이터
 const essentialCategories = [
@@ -67,8 +70,44 @@ export default function GoalSetupView({
     return true;
   }, [step, job, incomeNum, goalNum, selectedCategories]);
 
-  const handleNext = () => {
+
+const submitGoalData = async () => {
+    const now = new Date();
+    const goalStartDate = `${now.getFullYear()}-${String(
+      now.getMonth() + 1
+    ).padStart(2, "0")}-01`;
+
+    // selectedCategories: ["식비", "주거/관리", ...] (라벨)
+    // → 서버 ENUM: ["FOOD", "HOUSING", ...] 으로 변환
+    const essentialEnums = selectedCategories.map((label) => {
+      return categoryNameToEnum[label] || "ETC";
+    });
+
+    const payload = {
+      goalJob: job && jobNameToEnum[job] ? jobNameToEnum[job] : "UNEMPLOYED",
+      goalStartDate,                         // 이번 달 1일
+      goalIncome: incomeNum.toString(),      // "2000"
+      previousGoalMoney: goalNum,            // 300
+      essentialCategories: essentialEnums,   // ["FOOD", "HOUSING", ...]
+    };
+
+    console.log("🚨 payload 보내는 값:", JSON.stringify(payload, null, 2));
+
+    await apiList.goal.setGoal(payload);
+  };
+
+
+
+  const handleNext = async () => {
     if (!isValidStep) return;
+
+    if (step === 4) {
+      await submitGoalData(); // API 호출
+    }
+
+    if (step < 5) {
+      setStep((prev) => (prev + 1) as 1 | 2 | 3 | 4 | 5);
+    }
     if (step < 5) setStep((prev) => (prev + 1) as 1 | 2 | 3 | 4 | 5);
   };
 

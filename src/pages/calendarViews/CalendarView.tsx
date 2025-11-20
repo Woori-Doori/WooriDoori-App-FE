@@ -527,12 +527,13 @@ const CalendarView = () => {
       isBottomNav={true} 
       title='소비내역' 
       isHeader={true}
+      style={{ backgroundColor: '#FBFBFB' }}
       isShowClose={false}
       headerChildren={
           <IconButton onClick={() => navigate('/calendar/diary')}
             src={img.diaryIcon.toString()}
             alt="일기"
-            height={28}
+            height={24}
           />
       }
     > 
@@ -576,7 +577,7 @@ const CalendarView = () => {
         {/* 결제 내역 리스트 영역 (별도 스크롤) */}
         <div 
           ref={scrollRef}
-          className="overflow-y-auto flex-1 px-5 pb-32 overscroll-contain"
+          className="overflow-y-auto overscroll-contain flex-1 px-5 pb-32"
         >
           {isLoading && paymentDataState.length === 0 ? (
             // 로딩 상태

@@ -7,6 +7,7 @@ import GoalInput from "@/components/input/GoalInput";
 import DefaultButton from "@/components/button/DefaultButton";
 import BottomButtonWrapper from "@/components/button/BottomButtonWrapper";
 import check from "@/assets/check2.png";
+import { apiList } from "@/api/apiList";
 
 // 문자열 → 숫자 변환
 function parseAmountToNumber(v: string | number | null) {
@@ -26,15 +27,56 @@ export default function GoalEditView() {
   const incomeNum = useMemo(() => parseAmountToNumber(incomeText), [incomeText]);
   const goalNum = useMemo(() => parseAmountToNumber(goalText), [goalText]);
 
+  const [serverMsg, setServerMsg] = useState("");   // 서버 메시지 저장 (다음 달 목표 등록 / 수정 등)
+
   const isValidStep = useMemo(() => {
     if (step === 1 && incomeNum <= 0) return false;
     if (step === 2 && goalNum <= 0) return false;
     return true;
   }, [step, incomeNum, goalNum]);
 
-  const handleNext = () => {
+
+  // ---------------------------------------------
+  // setGoal 호출
+  // ---------------------------------------------
+   
+  const submitGoalEdit = async () => {
+    const payload = {
+      // 백엔드가 무조건 nextMonth로 덮어쓰기 때문에 아무 값이나 넣어도 상관없음
+      goalJob: "UNEMPLOYED",                   // 직업 기본값 (유저 설정값 있으면 그걸 쓰면 됨)
+      goalStartDate: null,                 // 백엔드가 nextMonth로 바꿈
+      essentialCategories: [],             // 수정 화면에서는 사용하지 않음
+
+      goalIncome: incomeNum.toString(),    // 입력값
+      previousGoalMoney: goalNum,
+    };
+
+    console.log("📤 최종 payload:", payload);
+
+    try {
+      const res = await apiList.goal.setGoal(payload);
+      const msg = res.data?.resultMsg;
+      if (msg) setServerMsg(msg);
+      return true;
+    } catch (err) {
+      console.error("❌ 목표 수정 실패:", err);
+      alert("목표 수정 요청 중 오류가 발생했습니다.");
+      return false;
+    }
+  };
+
+
+  const handleNext = async () => {
     if (!isValidStep) return;
-    if (step < 3) setStep((prev) => (prev + 1) as 1 | 2 | 3);
+
+    if (step === 2) {
+      const ok = await submitGoalEdit();  // ✅ 성공 여부 확인
+      if (!ok) return;                    // ❌ 실패하면 다음 단계로 안 감
+    }
+
+    if (step < 3) {
+      setStep((prev) => (prev + 1) as 1 | 2 | 3);
+    }
   };
 
   const handleRestart = () => {
@@ -136,8 +178,11 @@ export default function GoalEditView() {
 
             {/* 완료 텍스트 */}
             <div className="mt-[13rem] text-center">
-              <Title2 text="목표 금액을 수정했어요" />
-              <SubText text="수정된 목표 금액은 다음 달부터 적용됩니다." className="mt-[1.2rem]" />
+              <Title2 text={serverMsg || "목표 금액을 수정했어요"} />
+              <SubText
+                text="수정된 목표 금액은 다음 달부터 적용됩니다."
+                className="mt-[1.2rem]"
+              />
             </div>
           </div>
 

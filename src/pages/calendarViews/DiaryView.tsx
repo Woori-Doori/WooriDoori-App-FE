@@ -273,6 +273,7 @@ const DiaryView = () => {
       title='소비일기' 
       isHeader={true}
       isShowClose={true}
+      style={{ backgroundColor: '#FBFBFB' }}
       onClose={() => navigate('/calendar')}
     >
       <div className="flex relative flex-col h-full">
