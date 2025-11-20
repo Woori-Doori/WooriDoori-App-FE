@@ -2,7 +2,7 @@ import React from 'react';
 import { useCalendarStore } from '@/stores/calendarStore';
 import { img } from '@/assets/img';
 import { apiList } from '@/api/apiList';
-import { getCategoryMeta, getCategoryEnum } from '@/utils/categoryMeta';
+import { getCategoryEnum } from '@/utils/categoryMeta';
 // Payment 타입 - CalendarView의 paymentData 구조에 맞춤
 export type Payment = { 
   id: number; // 거래 고유 ID
