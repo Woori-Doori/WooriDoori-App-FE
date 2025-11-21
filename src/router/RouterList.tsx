@@ -14,6 +14,7 @@ import CardRecommendView from "@/pages/cardViews/CardOverView";
 import CardManagementView from "@/pages/cardViews/CardManagementView";
 import AddCardView from "@/pages/cardViews/AddCardView";
 import CardAddCompleteView from "@/pages/cardViews/CardAddCompleteView";
+import CardDetailView from "@/pages/cardViews/CardDetailView";
 import DiaryView from "@/pages/calendarViews/DiaryView";
 import DiaryEmotionView from "@/pages/calendarViews/DiaryEmotionView";
 import DiaryWriteView from "@/pages/calendarViews/DiaryWriteView";
@@ -35,6 +36,10 @@ import ReportView from "@/pages/reportViews/reportView";
 import NotificationView from "@/pages/noticationViews/NotificationView";
 import CategoryTop5View from "@/pages/CategoryTop5View";
 import MonthAchievementView from '@/pages/reportViews/MonthAchievementView';
+import AdminLoginView from '@/pages/adminViews/AdminLoginView';
+import AdminView from '@/pages/adminViews/AdminView';
+import AdminLayout from '@/components/admin/layout/AdminLayout';
+import ProtectedAdminRoute from '@/components/admin/ProtectedAdminRoute';
 
 // 라우트 타입 정의
 interface RouteConfig {
@@ -86,6 +91,7 @@ const cardRoutes: RouteConfig[] = [
   { path: '/card/cards', element: <AddCardView /> },
   { path: '/card/cards/complete', element: <CardAddCompleteView /> },
   { path: '/card-recommend', element: <CardRecommendView /> },
+  { path: '/card/detail/:id', element: <CardDetailView /> },
 ];
 
 // 목표 관련 라우트
@@ -108,6 +114,51 @@ const categoryRoutes: RouteConfig[] = [
   { path: '/category-top5/:id', element: <CategoryTop5View /> },
 ];
 
+// 관리자 관련 라우트
+const adminRoutes: RouteConfig[] = [
+  { path: '/admin/login', element: <AdminLoginView /> },
+  { 
+    path: '/admin', 
+    element: (
+      <ProtectedAdminRoute>
+        <AdminLayout>
+          <AdminView />
+        </AdminLayout>
+      </ProtectedAdminRoute>
+    ) 
+  },
+  { 
+    path: '/admin/cards', 
+    element: (
+      <ProtectedAdminRoute>
+        <AdminLayout>
+          <AdminView />
+        </AdminLayout>
+      </ProtectedAdminRoute>
+    ) 
+  },
+  { 
+    path: '/admin/users', 
+    element: (
+      <ProtectedAdminRoute>
+        <AdminLayout>
+          <AdminView />
+        </AdminLayout>
+      </ProtectedAdminRoute>
+    ) 
+  },
+  { 
+    path: '/admin/behavior', 
+    element: (
+      <ProtectedAdminRoute>
+        <AdminLayout>
+          <AdminView />
+        </AdminLayout>
+      </ProtectedAdminRoute>
+    ) 
+  },
+];
+
 // 모든 라우트 통합
 export const routerList: RouteConfig[] = [
   ...homeRoutes,
@@ -119,4 +170,5 @@ export const routerList: RouteConfig[] = [
   ...reportRoutes,
   ...categoryRoutes,
   ...accountRoutes,
+  ...adminRoutes,
 ];

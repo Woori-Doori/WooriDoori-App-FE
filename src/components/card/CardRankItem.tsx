@@ -21,27 +21,32 @@ const CardRankItem: React.FC<CardRankItemProps> = ({
     return (
         <div
             onClick={onClick}
-            className="flex items-center justify-between p-3 bg-white rounded-xl transition cursor-pointer"
+            className="flex justify-between items-center p-5 bg-white rounded-xl border border-gray-100 shadow-sm transition-all duration-200 cursor-pointer hover:shadow-md hover:border-gray-200"
         >
             {/* 왼쪽 이미지 */}
             <img
                 src={imageSrc}
                 alt={title}
-                className="w-[5rem] h-[8.5rem] object-fill"
+                className="object-contain flex-shrink-0 w-20 h-28 rounded-lg"
+                onError={(e) => {
+                    (e.target as HTMLImageElement).src = imageSrc;
+                }}
             />
 
             {/* 오른쪽 텍스트 */}
-            <div className="flex-1 ml-4 text-start">
-                <div className="text-[1.6rem] font-semibold text-gray-800">{rank}위</div>
-                <div className="text-[1.4rem] font-medium text-gray-900 whitespace-pre-line">{title}</div>
-                <div className="text-[1.4rem] font-medium text-gray-900 whitespace-pre-line">{subtitle}</div>
+            <div className="flex-1 ml-5 min-w-0 text-start">
+                <div className="text-[1.5rem] font-bold text-[#8BC34A] mb-1.5">{rank}위</div>
+                <div className="text-[1.3rem] font-semibold text-gray-900 whitespace-pre-line mb-2 leading-tight">{title}</div>
+                {subtitle && (
+                    <div className="text-[1.2rem] font-normal text-gray-600 whitespace-pre-line mb-2">{subtitle}</div>
+                )}
                 {description && (
-                    <div className="text-[1.2rem] text-[#A39C9C] mt-3">{description}</div>
+                    <div className="text-[1rem] text-gray-500 mt-1 line-clamp-2 leading-relaxed">{description}</div>
                 )}
             </div>
 
             {/* 화살표 아이콘 */}
-            <img src={img.grayCheckRightIcon} alt=">" />
+            <img src={img.grayCheckRightIcon} alt=">" className="flex-shrink-0 ml-3 w-5 h-5 opacity-50" />
         </div>
     );
 };

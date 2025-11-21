@@ -43,16 +43,16 @@ const ReportLayout = ({
             isMainTitle={false}
         >
             {/* ✅ 본문 */}
-            <main className={`flex flex-col justify-end  px-6 py-6 ${isMainTextCenter ? 'text-center items-center' : 'text-left'}`}>
+            <main className={`flex flex-col px-0 ${isMainTextCenter ? 'items-center text-center' : 'text-left'}`}>
                 {/* 메인 문구 */}
-                <div className="mt-20 mb-7">
+                <div className="flex-shrink-0 mt-10 mb-20">
                     <h1 className="text-[1.9rem] font-semibold text-gray-900 leading-snug whitespace-pre-line">
                         {mainText}
                     </h1>
                 </div>
 
-                {/* 중앙 컨텐츠 (그래프, 이미지 등) */}
-                <div className="flex-1 flex items-center justify-center w-full">
+                {/* 중앙 컨텐츠 (그래프, 이미지 등) - 스크롤 가능 */}
+                <div className="overflow-y-auto flex-1 pb-44 w-full">
                     {children}
                 </div>
 

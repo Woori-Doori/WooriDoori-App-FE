@@ -22,14 +22,14 @@ const CardRecommendView: React.FC = () => {
   const [cards, setCards] = useState<CardItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 카드 목록 조회
+  // 카드 목록 API 호출
   useEffect(() => {
-    const fetchCards = async () => {
+    const fetchCardList = async () => {
       setIsLoading(true);
       try {
         const result = await apiList.card.getCardList();
         if (result?.success && result.data) {
-          setCards(result.data);
+          setCards(result.data || []);
         } else {
           console.error('카드 목록 조회 실패:', result?.resultMsg);
         }
@@ -40,19 +40,15 @@ const CardRecommendView: React.FC = () => {
       }
     };
 
-    fetchCards();
+    fetchCardList();
   }, []);
 
   // 필터링된 카드 목록
   const filteredCards = cards.filter(card => {
-    // cardType으로 필터링
     const matchesType = selectedFilter === '체크카드' 
       ? card.cardType === 'CHECK' 
       : card.cardType === 'CREDIT';
-    
-    // 검색어로 필터링
     const matchesSearch = card.cardName.toLowerCase().includes(searchQuery.toLowerCase());
-    
     return matchesType && matchesSearch;
   });
 
@@ -69,7 +65,7 @@ const CardRecommendView: React.FC = () => {
     >
       <div className="flex flex-col h-screen">
         {/* 상단 고정 영역 */}
-        <div className="flex-shrink-0 pb-6 bg-white">
+        <div className="flex-shrink-0 pb-6">
           {/* 검색바 */}
           <div className="mb-6">
             <div className="relative">
@@ -129,7 +125,8 @@ const CardRecommendView: React.FC = () => {
             filteredCards.map((card) => (
               <div
                 key={card.id}
-                className="p-4 bg-white rounded-lg border border-gray-100 shadow-sm"
+                onClick={() => navigate(`/card/detail/${card.id}`, { state: { card } })}
+                className="p-4 bg-white rounded-lg border border-gray-100 shadow-sm transition-shadow cursor-pointer hover:shadow-md"
               >
                 <div className="flex gap-4 items-start">
                   {/* 카드 이미지 */}
@@ -157,19 +154,19 @@ const CardRecommendView: React.FC = () => {
                     </p>
                     
                     {/* 카드 타입 태그 */}
-                    <div className="flex gap-2 mb-3" style={{ backgroundColor: '#FBFBFB' }}>
+                    <div className="flex gap-2 mb-2" style={{ backgroundColor: '#FBFBFB' }}>
                       <span className="px-3 py-1 rounded-full text-[0.9rem] font-medium bg-green-100 text-green-600">
                         {card.cardType === 'CHECK' ? '#체크카드' : '#신용카드'}
                       </span>
-                      {card.cardSvc && (
+                      {card.cardSvc === 'YES' && (
                         <span className="px-3 py-1 rounded-full text-[0.9rem] font-medium bg-blue-100 text-blue-600">
-                          #{card.cardSvc}
+                          #해외겸용
                         </span>
                       )}
                     </div>
 
                     {/* 상세보기 버튼 */}
-                    <div className="flex justify-end">
+                    <div className="flex justify-end -mt-9">
                       <button className="flex items-center gap-1 text-[1.1rem] text-gray-600 hover:text-gray-800 transition-colors">
                         상세보기
                         <img

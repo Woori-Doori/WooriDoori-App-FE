@@ -59,6 +59,7 @@ export default function GoalSetupView({
 
   const [incomeText, setIncomeText] = useState(""); // 숫자 문자열 (콤마 제거 상태)
   const [goalText, setGoalText] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // API 요청 로딩 상태
   
   // 카테고리 선택 상태 (필수/비필수)
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -77,43 +78,59 @@ export default function GoalSetupView({
 
 
 const submitGoalData = async () => {
-    const now = new Date();
-    const goalStartDate = `${now.getFullYear()}-${String(
-      now.getMonth() + 1
-    ).padStart(2, "0")}-01`;
+    setIsLoading(true);
+    try {
+      const now = new Date();
+      const goalStartDate = `${now.getFullYear()}-${String(
+        now.getMonth() + 1
+      ).padStart(2, "0")}-01`;
 
-    // selectedCategories: ["식비", "주거/관리", ...] (라벨)
-    // → 서버 ENUM: ["FOOD", "HOUSING", ...] 으로 변환
-    const essentialEnums = selectedCategories.map((label) => {
-      return categoryNameToEnum[label] || "ETC";
-    });
+      // selectedCategories: ["식비", "주거/관리", ...] (라벨)
+      // → 서버 ENUM: ["FOOD", "HOUSING", ...] 으로 변환
+      const essentialEnums = selectedCategories.map((label) => {
+        return categoryNameToEnum[label] || "ETC";
+      });
 
-    const payload = {
-      goalJob: job && jobNameToEnum[job] ? jobNameToEnum[job] : "UNEMPLOYED",
-      goalStartDate,                         // 이번 달 1일
-      goalIncome: incomeNum.toString(),      // "2000"
-      previousGoalMoney: goalNum,            // 300
-      essentialCategories: essentialEnums,   // ["FOOD", "HOUSING", ...]
-    };
+      const payload = {
+        goalJob: job && jobNameToEnum[job] ? jobNameToEnum[job] : "UNEMPLOYED",
+        goalStartDate,                         // 이번 달 1일
+        goalIncome: incomeNum.toString(),      // "2000"
+        previousGoalMoney: goalNum,            // 300
+        essentialCategories: essentialEnums,   // ["FOOD", "HOUSING", ...]
+      };
 
-    console.log("🚨 payload 보내는 값:", JSON.stringify(payload, null, 2));
+      console.log("🚨 payload 보내는 값:", JSON.stringify(payload, null, 2));
 
-    await apiList.goal.setGoal(payload);
+      await apiList.goal.setGoal(payload);
+    } catch (error) {
+      console.error("목표 설정 실패:", error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
   };
 
 
 
   const handleNext = async () => {
-    if (!isValidStep) return;
+    if (!isValidStep || isLoading) return;
 
     if (step === 4) {
-      await submitGoalData(); // API 호출
+      try {
+        await submitGoalData(); // API 호출
+        if (step < 5) {
+          setStep((prev) => (prev + 1) as 1 | 2 | 3 | 4 | 5);
+        }
+      } catch (error) {
+        // 에러 발생 시 단계 이동하지 않음
+        console.error("목표 설정 중 오류 발생:", error);
+      }
+      return;
     }
 
     if (step < 5) {
       setStep((prev) => (prev + 1) as 1 | 2 | 3 | 4 | 5);
     }
-    if (step < 5) setStep((prev) => (prev + 1) as 1 | 2 | 3 | 4 | 5);
   };
 
   const handleRestart = () => {
@@ -305,8 +322,21 @@ const submitGoalData = async () => {
           </div>
 
           <BottomButtonWrapper>
-            <DefaultButton text="다음" disabled={!isValidStep} onClick={handleNext} />
+            <DefaultButton 
+              text={isLoading ? "저장 중..." : "다음"} 
+              disabled={!isValidStep || isLoading} 
+              onClick={handleNext} 
+            />
           </BottomButtonWrapper>
+        </div>
+      )}
+
+      {/* 로딩 오버레이 */}
+      {isLoading && (
+        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+          <div className="bg-white rounded-full p-6 shadow-lg">
+            <div className="w-12 h-12 border-4 border-[#4C8B73] border-t-transparent rounded-full animate-spin"></div>
+          </div>
         </div>
       )}
 
