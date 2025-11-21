@@ -428,9 +428,33 @@ chat: async (message: string) => {
         newPassword: newPassword,
       });
       
+      return {
+        success: true,
+        data: response.data.resultData,
+        resultMsg: response.data.resultMsg,
+      };
+    } catch (err: any) {
+      console.error("비밀번호 변경 에러:", err);
       
-// 카드 API
-card: {
+      const errorName = err?.response?.data?.errorName;
+      const errorResultMsg = err?.response?.data?.errorResultMsg;
+      
+      let errorMessage = errorResultMsg;
+      if (errorName && ERROR_RESPONSE[errorName]) {
+        errorMessage = ERROR_RESPONSE[errorName].message;
+      }
+      
+      return {
+        success: false,
+        resultMsg: errorMessage || err?.response?.data?.resultMsg || err?.message || "비밀번호 변경에 실패했습니다.",
+        resultCode: err?.response?.data?.statusCode,
+        errorName: errorName,
+      };
+    }
+  },
+
+  // 카드 API
+  card: {
   // 카드 목록 조회
   getCardList: async () => {
     try {
@@ -532,8 +556,8 @@ card: {
     }
   },
 
-// 카드 별명 수정
-editCard: async (cardData: { id: number; cardAlias: string }) => {
+    // 카드 별명 수정
+    editCard: async (cardData: { id: number; cardAlias: string }) => {
   try {
     console.log("🔵 editCard API 호출:", {
       url: "/card/editCard",
@@ -585,10 +609,10 @@ editCard: async (cardData: { id: number; cardAlias: string }) => {
       errorName: errorName,
     };
   }
-},
+  },
 
-// 임시 비밀번호 발급 요청
-requestTemporaryPassword: async (memberId: string, memberName: string) => {
+    // 임시 비밀번호 발급 요청
+    requestTemporaryPassword: async (memberId: string, memberName: string) => {
   try {
     const response = await axiosInstance.patch("/auth/genPw", {
       id: memberId,
@@ -622,10 +646,10 @@ requestTemporaryPassword: async (memberId: string, memberName: string) => {
       errorName: errorName,
     };
   }
-},
+  },
 
-// 카드 검증 및 불러오기
-putCard: async (cardData: {
+    // 카드 검증 및 불러오기
+    putCard: async (cardData: {
   cardNum: string;
   cardPw: string;
   expiryMmYy: string;
@@ -640,14 +664,14 @@ putCard: async (cardData: {
       method: "PATCH",
       data: {
         ...cardData,
-        cardNum: cardData.cardNum.replace(/\d(?=\d{4})/g, "*"), // 마스킹
-        cardPw: "**",
-        cardCvc: "***",
+        cardNum: cardData.cardNum.replace(/\d(?=\d{4})/g, '*'), // 마스킹
+        cardPw: '**',
+        cardCvc: '***',
       },
     });
 
     const response = await axiosInstance.patch("/card/putCard", cardData);
-
+    
     console.log("🟢 putCard API 성공 응답:", {
       statusCode: response.data.statusCode,
       resultMsg: response.data.resultMsg,
@@ -670,26 +694,22 @@ putCard: async (cardData: {
         method: err?.config?.method,
       },
     });
-
+    
     const errorName = err?.response?.data?.errorName;
     const errorResultMsg = err?.response?.data?.errorResultMsg;
-
+    
     let errorMessage = errorResultMsg;
     if (errorName && ERROR_RESPONSE[errorName]) {
       errorMessage = ERROR_RESPONSE[errorName].message;
     }
-
+    
     return {
       success: false,
-      resultMsg:
-        errorMessage ||
-        err?.response?.data?.resultMsg ||
-        err?.message ||
-        "카드 검증에 실패했습니다.",
+      resultMsg: errorMessage || err?.response?.data?.resultMsg || err?.message || "카드 검증에 실패했습니다.",
       resultCode: err?.response?.data?.statusCode,
       errorName: errorName,
     };
   }
 },
-
+},
 };
