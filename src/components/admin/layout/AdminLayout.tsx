@@ -29,6 +29,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
   }
 
   const showActionButtons = location.pathname.includes('/cards') || location.pathname.includes('/users')
+  const isUsersPage = location.pathname.includes('/users')
 
   return (
     <div className="flex min-h-screen bg-white dark:bg-[#000000]">
@@ -44,7 +45,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
           titleIcon={currentPageIcon()}
           onMenuClick={() => setSidebarOpen(!sidebarOpen)}
           showActionButtons={showActionButtons}
-          onCreate={actions.onCreate}
+          onCreate={isUsersPage ? undefined : actions.onCreate}
           onExport={actions.onExport}
           onRefresh={actions.onRefresh}
           sidebarOpen={sidebarOpen}
