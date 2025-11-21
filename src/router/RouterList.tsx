@@ -14,6 +14,7 @@ import CardRecommendView from "@/pages/cardViews/CardOverView";
 import CardManagementView from "@/pages/cardViews/CardManagementView";
 import AddCardView from "@/pages/cardViews/AddCardView";
 import CardAddCompleteView from "@/pages/cardViews/CardAddCompleteView";
+import CardDetailView from "@/pages/cardViews/CardDetailView";
 import DiaryView from "@/pages/calendarViews/DiaryView";
 import DiaryEmotionView from "@/pages/calendarViews/DiaryEmotionView";
 import DiaryWriteView from "@/pages/calendarViews/DiaryWriteView";
@@ -86,6 +87,7 @@ const cardRoutes: RouteConfig[] = [
   { path: '/card/cards', element: <AddCardView /> },
   { path: '/card/cards/complete', element: <CardAddCompleteView /> },
   { path: '/card-recommend', element: <CardRecommendView /> },
+  { path: '/card/detail/:id', element: <CardDetailView /> },
 ];
 
 // 목표 관련 라우트
