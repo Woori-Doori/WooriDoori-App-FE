@@ -400,6 +400,13 @@ cardRecommend: async () => {
   }
 },
 
+  goalreport: {
+    getGoalReport: () =>
+    axiosInstance
+      .get(`/goal/report`)
+      .then(res => res.data.resultData),
+},
+
 // 채팅 API
 chat: async (message: string) => {
   try {
