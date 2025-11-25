@@ -45,11 +45,6 @@ export const useNotification = () => {
       console.log("🔗 SSE 연결 이벤트:", event.data);
     });
 
-    // eventSource.addEventListener("message", (event: MessageEvent) => {
-    //   console.log("📬 SSE 메시지 이벤트:", event.data);
-    //   handleNotification("알림", event.data);
-    // });
-
     // 리포트 알림 이벤트 (소문자)
     eventSource.addEventListener("report", (event: MessageEvent) => {
       console.log("📊 리포트 알림:", event.data);
