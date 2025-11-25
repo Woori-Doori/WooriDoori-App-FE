@@ -3,6 +3,7 @@ import Router from "./router/Router";
 import { useNotification } from "./hooks/useNotification";
 import { useUserStore } from "./stores/useUserStore";
 import { useCookieManager } from "./hooks/useCookieManager";
+import AmplitudeTracker from "./utils/AmplitudeTracker";
 
 function App() {
   // SSE 알림 연결 및 처리
@@ -22,6 +23,7 @@ function App() {
 
   return (
     <div className="app-shell">
+      <AmplitudeTracker />
       <div className="app-scroll-area">
         <Router />
       </div>
