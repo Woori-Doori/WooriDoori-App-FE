@@ -51,7 +51,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
           sidebarOpen={sidebarOpen}
         />
 
-        <main className="flex-1 p-0 bg-white dark:bg-[#000000]">
+        <main className="relative flex-1 p-0 bg-white dark:bg-[#000000]">
           {children}
         </main>
       </div>

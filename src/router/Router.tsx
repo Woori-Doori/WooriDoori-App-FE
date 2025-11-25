@@ -4,6 +4,7 @@ import { routerList } from "./RouterList";
 import { Suspense } from "react";
 import { AdminAuthProvider } from "@/context/AdminAuthContext";
 import { AdminHeaderProvider } from "@/context/AdminHeaderContext";
+import RouteChangeTracker from "@/utils/RouteChangeTracker";
 
 // 관리자 라우트를 Provider로 감싸는 컴포넌트
 const AdminRoutesWrapper = ({ children }: { children: React.ReactNode }) => {
@@ -19,6 +20,7 @@ const AdminRoutesWrapper = ({ children }: { children: React.ReactNode }) => {
 const Router = () => {
     return (
         <BrowserRouter>
+        <RouteChangeTracker />
         <Suspense fallback={<div className="w-full h-[100vh] flex items-center justify-center">Loading..</div>}>
             <Routes>
                 {

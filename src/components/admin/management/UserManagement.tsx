@@ -476,15 +476,15 @@ export function UserManagement() {
     <div className="w-full">
       {error && (
         <div className="p-4 mb-4 rounded-lg border bg-red-900/20 border-red-500/50">
-          <p className="text-sm text-red-400">{error}</p>
+          <p className="text-lg text-red-400">{error}</p>
             </div>
       )}
       
       {/* 검색창 및 전체 알림 버튼 */}
-      <div className="mb-6 p-4 bg-[#0a0a0a] rounded-lg border border-[#1a1a1a]">
+      <div className="mb-6 p-4 bg-gray-50 dark:bg-[#0a0a0a] rounded-lg border border-gray-200 dark:border-[#1a1a1a]">
         <div className="flex gap-3 items-end">
           <div className="flex-1">
-            <Label htmlFor="search-member-id" className="block mb-2 text-sm font-medium text-white">
+            <Label htmlFor="search-member-id" className="block mb-2 text-xl font-medium text-gray-900 dark:text-white">
               회원 검색 (회원 이름)
             </Label>
               <Input
@@ -498,13 +498,13 @@ export function UserManagement() {
                   handleSearch()
                 }
               }}
-              className="bg-[#1a1a1a] border-[#2a2a2a] text-white h-12 text-base placeholder:text-gray-500"
+              className="bg-white dark:bg-[#1a1a1a] border-gray-300 dark:border-[#2a2a2a] text-gray-900 dark:text-white h-16 text-xl placeholder:text-lg placeholder:text-gray-500 dark:placeholder:text-gray-500"
             />
             </div>
           <Button
             onClick={handleSearch}
             disabled={isSearching || !searchMemberId.trim()}
-            className="px-6 h-12 text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 h-16 text-xl font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSearching ? '검색 중...' : '검색'}
           </Button>
@@ -512,16 +512,16 @@ export function UserManagement() {
             <Button
               onClick={handleResetSearch}
               variant="outline"
-              className="h-12 px-6 border-[#2a2a2a] hover:bg-[#1a1a1a] bg-transparent text-white"
+              className="h-16 px-6 text-xl font-medium border-gray-300 dark:border-[#2a2a2a] hover:bg-gray-100 dark:hover:bg-[#1a1a1a] bg-white dark:bg-transparent text-gray-900 dark:text-white"
             >
               초기화
             </Button>
           )}
           <Button
             onClick={handleSendAllNotification}
-            className="px-6 h-12 text-white bg-green-600 hover:bg-green-700"
+            className="px-6 h-16 text-xl font-medium text-white bg-green-600 hover:bg-green-700"
           >
-            <svg className="mr-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="mr-2 w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
             </svg>
             전체 알림
@@ -637,18 +637,18 @@ export function UserManagement() {
         <table className="w-full border-collapse">
           <thead>
             <tr className="border-b border-gray-200 dark:border-[#1a1a1a]">
-              <th className="px-4 py-3 w-12 text-left">
+              <th className="px-5 py-5 w-14 text-left">
                 <Checkbox
                   checked={selectedUsers.length === users.length && users.length > 0}
                   onCheckedChange={toggleAll}
-                  className="border-gray-300 dark:border-gray-600"
+                  className="w-5 h-5 border-gray-300 dark:border-gray-600"
                 />
               </th>
-              <th className="px-4 py-3 text-sm font-medium text-left text-black dark:text-gray-400">
-                <button onClick={handleSort} className="flex gap-1 items-center transition-colors hover:text-gray-900 dark:hover:text-white">
+              <th className="px-5 py-5 text-lg font-semibold text-left text-black dark:text-gray-400">
+                <button onClick={handleSort} className="flex gap-1.5 items-center transition-colors hover:text-gray-900 dark:hover:text-white">
                   ID
                   <svg
-                    className={`w-4 h-4 transition-transform ${sortOrder === 'asc' ? '' : 'rotate-180'}`}
+                    className={`w-6 h-6 transition-transform ${sortOrder === 'asc' ? '' : 'rotate-180'}`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -657,48 +657,48 @@ export function UserManagement() {
                   </svg>
                 </button>
               </th>
-              <th className="px-4 py-3 text-sm font-medium text-left text-black dark:text-gray-400">권한</th>
-              <th className="px-4 py-3 text-sm font-medium text-left text-black dark:text-gray-400">사용자명</th>
-              <th className="px-4 py-3 text-sm font-medium text-left text-black dark:text-gray-400">이름</th>
-              <th className="px-4 py-3 text-sm font-medium text-left text-black dark:text-gray-400">전화번호</th>
-              <th className="px-4 py-3 text-sm font-medium text-left text-black dark:text-gray-400">생년월일</th>
-              <th className="px-4 py-3 text-sm font-medium text-left text-black dark:text-gray-400">상태</th>
-              <th className="px-4 py-3 text-sm font-medium text-right text-black dark:text-gray-400"></th>
+              <th className="px-5 py-5 text-lg font-semibold text-left text-black dark:text-gray-400">권한</th>
+              <th className="px-5 py-5 text-lg font-semibold text-left text-black dark:text-gray-400">사용자명</th>
+              <th className="px-5 py-5 text-lg font-semibold text-left text-black dark:text-gray-400">이름</th>
+              <th className="px-5 py-5 text-lg font-semibold text-left text-black dark:text-gray-400">전화번호</th>
+              <th className="px-5 py-5 text-lg font-semibold text-left text-black dark:text-gray-400">생년월일</th>
+              <th className="px-5 py-5 text-lg font-semibold text-left text-black dark:text-gray-400">상태</th>
+              <th className="px-5 py-5 text-lg font-semibold text-right text-black dark:text-gray-400"></th>
             </tr>
           </thead>
           <tbody>
             {sortedUsers.length === 0 ? (
               <tr>
-                <td colSpan={9} className="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                <td colSpan={9} className="px-4 py-8 text-lg text-center text-gray-500 dark:text-gray-400">
                   사용자 데이터가 없습니다.
                 </td>
               </tr>
             ) : (
               sortedUsers.map((user) => (
               <tr key={user.id} className="border-b border-gray-200 dark:border-[#1a1a1a] hover:bg-gray-50 dark:hover:bg-[#0f0f0f] transition-colors">
-                <td className="px-4 py-3">
+                <td className="px-5 py-5">
                   <Checkbox
                     checked={selectedUsers.includes(user.id)}
                     onCheckedChange={(checked) => toggleOne(user.id, checked as boolean)}
-                    className="border-gray-300 dark:border-gray-600"
+                    className="w-5 h-5 border-gray-300 dark:border-gray-600"
                   />
                 </td>
-                <td className="px-4 py-3 text-sm text-black dark:text-gray-300">{user.id}</td>
-                <td className="px-4 py-3 text-sm text-black dark:text-gray-300">{user.authority}</td>
-                <td className="px-4 py-3 text-sm text-black dark:text-gray-300">{user.username}</td>
-                <td className="px-4 py-3 text-sm text-black dark:text-white">{user.name}</td>
-                <td className="px-4 py-3 text-sm text-black dark:text-gray-300">{user.phone}</td>
-                <td className="px-4 py-3 text-sm text-black dark:text-gray-300">{formatBirthdate(user.birthdate)}</td>
-                <td className="px-4 py-3 text-sm text-black dark:text-gray-300">{user.status}</td>
-                <td className="px-4 py-3">
+                <td className="px-5 py-5 text-lg text-black dark:text-gray-300">{user.id}</td>
+                <td className="px-5 py-5 text-lg text-black dark:text-gray-300">{user.authority}</td>
+                <td className="px-5 py-5 text-lg text-black dark:text-gray-300">{user.username}</td>
+                <td className="px-5 py-5 text-lg text-black dark:text-white">{user.name}</td>
+                <td className="px-5 py-5 text-lg text-black dark:text-gray-300">{user.phone}</td>
+                <td className="px-5 py-5 text-lg text-black dark:text-gray-300">{formatBirthdate(user.birthdate)}</td>
+                <td className="px-5 py-5 text-lg text-black dark:text-gray-300">{user.status}</td>
+                <td className="px-5 py-5">
                   <div className="flex gap-2 justify-end items-center">
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-[#1a1a1a] gap-1.5"
+                      className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-[#1a1a1a] gap-2 text-lg"
                       onClick={() => handleSendNotification(user)}
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                       </svg>
                       알림
@@ -706,10 +706,10 @@ export function UserManagement() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1a1a1a] gap-1.5"
+                      className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1a1a1a] gap-2 text-lg"
                       onClick={() => handleEdit(user)}
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                       </svg>
                       EDIT
@@ -717,10 +717,10 @@ export function UserManagement() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-[#1a1a1a] gap-1.5"
+                      className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-[#1a1a1a] gap-2 text-lg"
                       onClick={() => handleDelete(user.id)}
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
                       DELETE

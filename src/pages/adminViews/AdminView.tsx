@@ -10,8 +10,8 @@ const AdminView = () => {
   const renderContent = () => {
     if (location.pathname.includes('/cards')) {
       return (
-        <div className="w-full bg-white dark:bg-[#000000]">
-          <div className="p-6">
+        <div className="absolute inset-0 w-full h-full bg-white dark:bg-[#000000] overflow-auto">
+          <div className="p-6 h-full">
             <CardManagement />
           </div>
         </div>
@@ -19,8 +19,8 @@ const AdminView = () => {
     }
     if (location.pathname.includes('/users')) {
       return (
-        <div className="w-full bg-white dark:bg-[#000000]">
-          <div className="p-6">
+        <div className="absolute inset-0 w-full h-full bg-white dark:bg-[#000000] overflow-auto">
+          <div className="p-6 h-full">
             <UserManagement />
           </div>
         </div>
@@ -28,18 +28,14 @@ const AdminView = () => {
     }
     if (location.pathname.includes('/behavior')) {
       return (
-        <div className="w-full bg-white dark:bg-[#000000]">
-          <div className="p-6">
-            <BehaviorAnalysis />
-          </div>
+        <div className="absolute inset-0 w-full h-full bg-white dark:bg-[#000000] overflow-auto">
+          <BehaviorAnalysis />
         </div>
       );
     }
     return (
-      <div className="w-full bg-white dark:bg-[#000000]">
-        <div className="p-6">
-          <DashboardContent />
-        </div>
+      <div className="absolute inset-0 w-full h-full bg-white dark:bg-[#000000]">
+        <DashboardContent />
       </div>
     );
   };

@@ -26,7 +26,7 @@ export function AppSidebar({ open, onClose }: AppSidebarProps) {
   return (
     <>
       {/* Overlay */}
-      {open && <div className="fixed inset-0 bg-black/50 z-40" onClick={onClose} />}
+      {open && <div className="fixed inset-0 z-40 bg-black/50" onClick={onClose} />}
 
       {/* Sidebar */}
       <aside
@@ -45,14 +45,14 @@ export function AppSidebar({ open, onClose }: AppSidebarProps) {
                   navigate(item.path)
                   onClose()
                 }}
-                className={`flex items-center gap-3 px-6 py-4 text-sm transition-colors border-b border-gray-200 dark:border-[#1a1a1a] ${
+                className={`flex items-center gap-4 px-6 py-5 font-medium transition-colors border-b border-gray-200 dark:border-[#1a1a1a] ${
                   active 
                     ? 'bg-gray-100 dark:bg-[#1a1a1a] text-gray-900 dark:text-white' 
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-[#1a1a1a] hover:text-gray-900 dark:hover:text-white'
                 }`}
               >
-                <item.icon className="w-5 h-5" />
-                <span>{item.label}</span>
+                <item.icon className="w-6 h-6" />
+                <span className="text-xl">{item.label}</span>
               </button>
             )
           })}

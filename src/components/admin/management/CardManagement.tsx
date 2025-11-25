@@ -661,18 +661,18 @@ export function CardManagement() {
         <table className="w-full border-collapse">
                   <thead>
                     <tr className="border-b border-gray-200 dark:border-[#1a1a1a]">
-                      <th className="px-4 py-3 w-12 text-left">
+                      <th className="px-5 py-5 w-14 text-left">
                         <Checkbox
                           checked={sortedCards.length > 0 && selectedIds.length === sortedCards.length && sortedCards.every(card => selectedIds.includes(card.id))}
                           onCheckedChange={toggleAll}
-                          className="border-gray-300 dark:border-gray-600"
+                          className="w-5 h-5 border-gray-300 dark:border-gray-600"
                         />
                       </th>
-                      <th className="px-4 py-3 text-sm font-medium text-left text-gray-600 whitespace-nowrap dark:text-gray-400">
-                        <button onClick={handleSort} className="flex gap-1 items-center transition-colors hover:text-gray-900 dark:hover:text-white">
+                      <th className="px-5 py-5 text-lg font-semibold text-left text-gray-600 whitespace-nowrap dark:text-gray-400">
+                        <button onClick={handleSort} className="flex gap-1.5 items-center transition-colors hover:text-gray-900 dark:hover:text-white">
                           {t('table.id')}
                           <svg
-                            className={`w-4 h-4 transition-transform ${sortOrder === 'asc' ? '' : 'rotate-180'}`}
+                            className={`w-6 h-6 transition-transform ${sortOrder === 'asc' ? '' : 'rotate-180'}`}
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -681,21 +681,21 @@ export function CardManagement() {
                           </svg>
                         </button>
                       </th>
-                      <th className="px-4 py-3 text-sm font-medium text-left text-gray-600 whitespace-nowrap dark:text-gray-400">{t('table.cardName')}</th>
-                      <th className="px-4 py-3 text-sm font-medium text-left text-gray-600 whitespace-nowrap dark:text-gray-400">{t('table.annualFee1')}</th>
-                      <th className="px-4 py-3 text-sm font-medium text-left text-gray-600 whitespace-nowrap dark:text-gray-400">{t('table.annualFee2')}</th>
-                      <th className="px-4 py-3 text-sm font-medium text-left text-gray-600 whitespace-nowrap dark:text-gray-400">{t('table.cardImageFileId')}</th>
-                      <th className="px-4 py-3 text-sm font-medium text-left text-gray-600 whitespace-nowrap dark:text-gray-400">{t('table.cardBannerFileId')}</th>
-                      <th className="px-4 py-3 text-sm font-medium text-left text-gray-600 whitespace-nowrap dark:text-gray-400">{t('table.cardBenefit')}</th>
-                      <th className="px-4 py-3 text-sm font-medium text-left text-gray-600 whitespace-nowrap dark:text-gray-400">{t('table.cardType')}</th>
-                      <th className="px-4 py-3 text-sm font-medium text-left text-gray-600 whitespace-nowrap dark:text-gray-400">{t('table.cardService')}</th>
-                      <th className="px-4 py-3 text-sm font-medium text-right text-gray-600 dark:text-gray-400"></th>
+                      <th className="px-5 py-5 text-lg font-semibold text-left text-gray-600 whitespace-nowrap dark:text-gray-400">{t('table.cardName')}</th>
+                      <th className="px-5 py-5 text-lg font-semibold text-left text-gray-600 whitespace-nowrap dark:text-gray-400">{t('table.annualFee1')}</th>
+                      <th className="px-5 py-5 text-lg font-semibold text-left text-gray-600 whitespace-nowrap dark:text-gray-400">{t('table.annualFee2')}</th>
+                      <th className="px-5 py-5 text-lg font-semibold text-left text-gray-600 whitespace-nowrap dark:text-gray-400">{t('table.cardImageFileId')}</th>
+                      <th className="px-5 py-5 text-lg font-semibold text-left text-gray-600 whitespace-nowrap dark:text-gray-400">{t('table.cardBannerFileId')}</th>
+                      <th className="px-5 py-5 text-lg font-semibold text-left text-gray-600 whitespace-nowrap dark:text-gray-400">{t('table.cardBenefit')}</th>
+                      <th className="px-5 py-5 text-lg font-semibold text-left text-gray-600 whitespace-nowrap dark:text-gray-400">{t('table.cardType')}</th>
+                      <th className="px-5 py-5 text-lg font-semibold text-left text-gray-600 whitespace-nowrap dark:text-gray-400">{t('table.cardService')}</th>
+                      <th className="px-5 py-5 text-lg font-semibold text-right text-gray-600 dark:text-gray-400"></th>
                     </tr>
                   </thead>
           <tbody>
             {sortedCards.length === 0 ? (
               <tr>
-                <td colSpan={10} className="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                <td colSpan={10} className="px-4 py-8 text-lg text-center text-gray-500 dark:text-gray-400">
                   {cardsState.length === 0 
                     ? '카드 데이터가 없습니다.' 
                     : '필터 조건에 맞는 카드가 없습니다.'}
@@ -704,33 +704,33 @@ export function CardManagement() {
             ) : (
               sortedCards.map((card) => (
                 <tr key={card.id} className="border-b border-gray-200 dark:border-[#1a1a1a] hover:bg-gray-50 dark:hover:bg-[#0f0f0f] transition-colors">
-                <td className="px-4 py-3">
+                <td className="px-5 py-5">
                   <Checkbox
                     checked={selectedIds.includes(card.id)}
                     onCheckedChange={(checked) => toggleOne(card.id, checked as boolean)}
-                    className="border-gray-300 dark:border-gray-600"
+                    className="w-5 h-5 border-gray-300 dark:border-gray-600"
                   />
                 </td>
-                <td className="px-4 py-3 text-sm text-black whitespace-nowrap dark:text-gray-300">{card.id}</td>
-                <td className="px-4 py-3 text-sm text-black whitespace-nowrap dark:text-white">{card.card_name}</td>
-                <td className="px-4 py-3 text-sm text-black whitespace-nowrap dark:text-gray-300">{card.annual_fee_1}</td>
-                <td className="px-4 py-3 text-sm text-black whitespace-nowrap dark:text-gray-300">{card.annual_fee_2}</td>
-                <td className="px-4 py-3 text-sm text-black whitespace-nowrap dark:text-gray-300">{card.file_id}</td>
-                <td className="px-4 py-3 text-sm text-black whitespace-nowrap dark:text-gray-300">{card.card_banner_file_id}</td>
-                <td className="px-4 py-3 text-sm text-black whitespace-nowrap dark:text-gray-300">{card.card_benef}</td>
-                <td className="px-4 py-3 text-sm text-black whitespace-nowrap dark:text-gray-300">{card.card_type}</td>
-                <td className="px-4 py-3 text-sm text-black whitespace-nowrap dark:text-gray-300">
+                <td className="px-5 py-5 text-lg text-black whitespace-nowrap dark:text-gray-300">{card.id}</td>
+                <td className="px-5 py-5 text-lg text-black whitespace-nowrap dark:text-white">{card.card_name}</td>
+                <td className="px-5 py-5 text-lg text-black whitespace-nowrap dark:text-gray-300">{card.annual_fee_1}</td>
+                <td className="px-5 py-5 text-lg text-black whitespace-nowrap dark:text-gray-300">{card.annual_fee_2}</td>
+                <td className="px-5 py-5 text-lg text-black whitespace-nowrap dark:text-gray-300">{card.file_id}</td>
+                <td className="px-5 py-5 text-lg text-black whitespace-nowrap dark:text-gray-300">{card.card_banner_file_id}</td>
+                <td className="px-5 py-5 text-lg text-black whitespace-nowrap dark:text-gray-300">{card.card_benef}</td>
+                <td className="px-5 py-5 text-lg text-black whitespace-nowrap dark:text-gray-300">{card.card_type}</td>
+                <td className="px-5 py-5 text-lg text-black whitespace-nowrap dark:text-gray-300">
                   {card.card_svc === 'T' ? 'YES' : card.card_svc === 'F' ? 'NO' : card.card_svc}
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-5 py-5">
                           <div className="flex gap-2 justify-end items-center">
                             <Button
                               variant="ghost"
                               size="sm"
-                              className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1a1a1a] gap-1.5"
+                              className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1a1a1a] gap-2 text-lg"
                               onClick={() => handleEdit(card.id)}
                             >
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                               </svg>
                               {t('table.edit')}
@@ -738,10 +738,10 @@ export function CardManagement() {
                             <Button
                               variant="ghost"
                               size="sm"
-                              className="text-red-600 dark:text-red-500 hover:text-red-700 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-[#1a1a1a] gap-1.5"
+                              className="text-red-600 dark:text-red-500 hover:text-red-700 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-[#1a1a1a] gap-2 text-lg"
                               onClick={() => handleDelete(card.id)}
                             >
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                               </svg>
                               {t('table.delete')}
@@ -758,20 +758,20 @@ export function CardManagement() {
       
       {/* 우측 필터 사이드바 */}
       <div className="flex-shrink-0 w-64">
-        <div className="sticky top-6 p-4 bg-[#0a0a0a] rounded-lg border border-[#1a1a1a]">
+        <div className="sticky top-6 p-4 bg-gray-50 dark:bg-[#0a0a0a] rounded-lg border border-gray-200 dark:border-[#1a1a1a]">
           <div className="mb-4">
-            <h3 className="mb-4 text-base font-semibold text-white">필터</h3>
+            <h3 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">필터</h3>
             
             {/* 카드 타입 필터 */}
             <div className="mb-4">
-              <Label htmlFor="filter-card-type" className="block mb-2 text-sm font-medium text-white">
+              <Label htmlFor="filter-card-type" className="block mb-2 text-lg font-medium text-gray-900 dark:text-white">
                 카드 타입
               </Label>
               <Select value={filterCardType} onValueChange={setFilterCardType}>
-                <SelectTrigger className="bg-[#1a1a1a] border-[#2a2a2a] text-white h-10 w-full text-sm">
+                <SelectTrigger className="bg-white dark:bg-[#1a1a1a] border-gray-300 dark:border-[#2a2a2a] text-gray-900 dark:text-white h-12 w-full text-lg">
                   <SelectValue placeholder="전체" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#1a1a1a] border-[#2a2a2a] text-white">
+                <SelectContent className="bg-white dark:bg-[#1a1a1a] border-gray-300 dark:border-[#2a2a2a] text-gray-900 dark:text-white">
                   <SelectItem value="all">전체</SelectItem>
                   {uniqueCardTypes.map((type) => (
                     <SelectItem key={type} value={type}>
@@ -784,14 +784,14 @@ export function CardManagement() {
             
             {/* 카드 서비스 필터 */}
             <div className="mb-4">
-              <Label htmlFor="filter-card-svc" className="block mb-2 text-sm font-medium text-white">
+              <Label htmlFor="filter-card-svc" className="block mb-2 text-lg font-medium text-gray-900 dark:text-white">
                 카드 서비스
               </Label>
               <Select value={filterCardSvc} onValueChange={setFilterCardSvc}>
-                <SelectTrigger className="bg-[#1a1a1a] border-[#2a2a2a] text-white h-10 w-full text-sm">
+                <SelectTrigger className="bg-white dark:bg-[#1a1a1a] border-gray-300 dark:border-[#2a2a2a] text-gray-900 dark:text-white h-12 w-full text-lg">
                   <SelectValue placeholder="전체" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#1a1a1a] border-[#2a2a2a] text-white">
+                <SelectContent className="bg-white dark:bg-[#1a1a1a] border-gray-300 dark:border-[#2a2a2a] text-gray-900 dark:text-white">
                   <SelectItem value="all">전체</SelectItem>
                   {uniqueCardSvcs.map((svc) => (
                     <SelectItem key={svc} value={svc}>
@@ -807,17 +807,17 @@ export function CardManagement() {
               <Button
                 onClick={handleResetFilters}
                 variant="outline"
-                className="w-full px-4 h-9 border-[#2a2a2a] hover:bg-[#1a1a1a] bg-transparent text-white text-sm mb-4"
+                className="w-full px-4 h-9 border-gray-300 dark:border-[#2a2a2a] hover:bg-gray-100 dark:hover:bg-[#1a1a1a] bg-white dark:bg-transparent text-gray-900 dark:text-white text-lg mb-4"
               >
                 필터 초기화
               </Button>
             )}
             
             {/* 필터 결과 표시 */}
-            <div className="pt-4 border-t border-[#1a1a1a]">
-              <div className="text-sm text-gray-400">
+            <div className="pt-4 border-t border-gray-200 dark:border-[#1a1a1a]">
+              <div className="text-lg text-gray-600 dark:text-gray-400">
                 <div>전체: {cardsState.length}개</div>
-                <div className="mt-1 font-medium text-white">필터: {filteredCards.length}개</div>
+                <div className="mt-1 font-medium text-gray-900 dark:text-white">필터: {filteredCards.length}개</div>
               </div>
             </div>
           </div>
