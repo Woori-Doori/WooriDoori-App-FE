@@ -416,7 +416,7 @@ const getCategoryInfo = (categoryName: string) => {
         
         {/* 최근 기록(가장 최근 월)에만 챗봇 버튼 표시 */}
         {/* 💡 초기 월/년도와 현재 월/년도가 일치하고, 현재 인덱스가 최신 기록일 때만 표시 */}
-        {currentYear === initialYear && currentMonth === initialMonth && isFirstItem && (
+        {currentYear === initialYear && currentMonth === initialMonth && isLastItem && (
           <div className="flex sticky right-6 bottom-8 z-40 justify-end">
             <button
               onClick={() => setIsChatModalOpen(true)}
