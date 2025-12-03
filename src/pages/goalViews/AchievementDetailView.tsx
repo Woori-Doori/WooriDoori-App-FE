@@ -101,15 +101,15 @@ export default function AchievementDetailView() {
     const handleNavigateMonth = (direction: "prev" | "next") => {
     if (!historyList || currentIndex === -1) return;
 
-    // HistoryList가 일반적으로 최신순(Index 0)으로 정렬되었다고 가정
+
     if (direction === "prev") {
-      // '이전 달' 버튼 (과거 기록으로 이동 -> 인덱스 증가)
-      if (currentIndex >= historyList.length - 1) {
+      // '이전 달' 버튼 (과거 기록으로 이동 -> 인덱스 감소)
+      if (currentIndex >= 0) {
         setCurrentIndex(currentIndex - 1);
       }
     } else {
-      // '다음 달' 버튼 (최신 기록으로 이동 -> 인덱스 감소)
-      if (currentIndex <= 0) {
+      // '다음 달' 버튼 (최신 기록으로 이동 -> 인덱스 증가)
+      if (currentIndex <= historyList.length - 1) {
         setCurrentIndex(currentIndex + 1);
       }
     }
@@ -416,7 +416,7 @@ const getCategoryInfo = (categoryName: string) => {
         
         {/* 최근 기록(가장 최근 월)에만 챗봇 버튼 표시 */}
         {/* 💡 초기 월/년도와 현재 월/년도가 일치하고, 현재 인덱스가 최신 기록일 때만 표시 */}
-        {currentYear === initialYear && currentMonth === initialMonth && isFirstItem && (
+        {currentYear === initialYear && currentMonth === initialMonth && isLastItem && (
           <div className="flex sticky right-6 bottom-8 z-40 justify-end">
             <button
               onClick={() => setIsChatModalOpen(true)}
