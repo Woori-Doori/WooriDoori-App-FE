@@ -523,6 +523,7 @@ const CalendarView = () => {
 
   return (
     <DefaultDiv 
+      className="pt-10"
       isPadding={false} 
       isBottomNav={true} 
       title='소비내역' 
@@ -548,7 +549,7 @@ const CalendarView = () => {
       <div 
         className="flex relative flex-col transition-transform"
         style={{ 
-          height: 'calc(100vh - 6rem - 6rem)',
+          height: 'calc(100vh - 11rem)',
           transform: `translateY(${pullY}px)`,
           transitionDuration: isPulling ? '0ms' : '180ms'
         }}
@@ -577,7 +578,7 @@ const CalendarView = () => {
         {/* 결제 내역 리스트 영역 (별도 스크롤) */}
         <div 
           ref={scrollRef}
-          className="overflow-y-auto overscroll-contain flex-1 px-5 pb-32 pt-4"
+          className="overflow-y-auto overscroll-contain flex-1 px-5  pt-4"
         >
           {isLoading && paymentDataState.length === 0 ? (
             // 로딩 상태

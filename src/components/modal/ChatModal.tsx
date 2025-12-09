@@ -5,9 +5,11 @@ import { apiList } from "@/api/apiList";
 interface ChatModalProps {
   isOpen: boolean;
   onClose: () => void;
+  year?: number;
+  month?: number;
 }
 
-const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
+const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, year, month }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "1",
@@ -49,8 +51,8 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
     setIsTyping(true);
 
     try {
-      // API 호출
-      const result = await apiList.chat(text);
+      // API 호출 (year, month가 있으면 전달)
+      const result = await apiList.chat(text, year, month);
 
       if (result.success && result.data) {
         // 봇 응답 메시지 추가

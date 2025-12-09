@@ -37,7 +37,7 @@ const bubbleTemplate: BubbleProps[] = [
 ];
 
 
-const Bubble: React.FC<BubbleProps> = ({ src, size, top, left, delay = 0, name }) => {
+const Bubble: React.FC<BubbleProps> = ({ src, size, top, left, delay = 0 }) => {
   return (
     <div
       className="bubble"

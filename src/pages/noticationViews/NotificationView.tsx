@@ -7,7 +7,6 @@ import NotificationTab from './NotificationTabs';
 import { OneBtnModal } from '@/components/modal/OneBtnModal';
 import ToggleSwiitchBtn from '@/components/button/ToggleSwitchBtn';
 import { useNotificationStore } from '@/stores/useNotificationStore';
-import { isNotificationEnabled } from '@/utils/notificationSettings';
 
 type TabType = 'system' | 'diary';
 

@@ -421,7 +421,7 @@ cardRecommend: async () => {
 },
 
 // 채팅 API
-chat: async (message: string) => {
+chat: async (message: string, year?: number, month?: number) => {
   try {
     // baseURL 확인 (디버깅용)
     const baseURL = import.meta.env.VITE_API_BASE_URL;
@@ -433,7 +433,11 @@ chat: async (message: string) => {
       };
     }
     
-    const response = await axiosInstance.post("/api/chat", { message });
+    const requestBody: { message: string; year?: number; month?: number } = { message };
+    if (year !== undefined) requestBody.year = year;
+    if (month !== undefined) requestBody.month = month;
+    
+    const response = await axiosInstance.post("/api/chat", requestBody);
     
     // 디버깅: 응답 구조 확인
     console.log("📨 채팅 API 응답:", response.data);

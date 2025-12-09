@@ -437,7 +437,12 @@ const getCategoryInfo = (categoryName: string) => {
         )}
       </div>
       {/* 채팅 모달 */}
-      <ChatModal isOpen={isChatModalOpen} onClose={() => setIsChatModalOpen(false)} />
+      <ChatModal 
+        isOpen={isChatModalOpen} 
+        onClose={() => setIsChatModalOpen(false)}
+        year={currentYear}
+        month={currentMonth}
+      />
     </DefaultDiv>
   );
 }
